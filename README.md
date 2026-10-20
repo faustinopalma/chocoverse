@@ -173,6 +173,9 @@ browser observation. A cloud shutdown deadline bounds each active lab session.
 * Not certified financial reporting, measured profitability, a causal what-if forecast or an autonomous factory.
 * Not live everywhere: the snapshot consumers remain fixed until explicitly republished.
 * Not a free service: active F4, model calls, retained data and supporting Azure services have costs.
+* Not self-healing: a cloud I/O failure can stop the worker while capacity stays active until scheduled shutdown.
+  Inspect actual execution health; a saved `Running` session record is not evidence that the company is advancing.
+  Recovery uses guarded controls and the stored checkpoint, not a new company.
 * Not a public tenant endpoint: reproducing it requires your own authorized Azure/Fabric context and prerequisites.
 * Not independently audited just because the same AI wrote tests and then looked pleased with itself.
 
