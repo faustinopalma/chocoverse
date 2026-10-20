@@ -467,6 +467,41 @@ evaluation, failure handling, local-lock recovery and snapshot limits. These com
 application access; use the section below for that path. Use normal Stop/deadline handling; this command never suspends
 an active user's laboratory.
 
+### Data Agent delegation comparison
+
+This read-only experiment compares an overview-only generalist, the same generalist with a real Data Agent tool,
+and a control supplied with the retrieved evidence. See [chapter 28](../../docs/28-data-agent-delegation-experiment.md)
+for the frozen questions, observed results and limitations.
+
+Prerequisites: a stopped lab, the existing runtime model deployment, reconciled semantic snapshot and published
+Data Agent, and the operator's configured Azure CLI identity. Run from the repository root:
+
+```powershell
+.\ops\Invoke-AgentComparison.ps1 -Experiment 'delegation-example-01'
+```
+
+The wrapper verifies the existing model version, starts **Analysis** mode with a 45-real-minute shutdown deadline,
+runs the comparison and invokes session-scoped Stop in `finally`.
+Cleanup independently checks Paused F4 and terminal worker executions; it must not be used to take over another
+user's active session. Company data is preserved and no business time advances.
+
+The suite reserves at most sixteen generalist completions with 2,048 output tokens each, four specialist calls,
+a 32 KB input envelope per completion and a 30-minute logical run deadline.
+The child process is bounded to 1,900 seconds; startup and cleanup have separate limits.
+The published snapshot is rechecked before and after the suite. No inference retries are automatic.
+These are request/time limits, not a monetary ceiling; F4, both inference paths and supporting services cost money.
+Retained services, including subscription Defender plans, can cost money after shutdown.
+
+The unique name reserves `.local\agent-comparisons\<name>\result.json` before inference.
+It contains the frozen plan/oracle, actual questions and answers, scores, usage and failures.
+Reusing a name fails: inspect an incomplete run, then deliberately choose a new name for another billable trial.
+Never delete records to hide failed trials, and never publish raw prompts, tenant identities or operational journals.
+Offline comparison checks need no cloud session:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests -p test_agent_comparison.py -v
+```
+
 ### Secretless Data Agent application identity
 
 The [authentication guide](../../docs/25-data-agent-authentication.md) owns the token-exchange flow,

@@ -13,6 +13,10 @@ still receives simulator briefings. [Secretless application federation](./25-dat
 now provides a verified autonomous authentication path, but does not supply a live data-completeness barrier.
 Operating commands belong to the [cloud runbook](../infra/demo/README.md#fabric-data-agent-showcase).
 
+For an actual direct-versus-delegated comparison, see the
+[CEO and line-lead experiment](./28-data-agent-delegation-experiment.md).
+It tests the same generalist without retrieval, with a Data Agent tool, and with retrieved evidence supplied directly.
+
 ## 24.1 Architecture and educational purpose
 
 ```mermaid

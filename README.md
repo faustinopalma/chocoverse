@@ -109,6 +109,10 @@ The separate S&OP evidence-to-decision experiment is isolated and does not write
 [Data Agent boundaries](./docs/24-data-agent-showcase.md) |
 [Secretless application authentication](./docs/25-data-agent-authentication.md)
 
+**Does delegation actually help?** The [CEO and line-lead experiment](./docs/28-data-agent-delegation-experiment.md)
+compares the same generalist alone and with the Data Agent on real snapshot questions.
+It includes an evidence-supplied control and the cases where neither should invent an answer.
+
 ### 4. Give the business an explicit vocabulary
 
 The native Fabric IQ ontology binds **eight entity types and eight relationship types** to immutable OneLake
