@@ -1,0 +1,6 @@
+bronze_business
+| where run_id == "business-demo-001" and event_type == "world.business.observed"
+| top 1 by sequence desc
+| project virtual_time_utc=sim_ts, last_update_utc=wall_ts,
+    age_seconds=datetime_diff("second", now(), wall_ts),
+    configured_speed=toint(event.speed), tick=tolong(event.data.tick)

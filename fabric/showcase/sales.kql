@@ -1,0 +1,9 @@
+bronze_business
+| where run_id == "business-demo-001" and sequence <= upper_sequence
+| where event_type in ("retail.sellout.recorded", "trade.sellout.recorded")
+| where todatetime(event.simlocaldate) < cutoff
+| summarize take_any(*) by event_id
+| summarize SoldKg=sum(tolong(event.data.quantity)) by
+    Date=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd"),
+    Channel=tostring(event.data.channel), Product=tostring(event.data.sku), Territory=tostring(event.data.territory)
+| order by Date asc, Channel asc, Product asc, Territory asc

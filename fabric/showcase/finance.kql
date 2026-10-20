@@ -1,0 +1,14 @@
+bronze_business
+| where run_id == "business-demo-001" and sequence <= upper_sequence
+| where event_type in ("finance.ledger.posted", "finance.cash.settled")
+| where todatetime(event.simlocaldate) < cutoff
+| summarize take_any(*) by event_id
+| extend amount=tolong(event.data.amount_cents), posting=tostring(event.data.posting_type)
+| summarize RevenueCents=sumif(amount, event_type == "finance.ledger.posted" and posting in ("retail.cash.received", "finance.sales.invoice")),
+    PurchaseCents=sumif(amount, event_type == "finance.ledger.posted" and posting == "finance.purchase.invoice"),
+    ConversionCents=sumif(amount, event_type == "finance.ledger.posted" and posting == "finance.conversion.paid"),
+    RetailCashCents=sumif(amount, event_type == "finance.ledger.posted" and posting == "retail.cash.received"),
+    CollectionCents=sumif(amount, event_type == "finance.cash.settled" and amount > 0),
+    PaymentCents=sumif(-amount, event_type == "finance.cash.settled" and amount < 0)
+    by Date=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd")
+| order by Date asc

@@ -1,0 +1,6 @@
+bronze_business
+| where run_id == "business-demo-001"
+| summarize take_any(*) by event_id
+| top 25 by sequence desc
+| project sim_ts, virtual_date_rome=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd"),
+    sequence, event_type, details=event.data

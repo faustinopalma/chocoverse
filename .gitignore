@@ -1,0 +1,34 @@
+# Local settings, never committed
+.env
+.env.*
+!.env.example
+
+# Azure CLI and azd local state
+.azure/
+
+# Bicep build output (the scripts build to stdout; this catches manual "bicep build" runs)
+infra/**/main.json
+
+# Operating system and editor files
+.DS_Store
+Thumbs.db
+.vs/
+
+# Python environments, build output and persistent local demo data
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.local/
+
+# Fabric App dependencies and generated deployment identities
+node_modules/
+*.tsbuildinfo
+apps/**/rayfin/.deployments.json
+apps/**/rayfin/.env
+apps/**/rayfin/.env.*
+apps/**/rayfin/.local/
+apps/giandoria-decision-room/packages/shared/src/source-context.ts
+apps/**/packages/functions/local.settings.json

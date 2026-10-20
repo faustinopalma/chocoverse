@@ -1,0 +1,25 @@
+{
+  "project": "giandoria",
+  "environment": "demo",
+  "location": "swedencentral",
+  "fabricSku": "F4",
+  "scenario": "easter-2031-base",
+  "epoch": "2030-05-31T22:00:00.000Z",
+  "businessTimezone": "Europe/Rome",
+  "seed": 42,
+  "tickSeconds": 3600,
+  "speed": 8760,
+  "networking": "public-where-policy-allows",
+  "storageAccess": "public-with-resource-policy-exemption",
+  "costObjectives": {
+    "currency": "EUR",
+    "subscriptionMonthlyCeiling": 500,
+    "subscriptionBudgetIsSpendingTarget": false,
+    "subscriptionBudgetIncludesOtherProjects": true,
+    "initialDatasetApproximateCeiling": 200,
+    "activeDay": "A few tens of euros; calibrate continuous-session guardrails through bounded experiments",
+    "idle": "Retain data with low recurring cost",
+    "necessaryFixedInfrastructureCostsAcceptable": true,
+    "operationalLimitsApproved": false
+  }
+}

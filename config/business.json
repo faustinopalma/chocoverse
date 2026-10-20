@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "fidelity": "causal-aggregate",
+  "dailyDemandKg": 420,
+  "initialRawMaterialDays": 2,
+  "initialFinishedGoodsDays": 2,
+  "initialChannelStockDays": 2,
+  "qualityHoldHours": 24,
+  "supplierLeadHours": 72,
+  "packagingLeadHours": 168,
+  "distributionLeadHours": 24,
+  "reviewEveryHours": 168,
+  "territories": ["north", "centre", "south"],
+  "channels": {
+    "modern_trade": 50,
+    "export": 23,
+    "own_retail": 9,
+    "traditional": 7,
+    "professional": 5,
+    "campaigns": 4,
+    "travel": 2
+  },
+  "lines": {"moulding": 520, "seasonal": 180},
+  "products": {
+    "dark70": {
+      "share": 45, "line": "moulding", "wholesaleCents": 1100, "retailCents": 1600,
+      "recipeGrams": {"cocoa_mass": 620, "cocoa_butter": 80, "sugar": 295, "lecithin": 4, "vanilla": 1}
+    },
+    "milk": {
+      "share": 40, "line": "moulding", "wholesaleCents": 1000, "retailCents": 1500,
+      "recipeGrams": {"cocoa_mass": 120, "cocoa_butter": 200, "sugar": 450, "milk_powder": 220, "lecithin": 9, "vanilla": 1}
+    },
+    "seasonal_gianduja": {
+      "share": 15, "line": "seasonal", "wholesaleCents": 1450, "retailCents": 2000,
+      "recipeGrams": {"cocoa_mass": 350, "cocoa_butter": 100, "sugar": 249, "hazelnuts": 300, "vanilla": 1}
+    }
+  },
+  "materialCentsPerKg": {
+    "cocoa_mass": 800, "cocoa_butter": 1000, "sugar": 110, "milk_powder": 300,
+    "hazelnuts": 900, "lecithin": 500, "vanilla": 5000
+  },
+  "packagingCentsPerUnit": 35,
+  "conversionCentsPerKg": 65
+}

@@ -1,0 +1,11 @@
+bronze_business
+| where run_id == "business-demo-001" and sequence <= upper_sequence
+| where event_type in ("factory.production.started", "factory.quality.released", "logistics.shipment.dispatched")
+| where todatetime(event.simlocaldate) < cutoff
+| summarize take_any(*) by event_id
+| extend quantity=tolong(event.data.quantity)
+| summarize StartedKg=sumif(quantity, event_type == "factory.production.started"),
+    ReleasedKg=sumif(quantity, event_type == "factory.quality.released"),
+    ShippedKg=sumif(quantity, event_type == "logistics.shipment.dispatched") by
+    Date=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd"), Product=tostring(event.data.sku)
+| order by Date asc, Product asc

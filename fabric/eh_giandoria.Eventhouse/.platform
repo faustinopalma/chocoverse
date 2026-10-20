@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventhouse",
+    "displayName": "eh_giandoria",
+    "description": "Giandoria demo; managed by fabric-cicd from fabric/; synthetic data only."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a5dc3f94-6979-514a-aa20-ff91af45ade7"
+  }
+}

@@ -1,0 +1,12 @@
+bronze_business
+| where run_id == "business-demo-001" and sequence <= upper_sequence and event_type == "world.business.observed"
+| extend Date=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd")
+| where todatetime(Date) < cutoff
+| summarize arg_max(sequence, *) by Date
+| project Date, FinishedKg=tolong(event.data.observations.logistics.finished_kg),
+    BacklogKg=tolong(event.data.observations.logistics.backlog_kg),
+    WipKg=tolong(event.data.observations.factory.wip_kg),
+    CashCents=tolong(event.data.observations.finance.cash_cents),
+    ReceivableCents=tolong(event.data.observations.finance.receivable_cents),
+    PayableCents=tolong(event.data.observations.finance.payable_cents)
+| order by Date asc

@@ -1,0 +1,14 @@
+let end_day = toscalar(bronze_business
+    | where run_id == "business-demo-001" and event_type == "world.business.observed"
+    | summarize max(todatetime(event.simlocaldate)));
+bronze_business
+| where run_id == "business-demo-001"
+| where todatetime(event.simlocaldate) < end_day
+| where event_type in ("retail.sellout.recorded", "trade.sellout.recorded",
+    "factory.quality.released", "logistics.shipment.dispatched")
+| summarize take_any(*) by event_id
+| extend quantity=tolong(event.data.quantity), sim_day=todatetime(event.simlocaldate)
+| summarize sold_kg=sumif(quantity, event_type in ("retail.sellout.recorded", "trade.sellout.recorded")),
+    released_kg=sumif(quantity, event_type == "factory.quality.released"),
+    shipped_kg=sumif(quantity, event_type == "logistics.shipment.dispatched") by sim_day
+| order by sim_day asc

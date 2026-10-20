@@ -1,0 +1,3 @@
+{
+  "query": "EVALUATE VAR Cutoff = MAX('Snapshot'[ThroughDate]) RETURN ROW(\"Through\", FORMAT(Cutoff, \"yyyy-MM-dd\"), \"Sequence\", MAX('Snapshot'[Sequence]), \"Observation\", FORMAT(MAX('Balances'[Date]), \"yyyy-MM-dd\"), \"Stock\", [Finished as observed kg], \"Backlog\", [Backlog as observed kg], \"PreviousBacklog\", CALCULATE([Backlog as observed kg], FILTER(ALL('Date'), 'Date'[Date] <= Cutoff - 7)), \"DailySales\", [Daily sales 30d kg], \"Cash\", [Cash as observed EUR], \"Revenue30\", CALCULATE([Revenue EUR], DATESBETWEEN('Date'[Date], Cutoff - 29, Cutoff)), \"CashMovement30\", CALCULATE([Cash movement EUR], DATESBETWEEN('Date'[Date], Cutoff - 29, Cutoff)), \"Sold30\", [Sales rolling 30d kg])"
+}

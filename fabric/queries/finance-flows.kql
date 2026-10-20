@@ -1,0 +1,13 @@
+let end_day = toscalar(bronze_business
+    | where run_id == "business-demo-001" and event_type == "world.business.observed"
+    | summarize max(todatetime(event.simlocaldate)));
+bronze_business
+| where run_id == "business-demo-001" and event_type == "finance.ledger.posted"
+| where todatetime(event.simlocaldate) >= end_day - 90d and todatetime(event.simlocaldate) < end_day
+| summarize take_any(*) by event_id
+| extend amount_eur=todouble(event.data.amount_cents)/100.0, posting=tostring(event.data.posting_type)
+| summarize revenue_eur=sumif(amount_eur, posting in ("retail.cash.received", "finance.sales.invoice")),
+    purchases_eur=sumif(amount_eur, posting == "finance.purchase.invoice"),
+    conversion_eur=sumif(amount_eur, posting == "finance.conversion.paid")
+    by sim_day=todatetime(event.simlocaldate)
+| order by sim_day asc

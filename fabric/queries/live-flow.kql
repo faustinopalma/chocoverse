@@ -1,0 +1,5 @@
+bronze_business
+| where run_id == "business-demo-001" and wall_ts > ago(15m)
+| summarize take_any(*) by event_id
+| summarize events=count() by bin(wall_ts, 10s)
+| order by wall_ts asc

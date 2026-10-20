@@ -1,0 +1,77 @@
+{
+  "description": "Model families for the shared Foundry resource. scripts/Resolve-ModelPlan.ps1 reads this file and writes model-plan.json: for each family it picks the newest generation and version that the region offers with the SKU below and that is not retired within minDaysToRetirement, then sizes the deployment to the free quota. Edit this file, not the plan.",
+  "sku": "GlobalStandard",
+  "openAiVersionUpgradeOption": "NoAutoUpgrade",
+  "minDaysToRetirement": 60,
+  "families": [
+    {
+      "family": "gpt-astra",
+      "purpose": "chat",
+      "format": "OpenAI",
+      "match": "^gpt-(?<gen>\\d+(?:\\.\\d+)?)-astra$"
+    },
+    {
+      "family": "gpt-sol",
+      "purpose": "chat",
+      "format": "OpenAI",
+      "match": "^gpt-(?<gen>\\d+(?:\\.\\d+)?)-sol$"
+    },
+    {
+      "family": "gpt-terra",
+      "purpose": "chat",
+      "format": "OpenAI",
+      "match": "^gpt-(?<gen>\\d+(?:\\.\\d+)?)-terra$"
+    },
+    {
+      "family": "gpt-luna",
+      "purpose": "chat",
+      "format": "OpenAI",
+      "match": "^gpt-(?<gen>\\d+(?:\\.\\d+)?)-luna$"
+    },
+    {
+      "family": "gpt-image-flare",
+      "purpose": "image",
+      "format": "OpenAI",
+      "match": "^gpt-image-(?<gen>\\d+(?:\\.\\d+)?)-flare$"
+    },
+    {
+      "family": "gpt-image-sunburst",
+      "purpose": "image",
+      "format": "OpenAI",
+      "match": "^gpt-image-(?<gen>\\d+(?:\\.\\d+)?)-sunburst$"
+    },
+    {
+      "family": "mai-image",
+      "purpose": "image",
+      "format": "Microsoft",
+      "match": "^MAI-Image-(?<gen>\\d+(?:\\.\\d+)?)$",
+      "allowPreview": true
+    },
+    {
+      "family": "mai-image-flash",
+      "purpose": "image",
+      "format": "Microsoft",
+      "match": "^MAI-Image-(?<gen>\\d+(?:\\.\\d+)?)-Flash$",
+      "allowPreview": true
+    },
+    {
+      "family": "mai-image-pro",
+      "purpose": "image",
+      "format": "Microsoft",
+      "match": "^MAI-Image-(?<gen>\\d+(?:\\.\\d+)?)-Pro$",
+      "allowPreview": true
+    },
+    {
+      "family": "flux-pro",
+      "purpose": "image",
+      "format": "Black Forest Labs",
+      "match": "^FLUX[.-](?<gen>\\d+(?:\\.\\d+)?)-pro$"
+    },
+    {
+      "family": "flux-flex",
+      "purpose": "image",
+      "format": "Black Forest Labs",
+      "match": "^FLUX[.-](?<gen>\\d+(?:\\.\\d+)?)-flex$"
+    }
+  ]
+}

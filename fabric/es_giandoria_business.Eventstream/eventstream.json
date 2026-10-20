@@ -1,0 +1,24 @@
+{
+  "sources": [{"name": "business", "type": "CustomEndpoint", "properties": {}}],
+  "destinations": [{
+    "name": "business_history",
+    "type": "Eventhouse",
+    "properties": {
+      "dataIngestionMode": "DirectIngestion",
+      "workspaceId": "<workspace-id>",
+      "itemId": "<database-id>",
+      "tableName": "bronze_business",
+      "connectionName": "giandoria_business",
+      "mappingRuleName": "business_json"
+    },
+    "inputNodes": [{"name": "business_stream"}]
+  }],
+  "streams": [{
+    "name": "business_stream",
+    "type": "DefaultStream",
+    "properties": {},
+    "inputNodes": [{"name": "business"}]
+  }],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}

@@ -1,0 +1,9 @@
+*
+!Dockerfile
+!pyproject.toml
+!src/
+!src/giandoria/
+!src/giandoria/*.py
+!config/
+!config/demo.json
+!config/business.json

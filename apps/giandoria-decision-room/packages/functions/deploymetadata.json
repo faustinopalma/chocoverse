@@ -1,0 +1,50 @@
+{
+  "runtime": "TypeScript",
+  "functionsMetadata": [
+    {
+      "name": "investigate",
+      "scriptFile": "src\\function_app.ts",
+      "bindings": [
+        {
+          "name": "req",
+          "type": "httpTrigger",
+          "direction": "in",
+          "authLevel": "anonymous",
+          "methods": [
+            "post"
+          ],
+          "route": "investigate"
+        },
+        {
+          "name": "$return",
+          "type": "http",
+          "direction": "out"
+        },
+        {
+          "name": "__generic_Fabric",
+          "direction": "in",
+          "type": "FabricItem",
+          "alias": "",
+          "audienceType": "Fabric"
+        }
+      ],
+      "fabricProperties": {
+        "fabricMetadataSchemaVersion": "1.0",
+        "fabricFunctionReturnType": "Promise<{ answer: string; virtualDate: string; snapshotDigest: string }>",
+        "fabricFunctionParameters": [
+          {
+            "name": "ctx",
+            "dataType": "RayfinContext<UniversalAppSchema, AudienceType.Fabric>",
+            "hasDefaultValue": false
+          },
+          {
+            "name": "question",
+            "dataType": "string",
+            "hasDefaultValue": false
+          }
+        ]
+      },
+      "functionCode": "udf.func(\n  'investigate',\n  async (ctx: RayfinContext<UniversalAppSchema, AudienceType.Fabric>,\n    question: string): Promise<{ answer: string; virtualDate: string; snapshotDigest: string }> => {\n    if (!question.trim() || question.length > 1500) throw new Error('Enter a question of 1 to 1,500 characters.');\n    const token = ctx.Tokens.Fabric;\n    const deadline = AbortSignal.timeout(210000);\n    const verify = async () => {\n      await assertContract(sourceContext.workspaceId, sourceContext.modelId, sourceContext.modelDigest, token,\n        AbortSignal.any([deadline, AbortSignal.timeout(45000)]), 'TMSL');\n      await assertContract(sourceContext.workspaceId, sourceContext.agentId, sourceContext.agentDigest, token,\n        AbortSignal.any([deadline, AbortSignal.timeout(45000)]));\n    };\n    await verify();\n    const endpoint = `https://api.fabric.microsoft.com/v1/mcp/workspaces/${sourceContext.workspaceId}/dataagents/${sourceContext.agentId}/agent`;\n    const prompt = `Use only the published enterprise snapshot through ${sourceContext.throughDate} (virtual Rome date). ` +\n      'Answer concisely in English, under 3,000 characters. State limitations and distinguish observed facts from hypothetical advice. Do not claim live data. Question: ' + question;\n    const answer = await askAgent(endpoint, token, prompt, deadline);\n    await verify();\n    return { answer, virtualDate: sourceContext.throughDate, snapshotDigest: sourceContext.snapshotDigest };\n  },\n  []\n)"
+    }
+  ]
+}

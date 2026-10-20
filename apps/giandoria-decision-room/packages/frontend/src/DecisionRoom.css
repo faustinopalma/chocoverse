@@ -1,0 +1,142 @@
+@reference "./global.css";
+
+@layer components {
+  .decision-room { @apply flex min-h-screen bg-background text-foreground font-base text-300 leading-relaxed; }
+  .decision-room h1 { @apply font-heading text-hero-900 leading-tight font-semibold tracking-tight; }
+  .decision-room h2 { @apply font-heading text-500 leading-snug font-semibold tracking-tight; }
+  .decision-room h3 { @apply flex items-center gap-200 text-400 font-semibold; }
+  .decision-room a { @apply inline-flex items-center gap-200-nudge text-primary font-medium no-underline hover:underline; }
+  .decision-room button { @apply cursor-pointer transition-colors disabled:cursor-not-allowed disabled:opacity-50; }
+  .decision-room :focus-visible { @apply outline-2 outline-ring outline-offset-2; }
+  .sidebar { @apply sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-border bg-card px-500 py-800; }
+  .decision-room .wordmark { @apply gap-300 text-foreground text-400 font-bold tracking-widest; }
+  .wordmark small { @apply mt-100 block text-[9px] font-medium tracking-[.15em] text-muted-foreground; }
+  .brand-icon { @apply relative grid size-11 shrink-0 place-items-center rounded-xl bg-primary font-heading text-600 text-primary-foreground; }
+  .brand-icon span { @apply absolute right-1.5 bottom-1.5 size-1.5 rounded-full bg-primary-foreground; }
+  .workspace-label { @apply mx-300 mt-12 mb-400 text-[11px] tracking-widest text-muted-foreground; }
+  .sidebar nav { @apply grid gap-300-nudge; }
+  .sidebar nav button { @apply m-0 flex h-12 w-full items-center justify-start gap-300 rounded-[10px] border-0 bg-transparent px-400 text-left text-300 font-medium text-muted-foreground; }
+  .sidebar nav button:hover, .sidebar nav button[aria-current="page"] { @apply bg-accent text-primary; }
+  .sidebar nav button[aria-current="page"] { @apply font-semibold; }
+  .nav-chevron { @apply ml-auto; }
+  .trust-mark { @apply mb-400 flex items-center gap-200 font-semibold text-foreground; }
+  .sidebar-bottom { @apply mt-auto border-t border-border px-200 pt-500 text-200 text-muted-foreground; }
+  .sidebar-bottom p { @apply mt-200 mb-400; }
+  .status-dot { @apply mr-100 inline-block size-200-nudge rounded-full bg-primary; }
+  .decision-room main { @apply min-w-0 max-w-[1600px] flex-1 px-10 pb-800; }
+  .topbar { @apply flex min-h-20 items-center justify-between border-b border-border py-300 text-200 tracking-wide text-muted-foreground; }
+  .topbar b { @apply font-medium text-foreground; }
+  .pill { @apply whitespace-nowrap rounded-full bg-muted px-300 py-100 text-200 text-muted-foreground; }
+  .page-heading { @apply flex items-center justify-between gap-400 pt-800 pb-700; }
+  .decision-room .eyebrow { @apply mb-300 flex items-center gap-200 text-[11px] font-semibold tracking-[.13em] text-primary; }
+  .page-heading p:last-child { @apply mt-200 text-muted-foreground; }
+  .provenance { @apply flex flex-wrap gap-x-600 gap-y-200 rounded-[10px] border border-border bg-muted px-400 py-300 text-200 text-muted-foreground; }
+  .provenance > span { @apply inline-flex items-center gap-200; }
+  .provenance .version { @apply ml-auto; }
+  .provenance b { @apply mr-100 font-medium text-foreground; }
+  .metrics { @apply mt-600 mb-600 grid grid-cols-4 gap-500; }
+  .metric { @apply flex min-h-40 flex-col gap-200; }
+  .metric-heading { @apply mb-100 flex items-center justify-between gap-200 text-[11px] font-medium tracking-wide text-muted-foreground; }
+  .metric-icon { @apply grid size-9 shrink-0 place-items-center rounded-[10px] bg-accent text-primary; }
+  .metric strong { @apply whitespace-nowrap font-numeric font-semibold tracking-tight; font-size: clamp(1.1rem, 1.65vw, 1.75rem); font-variant-numeric: tabular-nums; }
+  .metric small { @apply text-200 text-muted-foreground; }
+  .metric-footer { @apply flex flex-wrap items-center gap-200; }
+  .overview-strip { @apply mb-800 grid grid-cols-[1.1fr_1fr] gap-500; }
+  .signal-summary { @apply flex items-center gap-500; }
+  .signal-summary p:last-child { @apply mt-200 text-200 leading-relaxed text-muted-foreground; }
+  .summary-icon { @apply grid size-12 shrink-0 place-items-center rounded-2xl bg-accent text-primary; }
+  .cover-card .section-title { @apply mb-300; }
+  .cover-card h3 { @apply text-300; }
+  .cover-values { @apply mb-300 flex justify-between gap-300 text-200 text-muted-foreground; }
+  .cover-values b { @apply font-semibold text-foreground; }
+  .cover-card > p { @apply mt-300; }
+  .inbox-grid { @apply grid grid-cols-[minmax(280px,.78fr)_minmax(0,1.4fr)] items-start gap-600; }
+  .section-title { @apply mb-400 flex items-center justify-between gap-300; }
+  .section-title > span { @apply text-200 text-muted-foreground; }
+  .case-list h2 { @apply text-500; }
+  .case-card { @apply mb-400 block w-full text-left; }
+  .case-card[aria-pressed="true"] {
+    --base-card-surface-box-shadow: 0 0 0 1px var(--cp-accent);
+    --base-card-surface-hover-box-shadow: var(--base-card-surface-box-shadow);
+    --base-card-surface-active-box-shadow: var(--base-card-surface-box-shadow);
+  }
+  .case-topline { @apply mb-400 flex items-center justify-between gap-200; }
+  .case-number { @apply text-200 font-semibold tracking-widest text-muted-foreground; }
+  .signal { @apply mb-300 inline-block text-200 font-semibold tracking-wide text-muted-foreground; }
+  .signal.active { @apply rounded-md bg-accent px-200 py-100 text-primary; }
+  .case-card h3 { @apply mb-200; }
+  .case-card p { @apply text-200 text-muted-foreground; }
+  .card-link { @apply mt-500 flex items-center justify-between gap-200 text-200 font-medium text-primary; }
+  .panel { @apply mb-600; }
+  .panel-heading { @apply flex items-center justify-between gap-300; }
+  .panel-heading h2 { @apply text-600; }
+  .workflow-guide { @apply mt-600 mb-500 flex items-center gap-300 border-y border-border py-300 text-[11px] tracking-wide text-muted-foreground; }
+  .panel > p { @apply mt-300 mb-500 text-muted-foreground; }
+  .proposal { @apply mt-500 mb-700 rounded-[10px] border border-border bg-muted px-500 py-400 text-300 text-foreground; }
+  .proposal .signal { @apply mb-100 text-primary; }
+  .decision-room .muted { @apply text-200 text-muted-foreground; }
+  .field-label { @apply my-500 grid gap-300 text-200 font-semibold; }
+  .decision-room select { @apply w-full rounded-[10px] border border-input bg-background px-400 py-300 font-base text-300 font-normal leading-relaxed text-foreground; }
+  .answer { @apply my-600 rounded-xl border border-border bg-muted p-600; }
+  .answer .signal { @apply m-0; }
+  .answer p { @apply mt-400; }
+  .answer p, .preserve { @apply whitespace-pre-wrap break-words; }
+  .review-section { @apply mt-700 border-t border-border pt-600; }
+  .review-section > p { @apply mt-200 text-200 text-muted-foreground; }
+  .error { @apply my-500 rounded-[10px] border border-destructive bg-card p-500 text-destructive break-words; }
+  .success { @apply mt-300 text-200 text-primary; }
+  .loading, .empty { @apply my-500 flex items-center justify-center gap-300 rounded-xl border border-dashed border-border bg-card px-500 py-800 text-muted-foreground; }
+  .decision-room table { @apply my-600 w-full border-collapse text-left text-300; }
+  .decision-room th { @apply text-200 font-medium text-muted-foreground; }
+  .decision-room th, .decision-room td { @apply border-b border-border px-300 py-400; }
+  .highlight { @apply bg-accent text-primary; }
+  .method { @apply my-600 rounded-xl border border-border bg-muted p-500 text-200; }
+  .method p { @apply mt-200 text-muted-foreground; }
+  .filters { @apply grid grid-cols-3 gap-500; }
+  .link-row { @apply mt-500 flex flex-wrap gap-500; }
+  .journal-card { @apply my-500; }
+  .journal-card > p { @apply my-300; }
+  .journal-card summary { @apply mt-300 cursor-pointer text-primary; }
+  .journal-card pre { @apply whitespace-pre-wrap break-words bg-background p-300 text-200; }
+  .decision-room footer { @apply mt-800 border-t border-border pt-500 text-200 text-muted-foreground; }
+  .decision-room footer p { @apply mt-200 mb-300 max-w-5xl; }
+  .mobile-break { @apply hidden; }
+}
+@media (min-width: 1500px) { .decision-room main { @apply px-12; } }
+@media (max-width: 1100px) {
+  .sidebar { @apply w-56 px-300 py-600; }
+  .decision-room main { @apply px-600; }
+  .metrics { @apply grid-cols-2; }
+  .inbox-grid { @apply grid-cols-1; }
+  .overview-strip { @apply grid-cols-1; }
+  .case-list { @apply grid grid-cols-3 gap-300; }
+  .case-list .section-title { @apply col-span-full; }
+}
+@media (max-width: 720px) {
+  .decision-room { @apply block; }
+  .sidebar { @apply static h-auto w-full border-b border-border p-500; }
+  .sidebar nav { @apply mt-400 grid grid-cols-2 gap-200; }
+  .sidebar nav button { @apply p-200 text-200; }
+  .workspace-label, .sidebar-bottom { @apply hidden; }
+  .decision-room main { @apply px-400 pb-500; }
+  .topbar { @apply min-h-12 text-200; }
+  .topbar > div:first-child > span:first-child, .topbar > div:first-child > svg { @apply hidden; }
+  .page-heading { @apply flex-col items-start; }
+  .page-heading h1 { @apply text-hero-700; }
+  .metrics { @apply gap-300; }
+  .metric strong { @apply text-500; }
+  .case-list { @apply block; }
+  .panel-heading { @apply items-start; }
+  .panel-heading h2 { @apply text-500; }
+  .mobile-break { @apply block; }
+  .metric strong { @apply text-500; }
+  .metric { @apply min-h-36; }
+  .metric-heading { @apply text-[10px]; }
+  .metric-icon { @apply size-7; }
+  .filters { @apply grid-cols-1 gap-0; }
+  .decision-room th, .decision-room td { @apply px-100 py-300 text-200; }
+}
+@media (max-width: 420px) {
+  .metrics { @apply grid-cols-1; }
+  .metric { @apply min-h-32; }
+}

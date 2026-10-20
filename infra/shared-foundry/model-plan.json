@@ -1,0 +1,252 @@
+{
+  "generatedBy": "infra/shared-foundry/scripts/Resolve-ModelPlan.ps1 from model-selection.json",
+  "generatedAt": "2026-10-18T09:17:48Z",
+  "location": "swedencentral",
+  "sku": "GlobalStandard",
+  "quotaShare": 1.0,
+  "minDaysToRetirement": 60,
+  "deployments": [
+    {
+      "name": "gpt-6-astra",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-6-astra",
+        "version": "2026-09-03"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 250
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-astra",
+        "purpose": "chat",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2028-01-11",
+        "quotaName": "OpenAI.GlobalStandard.gpt-6-astra",
+        "quotaScope": "Global/global",
+        "quotaUnit": "1K TPM",
+        "quotaLimit": 250,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "gpt-6.1-sol",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-6.1-sol",
+        "version": "2026-09-29"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 250
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-sol",
+        "purpose": "chat",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2028-03-11",
+        "quotaName": "OpenAI.GlobalStandard.gpt-6.1-sol",
+        "quotaScope": "Global/global",
+        "quotaUnit": "1K TPM",
+        "quotaLimit": 250,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "gpt-5.6-terra",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-5.6-terra",
+        "version": "2026-07-09"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 250
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-terra",
+        "purpose": "chat",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2028-01-11",
+        "quotaName": "OpenAI.GlobalStandard.gpt-5.6-terra",
+        "quotaScope": "Global/global",
+        "quotaUnit": "1K TPM",
+        "quotaLimit": 250,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "gpt-6-luna",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-6-luna",
+        "version": "2026-09-22"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 250
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-luna",
+        "purpose": "chat",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2028-03-11",
+        "quotaName": "OpenAI.GlobalStandard.gpt-6-luna",
+        "quotaScope": "Global/global",
+        "quotaUnit": "1K TPM",
+        "quotaLimit": 250,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "gpt-image-2.5-flare",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-image-2.5-flare",
+        "version": "2026-09-08"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 2
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-image-flare",
+        "purpose": "image",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2027-09-08",
+        "quotaName": "OpenAI.GlobalStandard.gpt-image-2.5-flare",
+        "quotaScope": "Global/global",
+        "quotaUnit": "RPM",
+        "quotaLimit": 2,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "gpt-image-2.5-sunburst",
+      "model": {
+        "format": "OpenAI",
+        "name": "gpt-image-2.5-sunburst",
+        "version": "2026-09-08"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 2
+      },
+      "versionUpgradeOption": "NoAutoUpgrade",
+      "metadata": {
+        "family": "gpt-image-sunburst",
+        "purpose": "image",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2027-09-08",
+        "quotaName": "OpenAI.GlobalStandard.gpt-image-2.5-sunburst",
+        "quotaScope": "Global/global",
+        "quotaUnit": "RPM",
+        "quotaLimit": 2,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "MAI-Image-2.6",
+      "model": {
+        "format": "Microsoft",
+        "name": "MAI-Image-2.6",
+        "version": "2026-07-31"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 6
+      },
+      "metadata": {
+        "family": "mai-image",
+        "purpose": "image",
+        "lifecycle": "Preview",
+        "retiresOn": "2027-01-09",
+        "quotaName": "AIServices.GlobalStandard.MAI-Image-2.6",
+        "quotaScope": "Global/global",
+        "quotaUnit": "RPM",
+        "quotaLimit": 6,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "MAI-Image-2.6-Flash",
+      "model": {
+        "format": "Microsoft",
+        "name": "MAI-Image-2.6-Flash",
+        "version": "2026-07-31"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 6
+      },
+      "metadata": {
+        "family": "mai-image-flash",
+        "purpose": "image",
+        "lifecycle": "Preview",
+        "retiresOn": "2027-01-09",
+        "quotaName": "AIServices.GlobalStandard.MAI-Image-2.6-Flash",
+        "quotaScope": "Global/global",
+        "quotaUnit": "RPM",
+        "quotaLimit": 6,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "FLUX.2-pro",
+      "model": {
+        "format": "Black Forest Labs",
+        "name": "FLUX.2-pro",
+        "version": "1"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 4
+      },
+      "metadata": {
+        "family": "flux-pro",
+        "purpose": "image",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2099-12-31",
+        "quotaName": "AIServices.GlobalStandard.FLUX.2-pro",
+        "quotaScope": "Classic/swedencentral",
+        "quotaUnit": "RPM",
+        "quotaLimit": 4,
+        "usedByOthers": 0
+      }
+    },
+    {
+      "name": "FLUX.2-flex",
+      "model": {
+        "format": "Black Forest Labs",
+        "name": "FLUX.2-flex",
+        "version": "1"
+      },
+      "sku": {
+        "name": "GlobalStandard",
+        "capacity": 4
+      },
+      "metadata": {
+        "family": "flux-flex",
+        "purpose": "image",
+        "lifecycle": "GenerallyAvailable",
+        "retiresOn": "2099-12-31",
+        "quotaName": "AIServices.GlobalStandard.FLUX.2-flex",
+        "quotaScope": "Classic/swedencentral",
+        "quotaUnit": "RPM",
+        "quotaLimit": 4,
+        "usedByOthers": 0
+      }
+    }
+  ],
+  "skipped": [
+    {
+      "family": "mai-image-pro",
+      "reason": "every candidate retires within 60 days: MAI-Image-2.5-Pro@2026-06-19 retires 2026-11-15"
+    }
+  ]
+}

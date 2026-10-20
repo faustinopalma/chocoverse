@@ -1,0 +1,12 @@
+let end_day = toscalar(bronze_business
+    | where run_id == "business-demo-001" and event_type == "world.business.observed"
+    | summarize max(todatetime(event.simlocaldate)));
+bronze_business
+| where run_id == "business-demo-001" and event_type == "world.business.observed"
+| extend sim_day=todatetime(event.simlocaldate)
+| where sim_day >= end_day - 90d and sim_day < end_day
+| summarize arg_max(sequence, *) by sim_day
+| project sim_day, cash_eur=todouble(event.data.observations.finance.cash_cents)/100.0,
+    receivable_eur=todouble(event.data.observations.finance.receivable_cents)/100.0,
+    payable_eur=todouble(event.data.observations.finance.payable_cents)/100.0
+| order by sim_day asc

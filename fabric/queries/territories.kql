@@ -1,0 +1,9 @@
+let end_day = toscalar(bronze_business
+    | where run_id == "business-demo-001" and event_type == "world.business.observed"
+    | summarize max(todatetime(event.simlocaldate)));
+bronze_business
+| where run_id == "business-demo-001" and event_type in ("retail.sellout.recorded", "trade.sellout.recorded")
+| where todatetime(event.simlocaldate) >= end_day - 90d and todatetime(event.simlocaldate) < end_day
+| summarize take_any(*) by event_id
+| summarize sold_kg=sum(tolong(event.data.quantity)) by territory=tostring(event.data.territory)
+| order by sold_kg desc

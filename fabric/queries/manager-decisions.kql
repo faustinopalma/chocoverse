@@ -1,0 +1,6 @@
+bronze_business
+| where run_id == "business-demo-001" and event_type == "agents.decision.recorded"
+| summarize take_any(*) by event_id
+| top 20 by sequence desc
+| project sim_ts, mode=tostring(event.data.mode), option=tostring(event.data.option),
+    reason=tostring(event.data.reason), tokens=tolong(event.data.usage.total_tokens)

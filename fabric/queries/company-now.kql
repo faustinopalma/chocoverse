@@ -1,0 +1,14 @@
+bronze_business
+| where run_id == "business-demo-001" and event_type == "world.business.observed"
+| top 1 by sequence desc
+| project virtual_time_utc=sim_ts,
+    virtual_date_rome=format_datetime(todatetime(event.simlocaldate), "yyyy-MM-dd"),
+    tick=tolong(event.data.tick),
+    finished_kg=tolong(event.data.observations.logistics.finished_kg),
+    backlog_kg=tolong(event.data.observations.logistics.backlog_kg),
+    wip_kg=tolong(event.data.observations.factory.wip_kg),
+    cash_eur=todouble(event.data.observations.finance.cash_cents)/100.0,
+    revenue_eur=todouble(event.data.observations.finance.revenue_cents)/100.0,
+    receivable_eur=todouble(event.data.observations.finance.receivable_cents)/100.0,
+    payable_eur=todouble(event.data.observations.finance.payable_cents)/100.0,
+    strategy=tostring(event.data.observations.planning.strategy)
