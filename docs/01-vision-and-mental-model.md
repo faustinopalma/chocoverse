@@ -827,7 +827,7 @@ months and can only be built a few weeks ahead.
 > component queues for its line and waits through closed shifts, so every step lands as late as possible on a line
 > that is really free. A forward pass from today then shows the slack of each step, and the latest order date of
 > each material. The research literature knows the idea as backward simulation; the owner arrived at it
-> independently. Chapter 17 explains the method, with a worked example checked to the hour.
+> independently. Chapter 17 gives a short explanation, a numerical example and a link to the original SimPy project.
 
 ### How much to commit: the newsvendor rule
 
@@ -1635,7 +1635,7 @@ Each chapter can be read on its own; they refer to each other by chapter and sec
 | 14 | Implementation plan | Principles, workstreams, the ten phases with goals and exit criteria, genesis, testing, the definition of done, the cost of the plan, risks, what comes after | Know how it gets built, and in what order |
 | 15 | Open decisions | The twenty decisions with their options and defaults, how they connect and when they close, the principles settled by design, how decisions are recorded | Agree before building |
 | 16 | References | The 177 sources in three families, the known gaps and how the design handles them, how the references are kept current | Check where a number comes from |
-| 17 | Reverse-time simulation: the reverse-time planning method | The project owner's method for backward planning with finite capacity: the mirror of time, the reversal rules, production boxes, the two passes and slack, a worked Christmas example, where Giandoria uses it, how it runs and is tested, its origin and the prior art, its limits | See how plans are built backwards against real capacity |
+| 17 | Reverse-time simulation: the reverse-time planning method | A concise explanation of the time mirror, two passes and slack, with a small example, the original SimPy repository, prior art and implementation limits | See how plans can be built backwards against real capacity |
 | 18 | Tenant governance: what the reference tenant allows | The policy audit of the reference tenant: what is denied, changed and added, Defender plans and their cost, delegated management, roles and Privileged Identity Management, model quota, the consequences for Giandoria, the shared Foundry resource, how to repeat the audit | Know which tenant rules shape the build, and what they cost |
 
 ### Four reading paths

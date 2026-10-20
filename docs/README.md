@@ -67,8 +67,8 @@ and the people. Real-world facts are used only to make it realistic; chapter 16 
 > shifts, and each material gets the latest date by which it must be ordered. Every step lands as late as possible on
 > a line that is really free. A forward pass from today then gives the slack of every step and flags what is already
 > late. I arrived at the idea independently; [chapter 17](./17-reverse-time-simulation.md) explains it with a
-> worked example checked to the hour, and reviews the research literature, which knows the idea as backward
-> simulation.
+> short numerical example, links to the original Excel-driven SimPy repository, and credits the earlier
+> backward-simulation literature. The full planning engine remains part of the target design.
 
 ---
 
@@ -198,7 +198,7 @@ and approval.
 | 14 | [Implementation plan](./14-implementation-plan.md) | How it gets built: ten phases with goals and exit criteria, genesis, testing, the definition of done, the cost of the plan, risks |
 | 15 | [Decisions and adopted assumptions](./15-open-decisions.md) | Our twenty choices and remaining technical evidence |
 | 16 | [References](./16-references.md) | Sources and known gaps |
-| 17 | [Reverse-time simulation](./17-reverse-time-simulation.md) | **Reverse-time planning:** how production is planned backwards against real capacity, with slack per step; a worked Christmas example; the origin and the prior art |
+| 17 | [Reverse-time simulation](./17-reverse-time-simulation.md) | **Reverse-time planning, briefly:** the time mirror, two passes and slack, a small example, the original SimPy repository and implementation limits |
 | 18 | [Tenant governance](./18-tenant-governance.md) | **What the reference tenant allows:** the policies that deny, change or add settings, Defender plans and their cost, roles and Privileged Identity Management, model quota, the consequences for Giandoria, the shared Foundry resource |
 | 19 | [Public endpoints and exemptions](./19-policy-exemption-experiment.md) | Waiver scope, access controls and revocation handling |
 | 20 | [Fabric walking skeleton](./20-fabric-walking-skeleton.md) | Verified behavior, replay semantics and remaining work |
