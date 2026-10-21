@@ -233,6 +233,14 @@ and rules for keeping references current.
 | F100 | Fabric long-running operations | Accepted requests, polling operation status and fetching results | 20 | <https://learn.microsoft.com/en-us/rest/api/fabric/articles/long-running-operation> |
 | F101 | Kusto dynamic type | Strongly typed values and JSON normalization; raw text retained separately | 20 | <https://learn.microsoft.com/en-us/kusto/query/scalar-data-types/dynamic?view=microsoft-fabric> |
 | F102 | Radix Themes | React component authoring, theme configuration and accessible interface primitives | 27 | <https://www.radix-ui.com/themes/docs/overview/getting-started> |
+| F103 | Data Agent runtime | Standard and preview runtime; SQL and DAX improvements | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-runtime> |
+| F104 | Data Agent schema descriptions | SQL-source object descriptions and preview prerequisites | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-schema-object-descriptions> |
+| F105 | Data Agent topics | SQL topic retrieval and visible run steps | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-topics> |
+| F106 | Ontology as Data Agent context | Semantic context versus source-native query execution | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-ontology-sources> |
+| F107 | Data Agent visual responses | Native charts, 200-row limit and client restrictions | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-visuals> |
+| F108 | Data Agent Code Interpreter | Python tool, SDK configuration and execution inspection | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-code-interpreter> |
+| F109 | Data Agent consumer feedback | Administrator sharing, republishing and SDK retrieval | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/data-agent-microsoft-copilot-feedback> |
+| F110 | Data Agent Python SDK | Public management plane, MCP consumption and M365 publication limits | 29 | <https://learn.microsoft.com/en-us/fabric/data-science/fabric-data-agent-sdk> |
 
 ---
 

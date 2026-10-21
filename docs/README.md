@@ -1,6 +1,8 @@
 # Giandoria — a simulated chocolate universe on Azure and Microsoft Fabric
 
 For a short visual introduction, start with the [Chocoverse illustrated tour](../README.md).
+For an analyst's perspective, follow the [interactive Data Agent story](https://faustinopalma.github.io/chocoverse/)
+or its [illustrated Markdown edition](./data-agent-story.md).
 This index is the navigation and implementation-status guide. The
 [mental-model chapter](./01-vision-and-mental-model.md) explains the target universe; the chapters below own its
 detailed design.
@@ -16,7 +18,7 @@ with weekly LLM decisions, dashboards and queryable analytics. Semantic-model, o
 extend that evidence, each with documented prerequisites and limits. The full target planning engine is not yet
 implemented. See the [business lab](./21-business-lab.md) for current scope, the
 [Fabric walking skeleton](./20-fabric-walking-skeleton.md) for verified platform behavior, and chapters
-[23–28](#the-documents) for the focused showcases.
+[23–29](#the-documents) for the focused showcases and presentation companion.
 
 For a local run, use [the first local increment](#running-the-first-local-increment); for Azure operations, use the
 [demo runbook](../infra/demo/README.md). [Chapter 15](./15-open-decisions.md#152-summary-and-status) records the
@@ -107,6 +109,7 @@ and approval.
 | 26 | [Fabric IQ ontology](./26-fabric-ontology.md) | Enterprise entities, composite identities, relationship bindings, immutable Delta sources and preview prerequisites |
 | 27 | [Decision Room and app authoring](./27-decision-room.md) | Native Fabric App, Rayfin authoring, Radix interface, governed investigations and private review lifecycle |
 | 28 | [Data Agent delegation experiment](./28-data-agent-delegation-experiment.md) | Retrieval versus expertise: frozen questions, equal-access DAX controls, semantic knowledge and specialist errors |
+| 29 | [Data Agent companion runbook](./29-data-agent-companion.md) | Reproduce the illustrated story and its feature acceptance gates |
 
 The first infrastructure in code is the shared Foundry resource of chapter 18 §18.11:
 [infra/shared-foundry](../infra/shared-foundry/README.md).

@@ -1,0 +1,15 @@
+{
+  "name": "giandoria-data-agent-story",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "test": "node --test"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {
+    "markdown-it": "14.1.0"
+  }
+}

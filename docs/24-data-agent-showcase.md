@@ -11,6 +11,10 @@ For a direct-versus-delegated comparison, see the
 retains cases where the specialist gives an incorrect answer. Operating
 commands belong to the [cloud runbook](../infra/demo/README.md#fabric-data-agent-showcase).
 
+For an audience-facing story and feature-by-feature exercises, use the
+[presentation companion](./29-data-agent-companion.md). Its separate preview agents preserve this showcase's
+single-source observer contract.
+
 ## 24.1 Architecture and educational purpose
 
 ```mermaid

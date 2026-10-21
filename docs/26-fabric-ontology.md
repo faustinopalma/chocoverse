@@ -116,6 +116,10 @@ An ontology agent or a Data Agent connection is a separate consumer configuratio
 source-access, supported-feature and answer-quality verification. Publication alone does not prove
 natural-language querying, source permissions for the isolated manager identity or live decision integration.
 
+The separate [Data Agent analytical story](./data-agent-story.md#2-start-with-a-fair-comparison)
+now demonstrates ontology-grounded label resolution and SQL execution over the retained enterprise snapshot.
+That consumer result does not migrate the ontology or establish access for other identities.
+
 ## Official contracts
 
 * [Ontology overview and preview scope](https://learn.microsoft.com/en-us/fabric/iq/ontology/overview)

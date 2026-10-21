@@ -23,6 +23,10 @@ build/
 dist/
 .local/
 
+# Supplied confidential presentation, including its lock file while PowerPoint is open
+/The Road Ahead for AI in Fabric Data Agents.pptx
+/~$The Road Ahead for AI in Fabric Data Agents.pptx
+
 # Fabric App dependencies and generated deployment identities
 node_modules/
 *.tsbuildinfo
