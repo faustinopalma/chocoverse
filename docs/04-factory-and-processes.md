@@ -1,10 +1,9 @@
 # 04 — The Factory: Processes, Lines and Machines
 
-> This chapter describes **how chocolate is physically made** in the universe: the process steps with their
-> real times and temperatures, the two plants and their lines, the machines and how they fail, changeovers,
-> quality, people, energy and telemetry. sim-factory (chapter 08) is built from this chapter.
-> Numbers come from trade and vendor literature and are **ranges for parametrisation**, not data from one
-> real plant. Values marked *(estimate)* have no strong public source.
+This chapter follows chocolate from raw materials through finishing and quality release, then defines the
+plants, line capacities, reliability, changeovers, workforce, energy and telemetry used by sim-factory
+(chapter 08). Values are ranges for parameterisation, not data from one real plant; *(estimate)* marks
+figures without a strong public source.
 
 ---
 

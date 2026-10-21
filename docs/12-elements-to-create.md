@@ -1,28 +1,20 @@
 # 12 — Elements to create
 
-> This chapter is the **complete inventory** of what must exist for Giandoria to run, and the **order** in which it
-> is created.
->
-> * Everything is created by code. A person runs one bootstrap script per tenant and environment. CI/CD pipelines
->   create everything else. Lab Control creates the run-level artefacts.
-> * Nobody opens the Azure portal or the Fabric user interface to create a resource. The only exception is optional
->   visual design of dashboards and reports in the stopped `demo`, which is exported to Git (§12.11).
-> * Every element has an ID, so that the implementation plan (chapter 14) and the open decisions (chapter 15) can
->   point to it.
->
-> Chapter 11 explains why the architecture looks like this. Chapter 13 covers costs and runbooks.
+This chapter inventories the target resources and Fabric items by ID, creator, lifecycle and provisioning order.
+Resources are created by code; optional visual authoring in the stopped `demo` is exported to Git (§12.11).
+Chapter 11 explains the architecture; chapter 13 covers costs and runbooks.
 
 ---
 
 ## 12.1 How to read this chapter
 
-**Implementation scope.** Only `{env}=demo` is deployed, in Sweden Central, with one F4.
-This inventory remains the target catalogue, not a claim that every item is implemented or supported on F4.
+**Implementation scope.** Only `{env}=demo` is deployed, in Sweden Central, with one F4. This target inventory
+does not claim that every item is implemented or supported on F4.
 Workspace/configuration uses idempotent `fab`/REST; supported Git item definitions use `fabric-cicd`; API gaps stay
 explicit. Retained demo datasets and restart state are not temporary spike resources and survive hibernation.
 We use authenticated public endpoints with resource-scoped, non-expiring network Waivers for Storage, ACR and
 shared experimental Foundry. [Chapter 19](./19-policy-exemption-experiment.md) records exact scope, retained
-controls and verification; non-network controls are not exempted. The full inventory remains a target catalogue.
+controls and verification; non-network controls are not exempted.
 
 ### Element groups
 

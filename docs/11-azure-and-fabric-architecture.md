@@ -1,13 +1,8 @@
 # 11 — Azure and Fabric architecture
 
-> This chapter puts all the pieces on the map:
->
-> * which Azure resources run the universe
-> * which Fabric items receive and present the data
-> * how identities and permissions connect them
-> * how the control plane starts, pauses and hibernates everything without anyone opening a portal
->
-> Chapter 12 turns this into a complete inventory with a provisioning order. Chapter 13 covers costs and runbooks.
+This chapter shows how Azure resources and Fabric items fit together, how identities connect them, and how
+the control plane operates the universe. Chapter 12 inventories what must be created; chapter 13 covers costs
+and runbooks.
 
 ---
 

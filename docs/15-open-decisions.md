@@ -1,17 +1,8 @@
 # 15 — Decisions and adopted assumptions
 
-> The design of chapters 02 to 14 rests on **twenty decisions**. We adopt the recommended simple-demo choices
-> as working assumptions, while keeping unverified platform behavior and numeric guardrails explicit. For each decision,
-> this chapter says:
->
-> * what the decision is about, and which options exist
-> * why the default is recommended
-> * what changes in the design if another option is chosen
-> * by when it must be closed, and which checks or measurements provide the evidence
->
-> The decisions work together with the 29 open checks of chapter 12 §12.16 and the cost measurements of chapter 13
-> §13.12, which provide facts. An adopted assumption is permission to implement and test the choice, not proof
-> that its dependencies work or that performance targets have been achieved.
+This chapter records twenty design decisions, their defaults and when evidence may confirm or change them.
+Adopted assumptions allow implementation and testing; they do not close the 29 platform checks in chapter 12
+§12.16 or prove performance targets. Cost measurements are tracked in chapter 13 §13.12.
 
 ---
 

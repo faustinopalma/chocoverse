@@ -1,24 +1,11 @@
 # 18 — Tenant governance: what the reference tenant allows
 
-> The reference tenant, where Giandoria is built first, is a Microsoft-managed tenant for experimentation. Its
-> governing organisation applies Azure Policy from the tenant root, switches on Microsoft Defender for Cloud and runs
-> delegated automation. This chapter records what those rules deny, change and add, what they cost, and how they
-> change the design. Current project-specific exceptions and verification are recorded in chapter 19.
->
-> Other tenants may have no such rules, or different ones. The design and the templates work in both cases; the
-> consequences of §18.10 apply only where the same rules exist. Rules change without notice: §18.12 shows how to
-> repeat the audit.
->
-> This chapter explains:
->
-> * the tenant, the audit and the one rule the project follows (§18.1)
-> * the policy assignments and what their effects do (§18.2)
-> * what is denied (§18.3), changed (§18.4) and added (§18.5, §18.6)
-> * delegated management, locks, roles and Privileged Identity Management (§18.7, §18.8)
-> * model quota (§18.9)
-> * the consequences for Giandoria, and the options for storage without public endpoints (§18.10)
-> * the shared Foundry resource (§18.11)
-> * how to repeat the audit, and what is still open (§18.12, §18.13)
+The reference tenant is Microsoft-managed for experimentation and applies inherited Azure Policy, Microsoft
+Defender for Cloud and delegated automation. This chapter records their effects on Giandoria's design and cost;
+project-specific exemptions and verification are in chapter 19.
+
+Other tenants may differ, so §18.10 applies only where the same rules exist. Policies can change; §18.12
+explains how to repeat the audit.
 
 ---
 

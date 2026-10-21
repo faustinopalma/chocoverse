@@ -1,9 +1,8 @@
 # 16 — References
 
-> This chapter lists every source behind the numbers, methods and platform facts in chapters 02 to 15, 17 and 18.
-> Sources fall into three families: **M** for the market and seasonality, **P** for production, supply and planning
-> methods, and **F** for the platform, Azure and cost. The chapters cite them as [M#], [P#] and [F#]. The chapter
-> also lists the gaps the research could not close and says how the design handles each one.
+Sources for the design are grouped as **M** (market), **P** (production, supply and planning) and **F** (platform,
+Azure and cost), and cited in the chapters as [M#], [P#] and [F#]. This chapter records source details, known gaps
+and rules for keeping references current.
 
 ---
 
@@ -15,15 +14,8 @@
 | **P** | Processes, machines, quality, raw materials, suppliers, regulation, planning methods | 49 | 49 | — |
 | **F** | Microsoft Fabric, Azure, Foundry, prices, billing and tenant governance | 93 | 86 | F6, F8, F24, F25, F34, F41, F59 |
 
-* **How the sources were collected.** Three research passes in October 2026 (market, production and supply,
-  platform), then targeted checks while chapters 10 to 15 were written: Microsoft Learn pages, the Fabric
-  item-definition documentation and the Azure Retail Prices API. A last pass searched the research literature on
-  backward simulation for chapter 17 (P39–P49), starting from a systematic review [P47]; the bibliographic data
-  were checked against Crossref. An audit of the reference tenant added F82–F93 for chapter 18. All pages were read
-  in **October 2026**.
 * **Columns.** *Used for* names the facts taken from the source. *Cited in* lists the chapters that cite it.
-* **Not cited.** Entries kept from the research passes but not used in the text. They keep their numbers, so
-  that no citation ever changes meaning.
+* **Not cited.** Unused entries remain numbered so existing citations keep their meaning.
 * **Site-level entries.** For some production sources the research notes recorded only the website. These are
   marked *(site)*; the link points to the site, and *Used for* says which facts came from it.
 * **Values are for parametrization.** Trade and vendor figures describe typical ranges, not one plant or one
@@ -32,8 +24,8 @@
 * **No chocolate brands.** The universe and its companies are fictional (chapter 02). The descriptions name
   publishers, equipment vendors and ingredient suppliers, but no chocolate brand. When a source is a chocolate
   maker's own page, or discusses one, it is described in general terms; only the link shows the site.
-* **Prices change.** Azure, Fabric and model prices are those of October 2026, in USD. They are checked again
-  before phase 0 (§16.6).
+* **Prices change.** Azure, Fabric and model prices were checked in October 2026, in USD. They must be checked
+  again before phase 0 (§16.6).
 
 ---
 

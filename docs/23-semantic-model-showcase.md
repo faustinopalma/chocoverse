@@ -1,21 +1,14 @@
 # 23 - Semantic model and report showcase
 
-Giandoria has two complementary analytical paths. The Real-Time Dashboard in
-[chapter 22](./22-dashboard-engineering.md) queries the changing Eventhouse directly. The Power BI
-showcase adds a real **shared import semantic model** and **two thin reports**, generated entirely
-from source. All authored labels and documentation are English, and every business period uses the
-virtual Rome calendar.
+The Power BI showcase adds a **shared import semantic model** and two thin reports to the live Eventhouse
+dashboard in [chapter 22](./22-dashboard-engineering.md). It is a teaching model focused on fact grain,
+filter context and time intelligence—not a production-complete model—and uses a fixed synthetic snapshot,
+not hidden truth or invented customer detail.
 
-This is an intermediate-to-advanced **teaching showcase**, not a production-complete enterprise model.
-Its value is in correct grains, filter context, time intelligence, semi-additivity and scenario analysis,
-not in a large number of tables. It deliberately does not invent customer detail, margin or hidden demand.
-The model is a fixed synthetic snapshot; it does not advance when the laboratory advances.
+The same model supports the [Data Agent showcase](./24-data-agent-showcase.md). An isolated enterprise-only
+copy provides a separate authentication boundary; it does not change the analytical model
+([chapter 25](./25-data-agent-authentication.md)).
 Publication and update commands belong to the [operating runbook](../infra/demo/README.md#power-bi-semantic-showcase).
-The same model also supplies the [Fabric Data Agent showcase](./24-data-agent-showcase.md): natural-language
-analytics and a separate evidence-to-manager experiment, without exposing hidden truth.
-The [application-authentication extension](./25-data-agent-authentication.md) generates a second copy of this
-same model in an enterprise-only workspace on the existing F4. Its grains, measures and virtual snapshot
-contract are unchanged; the copy creates an authorization boundary, not another analytical methodology.
 
 ## 23.1 Source and construction pipeline
 
@@ -219,9 +212,9 @@ and never changes the simulator or the manager agents.
 
 ## 23.4 Report catalogue and demonstration route
 
-Each report has three pages, a fixed-cutoff card, a virtual-year slicer and a reader guide. Commercial pages also expose
-channel/product/territory slicers. The native visual definitions bind fields and explicit measures directly;
-there are no custom visuals, copied data models or report-local business measures.
+Each report has three pages, a fixed-cutoff card, a virtual-year slicer and a reader guide. Commercial pages
+also expose channel/product/territory slicers. Native visual definitions bind fields and explicit measures
+directly; there are no custom visuals, copied data models or report-local business measures.
 
 | Report / page | Visuals | Suggested interaction and lesson |
 |---|---|---|
@@ -241,10 +234,10 @@ Power BI preferences; source-owned report labels remain English.
 
 Each page separates two kinds of English text:
 
-* **KPI definitions - how to read this page**, below every chart, is optional static domain guidance. It explains sell-out
-  versus shipment, channel and territory meanings, period comparisons, flows versus stock levels,
-  receivables/payables, cash versus revenue, and the illustrative stock-cover calculation. Unsupported
-  slices and missing OEE/profit measurements are described rather than glossed over.
+* **KPI definitions - how to read this page** are optional static domain guidance below each chart. They
+  explain sell-out versus shipment, channel and territory meanings, period comparisons, flows versus stock
+  levels, receivables/payables, cash versus revenue, and the illustrative stock-cover calculation.
+  Unsupported slices and missing OEE/profit measurements are described rather than glossed over.
 * **Smart narrative - current selection**, above the charts, uses the native Power BI custom Smart narrative
   engine. It recalculates the trend sentence and explicit KPI values in the current filter context.
 
@@ -276,7 +269,7 @@ workspace, catalog and semantic-model ID. All remaining report content must matc
 an unexpected connection or changed visual/text fails verification.
 
 This is **native custom Smart narrative**, not generative Copilot mode. See
-[Smart narrative and filter interactions](https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative).
+[Smart narrative and filter interactions][smart-narrative].
 The native query/paragraph structure was checked against Microsoft's linked September 2020 sample;
 report text, measures and construction are source-owned. Copilot mode is a distinct option with its own
 tenant/capacity requirements and explicit narrative-refresh behavior.
@@ -339,3 +332,5 @@ Source observations remain synthetic and reduced-detail.
 
 These are proposals, not implemented pages. They are preferable to visually impressive KPIs whose
 denominators or business meaning cannot be supported by the enterprise data.
+
+[smart-narrative]: https://learn.microsoft.com/en-us/power-bi/visuals/power-bi-visualization-smart-narrative

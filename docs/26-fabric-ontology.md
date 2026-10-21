@@ -1,15 +1,9 @@
 # 26. Fabric IQ ontology: enterprise context and explicit relationships
 
-The implementation publishes a native Fabric IQ ontology over the existing enterprise snapshot.
-Cloud publication verifies all eight registered Delta sources and exact readback of eight entity types,
-eight property bindings, eight relationships and eight contextualizations. The browser renders the entity
-types, their source mappings and the relationship canvas. Product and SellOut instance browsing resolves
-the bound OneLake data; SellOut retains its four identifying columns and the sold-quantity property.
-The tenant must enable **Users can create Ontology (preview) items** before creation; a disabled setting
-returns `403 FeatureNotAvailable`. Local schema, key, relationship and Delta replay tests alone do not
-prove cloud availability: successful publication also requires verified source files, table registration
-and definition readback.
-The [runbook](../infra/demo/README.md#fabric-iq-ontology-preview) owns prerequisites and publication commands.
+The ontology makes business entities, their properties and relationships explicit over the enterprise
+snapshot. It complements, rather than replaces, the Power BI semantic model. The Fabric preview must be
+enabled in the tenant before creation; the [runbook](../infra/demo/README.md#fabric-iq-ontology-preview)
+owns prerequisites and publication commands.
 
 ## Why this is different from the Power BI model
 
@@ -89,6 +83,10 @@ tracking the running simulator simply because ontology supports real-time source
 * [test_ontology.py](../tests/test_ontology.py) covers exact source grains, supported key types, global property
   names, orphan/duplicate rejection, composite relationship keys, immutable Delta replay and registration guards.
 
+Cloud verification confirms all eight registered Delta sources, eight entity types, eight property bindings,
+eight relationships and eight contextualizations by exact definition readback. Browser exploration resolves
+Product and SellOut instances to OneLake data. Local schema and replay tests alone do not prove cloud availability.
+
 No Spark job, graph materialization, autonomous action or new model inference is part of this increment.
 The intended additional paid footprint is retained OneLake data and existing Fabric capacity/query activity.
 It is not zero-cost merely because no Azure resource is provisioned.
@@ -123,5 +121,8 @@ natural-language querying, source permissions for the isolated manager identity 
 * [Ontology overview and preview scope](https://learn.microsoft.com/en-us/fabric/iq/ontology/overview)
 * [Required tenant settings](https://learn.microsoft.com/en-us/fabric/iq/ontology/overview-tenant-settings)
 * [Data binding and supported key types](https://learn.microsoft.com/en-us/fabric/iq/ontology/how-to-bind-data)
-* [Public ontology definition](https://learn.microsoft.com/en-us/rest/api/fabric/articles/item-management/definitions/ontology-definition)
-* [OneLake API access and regional endpoints](https://learn.microsoft.com/en-us/fabric/onelake/onelake-access-api)
+* [Public ontology definition][ont-def]
+* [OneLake API access and regional endpoints][onelake-api]
+
+[ont-def]: https://learn.microsoft.com/en-us/rest/api/fabric/articles/item-management/definitions/ontology-definition
+[onelake-api]: https://learn.microsoft.com/en-us/fabric/onelake/onelake-access-api

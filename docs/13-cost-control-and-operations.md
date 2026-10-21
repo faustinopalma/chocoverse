@@ -1,10 +1,9 @@
 # 13 — Cost Control and Operations
 
-> This chapter covers four things: what the lab costs and why; how that cost is measured and capped while the
-> universe runs; what happens when something is forgotten or breaks; and the procedures for running the lab day to
-> day. All amounts are in US dollars, at pay-as-you-go retail prices for Italy North, before taxes and negotiated
-> discounts [F3]. Values marked *(estimate)* come from the cost model in §13.2 and the volumes in chapter 10. The
-> measurements in §13.12 replace them during phases 0 to 5 (chapter 14).
+This chapter explains the cost model, runtime limits and operating procedures. Its original cost tables use
+US dollars at Italy North pay-as-you-go retail prices, before taxes and negotiated discounts [F3]; they are
+sizing references, not current demo costs. Values marked *(estimate)* come from §13.2 and chapter 10 volumes;
+§13.12 tracks the measurements that will replace them.
 
 ---
 

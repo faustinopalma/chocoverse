@@ -1,8 +1,8 @@
 # 07 — The Time Model
 
-> **Why this chapter matters most.** In Giandoria every number, plan and dashboard depends on time.
-> The universe runs on its own **virtual clock**. That clock can go faster than reality, stop, resume and
-> even fork. Getting this right first avoids subtle bugs in every other part of the system.
+The universe runs on **sim time**, which can advance faster than wall time, pause, resume or fork.
+Business meaning always uses sim time; wall and ingestion time describe operations. This chapter defines
+the clocks and the rules that keep them separate.
 
 ---
 

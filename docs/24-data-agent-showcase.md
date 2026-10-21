@@ -1,22 +1,15 @@
 # 24 - Fabric Data Agent showcase
 
-The laboratory publishes a real **Fabric Data Agent**, `da_giandoria`, over the shared Power BI
-semantic model. An observer can ask natural-language questions through Fabric or the recorded CLI.
-A separate S&OP experiment retrieves analytical evidence from that agent and passes it to the existing
-validated manager. Its decision is persisted locally and **never applied to the running company**.
-Publication, real MCP answers, a browser chat answer reconciled to the snapshot totals, and an actual
-model-backed S&OP decision have been verified. The browser editor tests the draft configuration;
-the MCP client uses the published configuration, and source readback verifies that both match.
+This showcase uses a Fabric Data Agent to answer questions about the fixed enterprise snapshot and to supply
+evidence to an isolated S&OP experiment. The experiment's validated decision is saved locally and **never
+applied to the running company**. It is a teaching path, not a live worker integration; the simulation still
+uses its own briefings. Secretless application federation is covered in
+[chapter 25](./25-data-agent-authentication.md).
 
-This is a snapshot-based teaching experiment, not an autonomous live-worker integration. The worker
-still receives simulator briefings. [Secretless application federation](./25-data-agent-authentication.md)
-now provides a verified autonomous authentication path, but does not supply a live data-completeness barrier.
-Operating commands belong to the [cloud runbook](../infra/demo/README.md#fabric-data-agent-showcase).
-
-For an actual direct-versus-delegated comparison, see the
-[CEO and line-lead experiment](./28-data-agent-delegation-experiment.md).
-It tests delegation, evidence supplied directly and executable DAX with equal data access.
-The semantic-knowledge controls also retain cases where the specialist gives an incorrect answer.
+For a direct-versus-delegated comparison, see the
+[CEO and line-lead experiment](./28-data-agent-delegation-experiment.md). It compares equal data access and
+retains cases where the specialist gives an incorrect answer. Operating
+commands belong to the [cloud runbook](../infra/demo/README.md#fabric-data-agent-showcase).
 
 ## 24.1 Architecture and educational purpose
 
@@ -65,6 +58,9 @@ published** stage configurations, each with exactly one `semantic_model` source.
 Date, Channel, Product, Territory, Metrics, Snapshot, Cover policy and Cash flow. Measures provide the
 supported analytical interface over the underlying facts. The same English instructions are installed
 at stage and source level.
+
+The browser editor tests the draft configuration; the MCP client uses the published configuration.
+Source readback verifies that both contain the same model and instructions.
 
 Generic Fabric item REST APIs create or update the item. The existing ownership registry and exact
 workspace/description checks prevent adoption of unrelated same-name items. Readback validates the
@@ -204,4 +200,6 @@ Official references:
 * [Fabric Data Agent overview](https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent)
 * [Data Agent SDK and lifecycle](https://learn.microsoft.com/en-us/fabric/data-science/fabric-data-agent-sdk)
 * [Data Agent MCP server](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-mcp-server)
-* [Service-principal authentication and limitations](https://learn.microsoft.com/en-us/fabric/data-science/data-agent-service-principal)
+* [Service-principal authentication and limitations][service-principal]
+
+[service-principal]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-service-principal

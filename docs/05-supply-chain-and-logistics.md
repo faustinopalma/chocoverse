@@ -1,10 +1,9 @@
 # 05 — Supply Chain and Logistics
 
-> This chapter describes how materials reach the plants and how finished goods reach customers, stores and
-> consumers. It covers commodities and buying strategies, suppliers and their behaviour, inventory policies,
-> warehouses, transport (including the summer cold chain), order-to-cash documents, returns and costs.
-> **sim-supply** and **sim-logistics** (chapter 08) are built from this chapter. Values marked *(estimate)* are
-> tunable assumptions without a strong public source.
+This chapter traces materials from suppliers to plants and finished goods to customers. It covers supplier
+behaviour, procurement, inventory, warehouses, transport, costs, order-to-cash and returns—the design basis
+for **sim-supply** and **sim-logistics** (chapter 08). Values marked *(estimate)* are tunable assumptions
+without a strong public source.
 
 ---
 

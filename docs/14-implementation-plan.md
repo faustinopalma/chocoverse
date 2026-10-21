@@ -1,18 +1,12 @@
 # 14 — Implementation plan
 
-> This chapter turns the design into an order of work. It answers four questions:
->
-> * what to build first, and why in that order
-> * how to know that a phase is finished
-> * what to measure on the way, so that estimates become facts
-> * what each phase costs in Azure and Fabric
->
-> The plan starts with **spikes** that answer the open checks of chapter 12 §12.16 and the cost measurements of
-> chapter 13 §13.12. It then builds a **walking skeleton** that crosses every boundary once, adds the universe one
-> layer at a time, and brings in **LLM agents only when the rules, the decision log and replay already work**.
->
-> Durations and costs are estimates. The dates in the chart are placeholders. No code is written until the
-> mental model of chapters 01 to 13 has been agreed.
+This chapter lays out the intended build sequence, phase exit criteria, measurements and estimated costs.
+It starts with spikes for the open checks in chapter 12 §12.16 and cost measurements in chapter 13 §13.12,
+then builds the walking skeleton, expands the universe and adds LLM agents after rules, decision logging and
+replay are in place.
+
+Durations and costs are estimates; chart dates are placeholders. The [index](./README.md) summarizes current
+implementation separately from this target plan.
 
 ---
 

@@ -56,23 +56,9 @@ Six ideas hold the design together.
 
 ### Giandoria at a glance
 
-| Aspect | Profile M (default, tunable) |
-|---|---|
-| Company | Giandoria Cioccolato S.p.A., founded in Turin in 1872 as a chocolate workshop |
-| Size | ≈ €300 M of net sales, ≈ 20,000 t of products per year, ≈ 1,300 employees plus seasonal temporary staff |
-| Markets | Italy ≈ 77%, export ≈ 23% |
-| Brands | **Giandoria 1872** (premium heritage), **Giandoria Junior** (kids and families), **Giandoria Professional** (ingredients for pastry and gelato), **private label** for retail chains, **campaign and co-branded** products |
-| Products | ≈ 180 active SKUs: ≈ 110 sold all year, ≈ 70 seasonal or campaign SKUs that change every season |
-| Plants | **Torino Nord**: premium plant for gianduiotti, pralines, premium eggs and gift packing. **Langhe**: volume plant for beans, hazelnuts, masses, tablets, kids' surprise eggs, seasonal eggs and couverture |
-| Lines and machines | 13 finishing lines and 4 process departments, ≈ 120 machines, ≈ 700 sensor tags |
-| Warehouses | Central warehouse DC0 at 15–18 °C; four regional platforms run by logistics partners (Milan, Bologna, Rome, Naples); a seasonal overflow warehouse, DC-S |
-| Own retail | 20 stores, the "Botteghe Giandoria": flagships such as Turin Via Roma and the Milan Galleria, Malpensa airport, Venice, Florence, Courmayeur, a museum store in Alba and outlets; an e-shop with a loyalty programme |
-| Business models | Make-to-stock for products sold all year; make-to-forecast with pre-build for seasons; make-to-order for campaigns and corporate gifts |
-
-### Channel mix
-
-Modern trade is the largest channel, followed by export, own retail, traditional and professional trade, campaigns
-and travel retail. The [domain model](./02-universe-domain-model.md) gives the sales shares and customer counts.
+Giandoria is a mid-sized fictional Piedmontese maker, with two plants, about 180 products and sales in Italy and
+abroad. It serves retail, professional, travel and campaign customers through year-round, seasonal and made-to-order
+products. The [domain model](./02-universe-domain-model.md) owns its profile, channels, sites and customer counts.
 
 ### The world around the company
 
@@ -114,61 +100,10 @@ flowchart LR
     COMP -.-> CON
 ```
 
-### Who is who, and who plays them
-
-The domain is divided among simulators for the outside world, customers, retail, trade, supply, logistics and the
-factory. Planning engines and role-based agents support Giandoria's managers. Consumers are modelled as **segments**,
-not millions of individuals; chains are represented by **clusters of stores per chain and province**, not thousands
-of separate shops. Chapter 02 defines the entities; chapter 08 explains their ownership and interactions.
-
-### Products follow the calendar
-
-| Occasion | When (season 2030–31) | Products | What makes it special |
-|---|---|---|---|
-| **Easter** | Sunday 13 April 2031 | Premium, kids', private-label and charity eggs; small eggs; hollow figures | The hardest planning problem: eggs are built from November to February and sold in about ten weeks (§1.7) |
-| **Christmas** | 25 December 2030 | Gift boxes, pralines, gianduiotti, advent calendars, hollow figures, corporate gifts | The largest event in value; gifts peak from 10 to 24 December |
-| **November charity day** | One Saturday in November (9 November 2030 in the default scenario) | A 200 g dark chocolate pack for a research foundation | Made to order for a fixed date; volunteers offer it in town squares for a donation (§1.8) |
-| **Charity weekends** | Easter: 22–23 March 2031. Christmas: the weekend before Christmas | A charity egg; a box of heart pralines | Ring-fenced volumes that compete with Giandoria's own products for the same lines |
-| Valentine's Day | 14 February | Heart boxes, premium pralines | Made in December–January, while the Easter build runs |
-| Halloween | 31 October | Minis and multipacks | Small, made in September, during the Christmas ramp-up |
-| Summer | Mid-June to mid-September | Tablets, travel retail, souvenirs | Heat: praline shipments stop; the plants close around 15 August |
-| Smaller occasions | Epiphany, Father's Day, Mother's Day, back to school, a chocolate festival in October, Black Friday | Stockings, small gift boxes, snack bars, a pop-up store, e-shop promotions | Short, and often regional |
-
-The year is very uneven. In the default calibration, December alone brings about 21.5% of the year's sell-out,
-November 15% and March 13%, while June, July and August together bring only 8%. An early Easter moves several points
-from April to March: Easter 2032 falls on 28 March, and a run in 2032 behaves differently from one in 2031.
-
-**The territory is Italy:** 20 regions and 107 provinces, each with its population, income, climate zone and
-tourism. Demand is generated per province, consumer segment, product category and day. Tourism moves it: the art
-cities in spring and summer, the Alps in winter, airports all year. Summer heat in the south hurts chocolate more
-than in the north. The Botteghe stand where people walk and travel, and the maps in Fabric show sales, stock and
-shipments province by province.
-
-### Inside the plants: processes, machines and production times
-
-Chocolate takes hours to make and days to release, while some of its materials take months to arrive (chapter 04).
-
-```mermaid
-flowchart LR
-    BEAN["Cocoa beans: roasting 15–45 min, winnowing, grinding"] --> MIX["Mixing: sugar, milk powder, cocoa mass and butter"]
-    SEMI["Bought cocoa mass, butter and powder"] --> MIX
-    NUT["Hazelnuts: roasting 20–45 min, paste"] --> MIX
-    MIX --> REF["Refining to 15–25 µm"]
-    REF --> CON["Conching: 2–12 h, premium 16–72 h"]
-    CON --> TANK["Storage tank: use within 8–24 h"]
-    TANK --> TEMP["Tempering"]
-    TEMP --> FORM["Forming: moulding, depositing, enrobing, extrusion, spinning"]
-    FORM --> COOL["Cooling tunnel: 12–30 min"]
-    COOL --> PACK["Wrapping and packing"]
-    PACK --> HOLD["Quality hold: 24–72 h"]
-    HOLD --> DC0["DC0 at 15–18 °C"]
-```
-
-Torino Nord makes premium products; Langhe handles higher-volume products and seasonal eggs. Across 13 finishing
-lines and four process departments, about 120 machines share crews, materials and capacity. Their state changes,
-breakdowns, changeovers and quality holds affect when finished goods are available. Some machine wear is hidden:
-the company sees sensor symptoms, not the true condition. The factory chapter gives line capacities, timings and
-maintenance assumptions.
+Demand follows a calendar of peaks, while supply decisions often precede those peaks by months. Easter is the
+clearest example: toy orders, artwork, production and delivery must be coordinated long before the short selling
+season (§1.7). The [market chapter](./03-market-and-seasonality.md) explains the calendar; the
+[factory chapter](./04-factory-and-processes.md) explains how products are made.
 
 ---
 
@@ -285,36 +220,9 @@ Each simulator owns its part of the state; Chronos advances time and routes mess
 services support decisions. In the target design they share a modular runtime by default. Chapter 08 defines
 component ownership, event families and deployment modes.
 
-### Five kinds of actors
-
-Every event records who or what caused it, in its `actor` field. There are five kinds:
-
-| Kind | What it does | Example |
-|---|---|---|
-| **Simulator** (`sim:`) | Makes the physical world and the market happen: machines run and break, trucks move, consumers buy | A wrapper jams on egg line 1 |
-| **Rule** (`rule:`) | A simple deterministic policy for routine choices, and the fallback behind every agent | Store replenishment by min/max |
-| **Engine** (`engine:`) | A planning algorithm in svc-planning: fast, explainable, always produces a valid plan | The MRP run every Wednesday |
-| **Agent** (`agent:`) | An LLM playing a role: it reads a briefing, uses the engines as tools, decides and explains | Sizing the first toy order for Easter |
-| **Human** *(optional)* | A person who approves or changes a decision while the clock waits (decision D13) | Choosing the S&OP option in a demo |
-
-### Eight rules of the game
-
-1. **One owner per piece of reality.** Each simulator owns its entities, its state and its random streams. Nobody
-   else changes them.
-2. **Talk only through messages.** Simulators never share a database. A message sent in one tick is delivered in
-   the next tick at the earliest, plus a realistic channel delay: minutes for EDI, hours for an email, days for a
-   meeting.
-3. **One clock, in steps.** Chronos moves time in ticks. Every simulator processes the interval `[t, t + Δ)` before
-   anyone moves on. Inside a tick, events keep their exact timestamps, to the millisecond. Pauses, speed changes,
-   snapshots and forks happen only between ticks.
-4. **Every fact is an event.** Fabric observes the universe; by default it does not drive it.
-5. **Truth is kept apart.** It is emitted, but only to restricted storage used for evaluation (§1.3).
-6. **Rules first, agents where they add value.** Every decision point has a rule-based default. An LLM agent can
-   replace it, one role at a time.
-7. **Agents propose, the runtime acts.** Agent outputs are validated and applied at tick boundaries in a fixed
-   order. Agents never write to simulators or to Fabric themselves.
-8. **Everything is reproducible.** One root seed per run feeds every random stream, and every agent decision is
-   recorded, so a run can be replayed exactly.
+Simulators own the world and emit events; deterministic rules and planning engines handle routine work. Role-based
+agents may propose selected decisions, but the runtime validates their answers before applying them. People may
+approve decisions where the scenario allows it. The specialist chapters define component contracts and controls.
 
 ### One week in the life of a decision
 
@@ -364,85 +272,36 @@ and timing. A person may also approve a decision through Lab Control (D13). Chap
 The universe has its own clock. Everything in Giandoria depends on keeping it separate from the clock on the wall
 (chapter 07).
 
-### Two clocks, and the golden rule
+### One event, two clocks
 
-| Clock | Field | Owner | Meaning |
-|---|---|---|---|
-| **Sim time** (virtual time) | `sim_ts` | Chronos | *When the fact happened inside the universe.* All business logic, KPIs, plans and dashboards use it |
-| **Wall time** (real time) | `wall_ts` | The machine that emits the event (UTC) | *When the lab produced the record.* Used only for operations, costs and troubleshooting |
-| **Ingestion time** | Added by Fabric | Fabric | *When Fabric stored the record.* Used only to measure pipeline latency |
+When an egg wrapper jams on 12 February 2031 at 09:17 in the universe, the event records that **sim time** as well
+as the **wall time** when the lab emitted it. The lab can create that event in a different year; business meaning
+still comes from sim time. Fabric adds an ingestion time to measure delivery delay.
 
-**Golden rule: business meaning always comes from `sim_ts`.** A query, rule or dashboard that uses "now", "the last
-hour" or "the last 7 days" without translating it to sim time is a bug.
-
-Example: the wrapper on Easter egg line 1 jams on a Wednesday morning in February (chapter 10 §10.2).
-
-| Field | Value | Meaning |
+| Field | Example | Meaning |
 |---|---|---|
-| `sim_ts` | 2031-02-12 08:17:23.412 UTC | 09:17 in Italy, inside the universe |
-| `sim_local_date` | 2031-02-12 | The business day in Europe/Rome, which avoids daylight-saving mistakes |
-| `wall_ts` | 2026-11-05 14:42:09.380 UTC | When the lab produced the record, more than four years "earlier" |
-| `tick` | 6154 | About 6,154 sim hours after the epoch; the run reached it ≈ 42 wall minutes after its start |
-| `speed` | 8760 | One sim year per wall hour |
-| `run_id`, `scenario` | `r-0012`, `easter-2031-base` | Which universe the fact belongs to |
+| `sim_ts` | 2031-02-12 08:17 UTC | 09:17 in Italy, inside the universe |
+| `wall_ts` | 2026-11-05 14:42 UTC | When the lab emitted the event |
+| Ingestion time | Added by Fabric | When Fabric stored the event |
 
-The universe uses the **real Gregorian calendar and the real Italian rules** of its years: moving feasts, public
-holidays, daylight saving, weekends and school calendars. The default epoch, 1 June 2030, is a clearly virtual
-future date, so nobody mistakes synthetic data for real data.
-
-### Speed is a dial
-
-The speed factor S says how many sim seconds pass per wall second. It is a run parameter that can change at a tick
-boundary. At S = 8,760, one sim year would take an hour if the system kept up; this is a reference speed, not a
-performance guarantee. Chapter 07 has the speed profiles and tick protocol.
+The universe uses the Gregorian calendar and Italian holidays. Its default epoch, 1 June 2030, is synthetic;
+the [time chapter](./07-time-model.md) defines speed, calendars and the event contract.
 
 ### Start, pause, hibernate, stop
 
-```mermaid
-stateDiagram-v2
-    [*] --> Created
-    Created --> Running: start
-    Running --> Paused: pause or budget guard
-    Paused --> Running: resume
-    Paused --> Hibernated: hibernate or idle timer
-    Running --> Hibernated: emergency stop, crash or lost lease (unclean)
-    Hibernated --> Running: resume
-    Running --> Completed: end of the scenario horizon
-    Paused --> Stopped: stop
-    Hibernated --> Stopped: stop
-    Completed --> [*]
-    Stopped --> [*]
-```
-
-When running, sim time advances and events are produced. Pause freezes the clock while compute and Fabric remain
-available; hibernation also snapshots the run, scales compute to zero and suspends the Fabric capacity. Stopping
-ends that run's timeline, although it may still be forked. The normal resting state is hibernated, but retained data,
-registry and tenant services can still cost money; chapter 13 is authoritative for cost and operations.
+Running advances sim time. Pause freezes it while compute remains available; hibernation also saves state, scales
+compute to zero and suspends capacity. Resuming continues from the saved state. Hibernation is the normal resting
+state, but retained data and tenant services may still cost money (chapter 13).
 
 ### Nothing ages while the lab sleeps
 
-Chronos advances only when it processes a tick. Every simulator's timers use sim time, so a pause or hibernation
-does not age chocolate, move trucks or expire orders. On resume, the next event follows the last one in sim time.
-The time ledger records how each running interval maps between sim time and wall time; chapter 07 explains it.
+Simulator timers use sim time, so a pause or hibernation does not age chocolate, move trucks or expire orders.
+On resume, the next event follows the last one in sim time.
 
 ### Forks, replays and seeds
 
-Runs use seeded random streams and snapshots so a history can be reproduced or forked to compare a different policy.
-Recorded agent decisions can be replayed without calling the models. Chapter 07 defines the seed, snapshot, fork and
-replay contracts.
-
-### Speed multiplies every delay
-
-Wall-time delays translate into sim-time delays multiplied by S. This is why agents use briefings with a fixed
-sim-time cut-off rather than reading live Fabric data, and why dashboards display a data watermark. At high speeds,
-even a short ingestion or model delay can represent many sim hours or days.
-
-### No wall clock in Fabric
-
-Fabric's defaults assume real time: "the last hour", relative date filters, time windows in streams and alerts.
-Giandoria replaces all of them with sim time: KQL functions such as `SimNow`, `SimAgo` and `SimWindow`, dashboard
-parameters fed by `SimNow`, a sim calendar with flags such as `IsCurrentSimWeek`, aggregations on `sim_ts` in the
-Eventhouse, and alerts based on states and thresholds rather than on arrival time (chapter 07 §7.10).
+Seeded runs and snapshots allow the same history to be replayed or forked to compare a different policy. Recorded
+agent decisions can be reused without another model call. Chapter 07 defines the clock and replay contracts.
 
 ---
 
@@ -466,100 +325,27 @@ Every interesting planning problem in the universe comes from this gap:
 * **How much should a plan change?** Each re-plan reacts to news, but too many changes create chaos on the shop
   floor and at suppliers.
 
-### The planning ladder
+Planning connects forecasts and customer commitments to the date goods must be delivered. A toy order may be due
+months before Easter, while production and allocation must fit shared lines and delivery windows. Plans change as
+bookings, supplier dates and capacity change; planners must balance early supply commitments against better demand
+information. Chapter 06 owns the planning hierarchy, delivery outlook, fences and worked calculations.
 
-Planning moves from an annual budget and monthly sales-and-operations planning (S&OP) to seasonal commitments,
-weekly demand and production plans, daily material and distribution decisions, then order-level promises and
-allocation. Each level adds detail within the capacity and commitments set above it. Chapter 06 owns the horizons,
-engines, cadence and decision roles.
-
-The engines produce a plan on each cycle; agents may adjust selected decisions with a fixed data cut-off. If an agent
-is late or its answer is unusable, the engine's plan or rule-based fallback stands. This keeps the business moving
-without making an LLM call part of every operational step.
-
-### Seeing future deliveries: the delivery outlook
-
-Before it plans production, Giandoria estimates **what it will deliver, to whom and when**. A forecast may become a
-revisable booking, then a firm order and finally a shipment. The outlook is an important briefing input for agents
-who plan ahead; chapter 06 §6.5 defines its data sources and update rules.
-
-For each customer, SKU and week:
-
-```text
-expected delivery = firm orders
-                  + open booking × booking-conversion factor (learned per customer and lag)
-                  + forecast for the part that is neither ordered nor booked
-```
-
-Example *(illustrative)*: for week 10 a chain has booked 100,000 eggs, and 40,000 are already firm orders. The
-chain usually takes 93% of what it books, so the outlook expects 40,000 + 60,000 × 0.93 = 95,800 eggs. The outlook
-is never a single number: it carries **P10, P50 and P90**, because sizing seasonal commitments and safety stocks needs
-the spread. It is published every week, and whenever a booking changes by more than a threshold, as
-`plan.delivery_outlook.published`.
-
-**Plans remember what was known.** Every plan is a versioned, bi-temporal object: version 23 of the demand plan was
-*known* on 3 February 2031 at 06:00 and is *about* weeks 2031-W06 to 2031-W31. Fabric can therefore measure forecast
-accuracy by lag, plan stability, and answer the question every post-mortem asks: "what did we know when we decided?"
-
-### Fences: what may still change
-
-Near-term plans are frozen except for emergencies; the farther out a decision lies, the more freely it can change.
-Materials have their own commitment points, set by supplier lead times and other constraints. Chapter 06 §6.4 and
-chapter 05 explain the fences and points of no return.
-
-**Nervousness** measures how much a plan changes between versions inside the slushy zone. High nervousness sends
-changing signals to suppliers and to the factory, and amplifies the bullwhip effect.
-
-### Planning backwards from the need date
-
-Production must finish before the customer needs the goods. For a milk tablet, transport, warehouse handling, quality
-release, production and material lead times all count back from that date. Chapter 06 works through the planning
-calculation, while chapter 04 gives the production durations.
-
-Shelf life also limits how early finished goods can be made: dark tablets keep longer than pralines.
-
-> **Reverse-time simulation.** The target planning design accounts for finite capacity by simulating from due dates
-> towards the past, then checking the candidate schedule forward. Chapter 17 explains the method, its independent
-> origin and prior art. The full planning engine is not part of the current implementation.
+In the target design, the reverse-time method checks finite capacity by planning back from due dates, then testing
+the candidate schedule forward. Chapter 17 explains its origin and prior art; the full engine is not implemented.
 
 ### How much to commit: the newsvendor rule
 
-For a one-shot seasonal decision, the best quantity is a quantile of the demand distribution, given by the
-**critical ratio** Cu / (Cu + Co): the cost of one unit too few against the cost of one unit too many.
-
-| Decision *(all estimates)* | One too few (Cu) | One too many (Co) | Critical ratio | Plan at |
-|---|---|---|---:|---|
-| A Junior Easter egg: net price €4.00, variable cost €2.20, worth €0.60 after Easter | €1.80 of lost margin | €1.60 | ≈ 0.53 | ≈ P53 of season demand |
-| Its toy surprise: ≈ €0.15, worthless after the season | €1.80: no toy, no egg | €0.15 | ≈ 0.92 | ≈ P92 of the egg demand known at the toy order |
-
-The lesson is classic **postponement**: over-order the cheap long-lead component, and commit the expensive finished
-good as late as possible. Contracts change the numbers: if chains keep their unsold eggs instead of returning them,
-Giandoria's cost of one too many falls, but buyers book less the next year.
-
-### Trying before deciding: sandboxes and forks
-
-| Tool | What it does | Speed | Used for |
-|---|---|---|---|
-| **Planning sandbox** | svc-planning re-runs its engines on a copy of the company's state with one assumption changed, such as "toys three weeks late" | Wall seconds | Agents and humans compare options *before* deciding |
-| **Universe fork** | Chronos restarts the whole world from a snapshot with a different policy (§1.5) | Minutes to hours | Evaluating strategies *after the fact*: LLM planner against rules, decision A against decision B |
-
-A sandbox never sees the truth: it knows only what the company knows.
-
-**Re-planning is triggered by events, not only by the calendar.** Examples *(default thresholds, estimates)*: a
-critical material's ETA slips by more than 3 days, a booking changes by more than 10%, a bottleneck line breaks down
-for more than 4 hours, a quality hold blocks more than a day of output, cocoa or hazelnut prices move more than 10% in
-a week, or a heatwave is forecast. Each trigger raises `plan.exception.raised`, and exceptions beyond the engine's
-authority become agent decisions.
+The **critical ratio**, Cu / (Cu + Co), compares the cost of one unit too few (Cu) with one too many (Co) and sets
+the demand quantile for a one-shot seasonal order. This leads to **postponement**: reserve cheap, long-lead materials
+early, but delay commitment to expensive finished goods when better demand information arrives. Chapter 06 explains
+the planning rules; its sandbox tests options without exposing hidden truth.
 
 ### No universe starts empty
 
-On the first day of a run, a real company already has open purchase orders, bookings, stock built ahead, forecast
-history and plan versions. Giandoria creates them with **backfill and fork** (decision D11): an unpaced backfill run
-starts 12–18 sim months earlier from a simple state, and the live run forks from its snapshot, inheriting a
-consistent history. This also decides what a run can show. A run that starts on 1 January 2031 inherits the Easter
-commitments and lives only the late decisions. The default scenario starts on 1 June 2030 and lives the whole
-Easter 2031 cycle, from the range decision to the post-season review: about 11 sim months, or about 55 wall minutes
-at S = 8,760.
+The first day of a run may inherit open orders, bookings, stock, forecasts and earlier plans from a backfill snapshot.
+This lets the run begin with realistic decisions already in flight; decision D11 and chapter 06 §6.14 define the
+target approach. The default scenario starts on 1 June 2030 and follows the Easter 2031 cycle through its post-season
+review, about eleven sim months.
 
 ---
 
@@ -743,48 +529,18 @@ gantt
     Valentines Day                     :milestone, s4, 2031-02-14, 0d
 ```
 
-What a viewer sees during the showcase hour (the Fabric items are described in §1.10):
-
-| Wall minute | Sim time | What happens | Where to look |
-|---:|---|---|---|
-| 0 | 1 June 2030 | The run starts from the backfill snapshot; the Easter range decision (E1); Christmas bookings open | `rtd_lab`, `rtd_planning` |
-| 5–10 | July 2030 | Hollow figures start on the egg lines; charity packs on TAB2; toy wave 1 (7.2); artwork freeze A (10.2) | `rtd_factory`, `rtd_supply` |
-| 11.5–13.5 | 10–22 August | Ferragosto: the plants are closed; summer heat stops praline shipments | `rtd_factory`, `rtd_commerce` |
-| 15–20 | September | Christmas sell-in; artwork freeze B (17.1); the Easter charity contract (19.9) | `rtd_commerce`, `rtd_planning` |
-| 22–27 | October to early November | Booking cut-off (22.4); shift plan (23.3); charity packs to the hubs; the Easter build starts (25.6); square day (26.5) | `rtd_planning`, `map_giandoria` |
-| 30–34 | December | Christmas peak; mid-build review (32.6); hearts weekend (33.4); Christmas Day (34.0) | `rtd_commerce`, `rpt_sop` |
-| 37–43 | Mid-January to mid-February 2031 | Allocation v1 if short (37.5); first deliveries (39.5); eggs on shelf (40.6); the wrapper jam (42.2) | `rtd_supply`, `rtd_factory` |
-| 44.6 | 27 February | Last day of the Easter build | `rtd_factory` |
-| 45–52 | March to mid-April | Peak sell-out; charity egg weekend (48.3); Easter (51.9); post-season review (52.1) | `rtd_commerce`, `rtd_planning` |
-| 52–55 | Late April | Returns; the run completes at the horizon (54.9) and hibernates | `rpt_season_review`, `rpt_multiverse` |
-
-The operator can slow down for the moments worth watching, for example `lab speed 168` for the week in which the
-Easter build starts and the charity day takes place (the ledger in §1.5). A longer scenario, or a fork, continues
-into Easter 2032.
+The Gantt shows how Easter, Christmas and charity campaigns overlap. The Easter decisions and their effects are
+worked through in §1.7; the Fabric views are described in §1.10. A longer scenario or a fork can continue into
+Easter 2032.
 
 ---
 
 ## 1.10 Where the data goes
 
-Every fact in the universe becomes an event, and every event ends up in one Fabric workspace. Fabric is where people
-**watch and analyse** the universe, not where the universe lives. The simulators own their state, and the lab keeps
-its own state in Azure Storage, so a suspended Fabric capacity stops only the views (chapters 10 and 11).
-
-Two paths meet in the workspace. The **live path** is Fabric Real-Time Intelligence: Eventstreams, an Eventhouse,
-Real-Time Dashboards and Activator. The **batch path** is a Lakehouse in OneLake, a semantic model and Power BI
-reports.
-
-The **universe plane** contains Chronos, which advances sim time, and the simulators and services that own the
-company's state. The **data plane** in Fabric receives events and provides live views and reports. The **control
-plane** runs on wall time: it starts and hibernates runs, applies guardrails and manages resources.
-
-Each event has a common envelope with its sim time, wall time, source, run and visibility. Fabric stores business
-events for analysis; hidden truth follows a separate path for evaluation. Live dashboards may lag behind sim time,
-so they show a watermark, while reports support looking back. Agents do not use Fabric as their source of truth.
-
-Chapter 10 defines the event contract, streams, tables and volume assumptions. Chapter 11 owns the platform
-architecture and the Fabric experiences. Those chapters distinguish the target data path from what has been
-implemented and verified.
+Fabric is where people **watch and analyse** the universe, not where the universe lives. The live path streams
+events to dashboards; the batch path stores history for reports. Simulators own business state, Azure Storage
+preserves runtime state, and hidden truth follows a separate path for evaluation. Dashboards can lag behind sim time,
+so they show a watermark. Chapter 10 defines the data contract; chapter 11 defines the platform and experiences.
 
 ---
 

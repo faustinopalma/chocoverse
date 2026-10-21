@@ -1,16 +1,9 @@
 # 06 — Planning: how the virtual company looks ahead
 
-> Chocolate is sold in weeks but planned in months. An Easter egg sits on the shelf for about ten weeks, yet the
-> first decision about it (which toy goes inside) is taken about nine months before Easter Sunday. This chapter
-> explains how Giandoria plans:
->
-> * the planning levels and their rhythm in sim time
-> * the information planners receive, and when
-> * how production is planned ahead of delivery, using real production and lead times
-> * what happens when there is not enough for everybody
-> * how every plan becomes data in Fabric
->
-> The planning engines are deterministic and explainable. LLM agents (chapter 09) use them as tools.
+Seasonal products must be planned months before they sell: the Easter toy choice, for example, is made about
+nine months before Easter. This chapter shows how Giandoria turns demand and delivery commitments into
+capacity-aware plans, handles shortages, and publishes the results. The engines are deterministic; LLM agents
+(chapter 09) use them as tools.
 
 ---
 

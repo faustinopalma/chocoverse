@@ -1,8 +1,8 @@
 # 03 — Market, Demand and Seasonality
 
-> This chapter explains **how demand is born** in the universe: who wants what, where and when, and why the
-> calendar is the single most important driver of a chocolate business. It also defines what is
-> *true* (hidden) and what is *observed* (visible to the company).
+Demand starts with the people and occasions in each market, then varies with season, weather and price.
+Product availability determines how much becomes observable sales; the model keeps latent demand as hidden truth.
+This chapter defines those inputs and the Italian calendar used to calibrate them.
 
 ---
 
@@ -24,9 +24,9 @@
 
 **Universe calibration.** The default universe lives mostly in the season that ends with Easter 2031 (scenario
 `easter-2031-base`, epoch 1 June 2030; chapter 15, D2). The Italian retail market is therefore set to
-≈ $3.9 bn (≈ €3.6 bn) per year, close to the forecast for 2031 [M3]. Giandoria's calibration target is a value share of
-**about 10% in Italy** (≈ €230 M of Italian net sales, ≈ €350 M at retail value), stronger in pralines and Easter
-eggs.
+≈ $3.9 bn (≈ €3.6 bn) per year, close to the forecast for 2031 [M3].
+Giandoria's calibration target is a value share of **about 10% in Italy** (≈ €230 M of Italian net sales,
+≈ €350 M at retail value), stronger in pralines and Easter eggs.
 
 > **Known gaps.** No official Italian split of chocolate sales by month, channel or region was found. The
 > seasonal shapes below are **design assumptions** for calibration, clearly marked and easy to change.

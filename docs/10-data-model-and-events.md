@@ -1,14 +1,8 @@
 # 10 — Data model and events: what flows into Fabric
 
-> This chapter defines the data contract between the universe and Microsoft Fabric:
->
-> * the event envelope, and the catalogue of event types and in-universe messages
-> * the Eventstreams and the ingestion path
-> * the Eventhouse layers (bronze, silver, gold) and the Lakehouse tables
-> * how runs, forks and the hidden truth appear in the data
-> * data quality, volumes and schema versioning
->
-> The time rules of chapter 07 apply everywhere: **business meaning comes from `sim_ts`**.
+This chapter defines how events, run history and hidden truth are represented and delivered to Microsoft
+Fabric. Business meaning comes from `sim_ts` (chapter 07); the sections below specify the envelope, storage,
+quality rules and schema.
 
 ---
 

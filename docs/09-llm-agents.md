@@ -1,15 +1,9 @@
 # 09 — LLM agents: who decides, with what, and how we keep it safe and cheap
 
-> The simulators make the world move; the agents make it *decide*. This chapter defines:
->
-> * which roles inside and outside Giandoria are played by LLM agents
-> * what each role may see and do
-> * how a decision travels from request to outcome
-> * how agents talk to each other, and how they are kept within limits and within budget
-> * how we measure whether they are any good
->
-> Agents never control the clock. They answer decision requests, using the deterministic planning engines of
-> chapter 06 as tools.
+In-universe agents answer role-specific decision requests using the deterministic planning engines of
+chapter 06; they do not control the clock. The runtime validates their proposals before applying them.
+This chapter defines their roles, information boundaries, decision flow, guardrails and evaluation.
+Lab agents that assist people, rather than act in the universe, are covered in §9.9.
 
 ---
 
