@@ -1,131 +1,28 @@
 # Giandoria — a simulated chocolate universe on Azure and Microsoft Fabric
 
 For a short visual introduction, start with the [Chocoverse illustrated tour](../README.md).
-This index remains the detailed design and implementation map.
+This index is the navigation and implementation-status guide. The
+[mental-model chapter](./01-vision-and-mental-model.md) explains the target universe; the chapters below own its
+detailed design.
 
-> **Current implementation:** a persistent local clock/events store, Azure demo infrastructure and a bounded
-> Fabric publish/replay path. One `demo`, F4, Sweden Central; infrastructure uses Bicep/AVM, REST and `fabric-cicd`.
-> Cloud Automation Start/Stop and deadline shutdown are verified. The causal reduced-detail business runtime
-> has collected two simulated calendar years through Eventstream into Eventhouse, with exact payload verification
-> and real weekly LLM decisions. Ordinary Start now continues that same company at configurable speed; Stop
-> preserves its state/history. A five-page business dashboard and fifteen editable KQL queries accompany the runtime.
-> A [shared semantic-model showcase](./23-semantic-model-showcase.md) adds two thin Power BI reports over a
-> fixed virtual-time snapshot, with time intelligence, semi-additive balances and what-if analysis.
-> Native Smart narrative summaries respond to filters; optional KPI reading guides follow the charts.
-> A [Fabric IQ ontology implementation](./26-fabric-ontology.md) publishes enterprise entities and bindings
-> over immutable OneLake snapshot tables, subject to the ontology-preview tenant prerequisite.
-> A [Fabric Data Agent showcase](./24-data-agent-showcase.md) adds natural-language observation and an
-> isolated, replayable S&OP evidence-to-decision experiment.
-> [Secretless application authentication](./25-data-agent-authentication.md) is verified from Azure; the live
-> worker still uses simulator briefings. See
-> [the business lab](./21-business-lab.md) for scope and limits.
-> Start with [the local example](#running-the-first-local-increment) or the [cloud runbook](../infra/demo/README.md).
-> [Chapter 15](./15-open-decisions.md#152-summary-and-status) records our adopted choices;
-> [chapter 20](./20-fabric-walking-skeleton.md) summarizes verified Fabric behavior and limits.
+**Target design.** Giandoria is a fictional Piedmontese chocolate maker surrounded by a simulated market, suppliers,
+factory, customers and channels. Rules and planning engines handle routine decisions; role-based agents may handle
+judgement calls. The universe uses virtual time and emits events for Microsoft Fabric to observe. Everything is
+fictional; chapter 16 lists the real-world sources used for calibration.
 
-Giandoria is a laboratory in which a fictional Piedmontese chocolate maker, **Giandoria Cioccolato S.p.A.**, lives
-through whole seasons. It buys cocoa, hazelnuts, toys and packaging; makes chocolate on machines with realistic
-production times; stores and ships it; and sells it through retail chains, wholesalers, its own flagship stores, an
-e-shop, airport stores, export distributors and charity and corporate campaigns, across a simulated Italy of 107
-provinces. Consumers buy, or do not buy, depending on the calendar, the weather, prices, promotions and what is
-actually on the shelf.
+**Implemented today.** The repository has durable local run state, Azure demo infrastructure and a verified,
+bounded Fabric publish/replay path. The reduced-detail business runtime has produced two simulated years of data,
+with weekly LLM decisions, dashboards and queryable analytics. Semantic-model, ontology and Data Agent showcases
+extend that evidence, each with documented prerequisites and limits. The full target planning engine is not yet
+implemented. See the [business lab](./21-business-lab.md) for current scope, the
+[Fabric walking skeleton](./20-fabric-walking-skeleton.md) for verified platform behavior, and chapters
+[23–28](#the-documents) for the focused showcases.
 
-Several connected simulators play the parts of this world. Routine decisions are taken by rules and planning
-engines; judgement calls are taken by agents backed by large language models. Every fact becomes an event with a
-**virtual timestamp** and flows into **Microsoft Fabric**, where it is watched live and analysed later. Every
-resource is created by code. Scale and speed are calibrated to F4 rather than promising one sim year per wall hour.
-When the lab stops, both sim time and compute can stop.
-Retained data and supporting services can still incur idle costs.
-
-**Everything in the universe is fictional:** the company, its brands, the retailers, the suppliers, the foundations
-and the people. Real-world facts are used only to make it realistic; chapter 16 lists the sources.
-
----
-
-## Six ideas
-
-1. **One connected chain.** Nothing is generated in isolation: a jammed wrapper in February can become an empty
-   shelf before Easter, a lost sale and a smaller order the next year. Every link is an event, traceable to its cause.
-2. **The calendar drives demand.** Thirteen occasions shape the year; Easter eggs exist only around Easter, and an
-   early Easter behaves differently from a late one.
-3. **Commit before knowing.** Toys travel by sea for 9–15 weeks and eggs are built months before they sell. The
-   company plans ahead under uncertainty, using a delivery outlook, and lives with its commitments.
-4. **A hidden truth.** The universe knows true demand, lost sales and real machine wear. The company and its agents
-   see only what real systems would record; the truth is kept apart and used to score their decisions.
-5. **Virtual time.** Two clocks, never mixed: every event carries its sim time and, separately, its wall time. When
-   the lab stops, sim time stops, and nothing ages.
-6. **Built by code, stopped by default.** No resource is created in a portal. The normal state of the lab is
-   hibernated; actual idle cost includes retained Storage, ACR and tenant Defender requirements.
-
----
-
-## Reverse-time simulation: my method
-
-> **Planning backwards, against real capacity.** Giandoria plans production with **reverse-time simulation**, a
-> method devised in 2015 by the author of chapter 17. A simulation runs with its clock reversed, from the due dates towards
-> the past: a finished gift box asks for its chocolates, each chocolate queues for its line and waits through closed
-> shifts, and each material gets the latest date by which it must be ordered. Every step lands as late as possible on
-> a line that is really free. A forward pass from today then gives the slack of every step and flags what is already
-> late. I arrived at the idea independently; [chapter 17](./17-reverse-time-simulation.md) explains it with a
-> short numerical example, links to the original Excel-driven SimPy repository, and credits the earlier
-> backward-simulation literature. The full planning engine remains part of the target design.
-
----
-
-## The big picture
-
-```mermaid
-flowchart LR
-    subgraph CTRL["Control plane: wall time"]
-        OPS["Lab CLI and web form"]
-        LC["Lab Control"]
-        CI["Bootstrap and CI: Bicep, fab/REST, fabric-cicd"]
-    end
-    subgraph UNI["Universe plane: sim time, on Azure Container Apps"]
-        CH["Chronos: world clock and router"]
-        SIMS["Seven simulators: world, market, retail, trade, logistics, factory, supply"]
-        PLN["svc-planning: forecast to allocation"]
-        AGT["svc-agents: LLM roles with rule fallbacks"]
-        FIN["svc-finance: costs, P&L, cash"]
-        EMI["Shared emitter: one envelope for every event"]
-    end
-    FOU["Microsoft Foundry models"]
-    subgraph DATA["Data plane: Microsoft Fabric"]
-        CAP["One Fabric capacity: F4, demo, Sweden Central"]
-        ES["Four Eventstreams"]
-        EH["Eventhouse: bronze, silver, gold"]
-        TR["Truth: kqldb_truth and lh_evaluation"]
-        LH["Lakehouse and semantic model"]
-        VIEW["Real-Time Dashboards, reports, Activator, data agent"]
-    end
-    OPS --> LC
-    LC --> CH
-    LC -. resume and suspend .-> CAP
-    CH <--> SIMS
-    CH <--> PLN
-    CH <--> AGT
-    CH <--> FIN
-    AGT <--> FOU
-    SIMS --> EMI
-    PLN --> EMI
-    AGT --> EMI
-    FIN --> EMI
-    EMI --> ES
-    ES --> EH
-    ES --> TR
-    EH -->|"OneLake availability"| LH
-    EH --> VIEW
-    LH --> VIEW
-```
-
-* **Universe plane.** Chronos is the only component that moves time. The simulators own their state and talk only
-  through in-universe messages; svc-planning runs the planning engines; svc-agents runs the LLM roles, each with a
-  rule-based fallback, authority limits and a budget.
-* **Data plane.** Fabric observes the universe; it does not drive it. The live path is Real-Time Intelligence
-  (Eventstreams, the Eventhouse, Real-Time Dashboards, Activator); the batch path is a Lakehouse in OneLake, a
-  semantic model and Power BI reports. The truth has its own stream, database and Lakehouse.
-* **Control plane.** Lab Control starts, pauses, hibernates and stops runs, changes speed, enforces budgets and
-  resumes or suspends the capacity. The bootstrap script and the CI pipelines create every resource and item.
+For a local run, use [the first local increment](#running-the-first-local-increment); for Azure operations, use the
+[demo runbook](../infra/demo/README.md). [Chapter 15](./15-open-decisions.md#152-summary-and-status) records the
+adopted choices and remaining evidence. Cost and hibernation guidance is in
+[chapter 13](./13-cost-control-and-operations.md) and
+[chapter 18](./18-tenant-governance.md#186-microsoft-defender-for-cloud).
 
 ---
 
@@ -182,7 +79,7 @@ and approval.
 
 | Ch. | Document | What it answers |
 |---:|---|---|
-| 01 | [Vision and mental model](./01-vision-and-mental-model.md) | The whole idea: the company, truth and observation, the engine room, time, planning, Easter 2031 step by step, the data, cost, what must be agreed, the glossary. **Start here** |
+| 01 | [Vision and mental model](./01-vision-and-mental-model.md) | How the fictional company, truth, time, planning and observation fit together. Includes worked seasonal examples and a glossary. **Start here** |
 | 02 | [The universe: domain model](./02-universe-domain-model.md) | Who and what exists: Giandoria, its brands and products, the sites, the territory, the own stores, B2B customers, campaigns, consumers, suppliers, competitors, the size profiles |
 | 03 | [Market, demand and seasonality](./03-market-and-seasonality.md) | Where demand comes from and why it peaks: ten layers of demand, the Italian calendar, Easter and Christmas, campaigns, weather, tourism, prices and promotions |
 | 04 | [The factory: processes, lines and machines](./04-factory-and-processes.md) | How chocolate is made and how long it takes: the process chain, plants and lines, machine states, wear, changeovers, quality holds, shifts, energy, telemetry |
