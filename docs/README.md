@@ -209,7 +209,7 @@ and approval.
 | 25 | [Secretless Data Agent authentication](./25-data-agent-authentication.md) | Managed-identity federation to an application, token audiences, isolated authorization and real cloud verification |
 | 26 | [Fabric IQ ontology](./26-fabric-ontology.md) | Enterprise entities, composite identities, relationship bindings, immutable Delta sources and preview prerequisites |
 | 27 | [Decision Room and app authoring](./27-decision-room.md) | Native Fabric App, Rayfin authoring, Radix interface, governed investigations and private review lifecycle |
-| 28 | [Data Agent delegation experiment](./28-data-agent-delegation-experiment.md) | The same generalist alone and with a specialist: frozen questions, measured answers, an evidence control and limits |
+| 28 | [Data Agent delegation experiment](./28-data-agent-delegation-experiment.md) | Retrieval versus expertise: frozen questions, equal-access DAX controls, semantic knowledge and specialist errors |
 
 The first infrastructure in code is the shared Foundry resource of chapter 18 §18.11:
 [infra/shared-foundry](../infra/shared-foundry/README.md).

@@ -15,7 +15,8 @@ Operating commands belong to the [cloud runbook](../infra/demo/README.md#fabric-
 
 For an actual direct-versus-delegated comparison, see the
 [CEO and line-lead experiment](./28-data-agent-delegation-experiment.md).
-It tests the same generalist without retrieval, with a Data Agent tool, and with retrieved evidence supplied directly.
+It tests delegation, evidence supplied directly and executable DAX with equal data access.
+The semantic-knowledge controls also retain cases where the specialist gives an incorrect answer.
 
 ## 24.1 Architecture and educational purpose
 

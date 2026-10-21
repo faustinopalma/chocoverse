@@ -1,6 +1,9 @@
 #Requires -Version 7.4
 [CmdletBinding()]
-param([Parameter(Mandatory)][ValidatePattern('^[a-z0-9][a-z0-9-]{0,63}$')][string]$Experiment)
+param(
+    [Parameter(Mandatory)][ValidatePattern('^[a-z0-9][a-z0-9-]{0,63}$')][string]$Experiment,
+    [ValidateSet('evidence','query','query-ablation')][string]$Protocol = 'evidence'
+)
 
 . "$PSScriptRoot\..\infra\demo\common.ps1"
 Initialize-DemoContext
@@ -24,7 +27,7 @@ try {
         '-NoProfile','-File',$control,'-Action','Start','-SessionId',$session,'-Mode','Analysis','-MaxWallMinutes','45'
     ) -TimeoutSeconds 780
     Invoke-RecordedNative -FilePath $python -Arguments @(
-        '-m','giandoria.agent_comparison','--experiment',$Experiment
+        '-m','giandoria.agent_comparison','--experiment',$Experiment,'--protocol',$Protocol
     ) -TimeoutSeconds 1900
 }
 finally {

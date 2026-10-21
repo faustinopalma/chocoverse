@@ -1,6 +1,7 @@
-"""Compare an overview-only generalist with delegated, governed analytical evidence."""
+"""Compare generalists and a governed specialist with controlled evidence and query access."""
 
 import argparse
+import calendar
 import json
 import math
 import re
@@ -14,7 +15,7 @@ from azure.identity import AzureCliCredential
 from .cloud_io import FoundryChat, RecordedHttp
 from .data_agent import (
     MARKER, NAME, SCOPE, DataAgentClient, assert_agent_source, digest, evaluation_cases,
-    model_contract, read_definition,
+    evaluate_answer, model_contract, read_definition,
 )
 from .fabric_deploy import RecordedRequests
 from .showcase import ROOT, MARKER as MODEL_MARKER
@@ -40,6 +41,15 @@ TOOL = {
                        "properties": {"question": {"type": "string"}}, "required": ["question"]},
     },
 }
+QUERY_SYSTEM = (
+    "You are an enterprise analyst with full read-only DAX query access to the attached semantic model. "
+    "Every attached table, row and measure is queryable; no missing permissions or data export is involved. "
+    "Return one executable DAX query yielding exactly one row with the requested metric aliases, "
+    "and a brief explanation. Use the model metadata, including expressions and descriptions when supplied. "
+    "You may use any existing measure or base fact. Do not invent values or substitute unsupported grains. "
+    "A blank must remain null, except an explicitly requested zero count. "
+    "No Markdown, network calls or operations outside this single model."
+)
 
 
 def cases(snapshot: dict) -> dict[str, dict]:
@@ -96,6 +106,105 @@ def answer_format(fields: list[str]) -> dict:
     }}
 
 
+def query_cases(snapshot: dict) -> dict[str, dict]:
+    last = date.fromisoformat(snapshot["throughDate"])
+    end = last.replace(day=1) - timedelta(days=1)
+    start = end.replace(day=1)
+    selected = [r for r in snapshot["tables"]["Balances"] if start.isoformat() <= r[0] <= end.isoformat()]
+    sales = snapshot["tables"]["Sales"]
+    monthly_sales = [r for r in sales if start.isoformat() <= r[0] <= end.isoformat()]
+    first = date.fromisoformat(snapshot["firstDate"])
+    if first.day != 1:
+        first = (first.replace(day=28) + timedelta(days=4)).replace(day=1)
+    missing_end = first.replace(day=calendar.monthrange(first.year, first.month)[1])
+    missing = [r for r in snapshot["tables"]["Balances"] if first.isoformat() <= r[0] <= missing_end.isoformat()]
+    if not selected or missing or missing_end > last:
+        raise ValueError("Equal-access protocol requires an observed last complete month and unobserved first month.")
+    return {
+        "cash_close": {
+            "question": (
+                f"Prepare the company's cash close for virtual {start} through {end}: cash_eur, "
+                "observation_days and calendar_days. Cash close means the balance, not a sum of daily balances."
+            ),
+            "expected": {"cash_eur": selected[-1][4] / 100, "observation_days": len(selected),
+                         "calendar_days": (end - start).days + 1},
+        },
+        "cross_grain": {
+            "question": (
+                f"For virtual {start} through {end}, report sold_kg, released_kg and cash_eur for "
+                "product dark70, channel campaigns, territory centre. Keep all three filters on the requested "
+                "answer. If a metric is not measurable at this grain, use null, not an allocation or a company total."
+            ),
+            "expected": {"sold_kg": sum(r[4] for r in monthly_sales if r[1:4] == ["campaigns", "dark70", "centre"]),
+                         "released_kg": None, "cash_eur": None},
+        },
+        "policy_multiselect": {
+            "question": (
+                f"At virtual snapshot end {last}, the Cover policy slicer contains both 2 and 4, "
+                "simultaneously selected, not two separate scenarios. What does the model return for "
+                "cover_days and target_kg? Return target_kg rounded to its published one-decimal kg precision."
+            ),
+            "expected": {"cover_days": 3, "target_kg": round(
+                sum(r[4] for r in sales if (last - timedelta(days=29)).isoformat() <= r[0] <= last.isoformat())
+                / min(30, (last - date.fromisoformat(snapshot["firstDate"])).days + 1) * 3, 1)},
+        },
+        "missing_observations": {
+            "question": (
+                f"Prepare the company's report for virtual {first} through {missing_end}: sold_kg, cash_eur, "
+                "observation_days and calendar_days. Distinguish zero observed days (report the count as 0) "
+                "from an unknown balance. Do not use observations from outside the requested month."
+            ),
+            "expected": {"sold_kg": sum(r[4] for r in sales if first.isoformat() <= r[0] <= missing_end.isoformat()),
+                         "cash_eur": None, "observation_days": 0, "calendar_days": (missing_end - first).days + 1},
+        },
+    }
+
+
+def schema_context(parts: dict, *, raw: bool = False) -> dict:
+    """Export structure and optional curated measures, never embedded partition rows."""
+    model = parts["model.bim"]["model"]
+    return {
+        "tables": [{
+            "name": table["name"],
+            "columns": [{k: col[k] for k in ("name", "dataType", "description") if k in col}
+                        for col in table.get("columns", [])],
+            **({} if raw else {
+                "measures": [{k: measure[k] for k in ("name", "expression", "description", "formatString")
+                              if k in measure} for measure in table.get("measures", [])],
+            }),
+        } for table in model["tables"]],
+        "relationships": model["relationships"],
+    }
+
+
+def execute_query(http: RecordedHttp, workspace: str, model_id: str, query: str, fields: list[str]) -> dict:
+    if (not isinstance(query, str) or not 1 <= len(query) <= 12_000
+            or not re.match(r"\s*(?:DEFINE|EVALUATE)\b", query, re.IGNORECASE)):
+        raise ValueError("Expected a bounded read-only DAX query, without Markdown fences.")
+    response = http.request(
+        "POST", f"https://api.powerbi.com/v1.0/myorg/groups/{workspace}/datasets/{model_id}/executeQueries",
+        "https://analysis.windows.net/powerbi/api/.default",
+        headers={"Content-Type": "application/json"},
+        body=json.dumps({"queries": [{"query": query}], "serializerSettings": {"includeNulls": True}}).encode(),
+        expected=(200, 400),
+    )
+    try:
+        result = response.json()
+        status = response.status_code
+    finally:
+        response.close()
+    if status == 400 or result.get("error") or any(r.get("error") for r in result.get("results", [])):
+        http.record({"operation": "comparison.query", "status": "Failed", "query_sha256": digest(query)})
+        return {"state": "QueryFailed", "response": result}
+    rows = result["results"][0]["tables"][0]["rows"]
+    if len(rows) != 1:
+        return {"state": "ShapeFailed", "response": result}
+    values = {key.removeprefix("[").removesuffix("]"): value for key, value in rows[0].items()}
+    if set(values) != set(fields):
+        return {"state": "ShapeFailed", "response": result}
+    return {"state": "Executed", "metrics": values, "response": result}
+
+
 def score(answer: dict, expected: dict, cutoff: str) -> dict:
     observed = answer.get("metrics")
     if not isinstance(observed, dict) or observed.keys() != expected.keys():
@@ -123,7 +232,16 @@ class Study:
         path = self.directory / "result.json"
         temporary = path.with_suffix(".tmp")
         temporary.write_text(json.dumps(self.record, indent=2, allow_nan=False) + "\n", encoding="utf-8")
-        temporary.replace(path)
+        for attempt in range(5):
+            try:
+                temporary.replace(path)
+                return
+            except PermissionError as error:
+                if getattr(error, "winerror", None) not in (5, 32) or attempt == 4:
+                    raise
+                self.http.record({"operation": "comparison.checkpoint", "status": "Retrying",
+                                  "winerror": error.winerror, "attempt": attempt + 1})
+                time.sleep(0.05 * 2 ** attempt)
 
     def reserve(self, kind: str, limit: int) -> None:
         if time.monotonic() >= self.deadline or self.record[kind] >= limit:
@@ -136,10 +254,15 @@ class Study:
                 "messages": messages, "response_format": answer_format(fields)}
         if tools:
             body.update(tools=[TOOL], tool_choice="auto", parallel_tool_calls=False)
+        return self.request(body)
+
+    def request(self, body: dict) -> dict:
         payload = json.dumps(body).encode()
         if len(payload) > 32_000:
             raise ValueError("Model request exceeds the frozen 32 KB input envelope.")
         self.reserve("modelCalls", 16)
+        self.record.setdefault("modelRequests", []).append(body)
+        self.save()
         response = self.http.request(
             "POST", f"{self.target['endpoint'].rstrip('/')}/openai/v1/chat/completions",
             "https://cognitiveservices.azure.com/.default", body=payload,
@@ -157,6 +280,69 @@ class Study:
         self.record.setdefault("usage", []).append(result["usage"])
         self.save()
         return choice["message"]
+
+    def run_query_case(self, name: str, case: dict, client: DataAgentClient, workspace: str, model_id: str) -> None:
+        fields = list(case["expected"])
+        output = {"type": "json_schema", "json_schema": {
+            "name": "dax_query", "strict": True, "schema": {
+                "type": "object", "additionalProperties": False,
+                "properties": {"query": {"type": "string"}, "reason": {"type": "string"}},
+                "required": ["query", "reason"],
+            },
+        }}
+        common = self.plan.get("querySystem", QUERY_SYSTEM)
+        question = json.dumps({
+            "snapshot": {k: self.plan["contract"][k] for k in ("firstDate", "throughDate")},
+            "model": self.plan["schema"], "question": case["question"], "aliases": fields,
+        })
+        attempt: dict = {"case": name, "state": "Reserved", "arms": {}}
+        self.record["attempts"].append(attempt)
+        self.save()
+        for arm in self.plan.get("queryArms", ("schema_only", "schema_plus_instructions")):
+            system = common
+            if arm == "schema_plus_instructions":
+                system += "\nSpecialist analytical contract:\n" + self.plan["specialistInstructions"]
+            arm_question = question
+            if arm == "raw_schema":
+                arm_question = json.dumps({
+                    "snapshot": {k: self.plan["contract"][k] for k in ("firstDate", "throughDate")},
+                    "model": self.plan["rawSchema"], "question": case["question"], "aliases": fields,
+                })
+            message = self.request({
+                "model": self.target["deployment"], "max_completion_tokens": 2048,
+                "messages": [{"role": "system", "content": system}, {"role": "user", "content": arm_question}],
+                "response_format": output,
+            })
+            generated = json.loads(message["content"])
+            attempt["arms"][arm] = {"generated": generated, "state": "Generated"}
+            self.save()
+            execution = execute_query(self.http, workspace, model_id, generated["query"], fields)
+            outcome = attempt["arms"][arm]
+            outcome.update(execution)
+            outcome["score"] = (
+                score({"metrics": execution["metrics"], "virtual_cutoff": self.plan["contract"]["throughDate"],
+                       "data_status": "snapshot"}, case["expected"], self.plan["contract"]["throughDate"])
+                if execution["state"] == "Executed" else {"passed": False, "error": execution["state"]}
+            )
+            self.save()
+        self.reserve("dataAgentCalls", 4)
+        evidence = client.ask(
+            case["question"] + " State the virtual snapshot cutoff. Then return exactly one JSON object "
+            "with only these keys: " + ", ".join(fields) + ". Use numbers or null, not strings."
+        )
+        outcome = {"evidence": evidence, "state": "Answered"}
+        attempt["arms"]["data_agent"] = outcome
+        self.save()
+        try:
+            actual = evaluate_answer(evidence["text"], case["expected"])
+        except ValueError as error:
+            outcome.update(state="AnswerFailed", score={"passed": False, "error": str(error)})
+        else:
+            cutoff = re.search(r"\d{4}-\d{2}-\d{2}", evidence["text"])
+            provenance = cutoff is not None and cutoff.group() == self.plan["contract"]["throughDate"]
+            outcome.update(state="Evaluated", metrics=actual, score={"passed": provenance, "provenance": provenance})
+        attempt["state"] = "Complete"
+        self.save()
 
     def run_case(self, name: str, case: dict, client: DataAgentClient) -> None:
         fields = list(case["expected"])
@@ -211,6 +397,7 @@ class Study:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--experiment", required=True)
+    parser.add_argument("--protocol", choices=("evidence", "query", "query-ablation"), default="evidence")
     args = parser.parse_args()
     if not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", args.experiment):
         raise ValueError("Use a safe, unique lowercase experiment name.")
@@ -239,7 +426,8 @@ def main() -> None:
         model_id, agent_id = models.registry["sm_giandoria_showcase"], transport.registry[NAME]
         if model_id != verified["modelId"]:
             raise ValueError("Model is not the independently reconciled identity.")
-        contract = model_contract(read_definition(models, headers, model_id, model=True), snapshot)
+        model_parts = read_definition(models, headers, model_id, model=True)
+        contract = model_contract(model_parts, snapshot)
         agent_parts = read_definition(transport, headers, agent_id)
         assert_agent_source(agent_parts, workspace["id"], model_id)
         plan = {"protocol": 1, "contract": contract, "cases": cases(snapshot), "briefing": briefing(snapshot),
@@ -247,13 +435,27 @@ def main() -> None:
                 "limits": {"modelCalls": 16, "dataAgentCalls": 4, "seconds": 1800, "requestBytes": 32000},
                 "order": ["direct", "delegated", "evidence_supplied"],
                 "tolerance": 0.01, "retries": 0}
-        http = RecordedHttp(credential, {"api.fabric.microsoft.com", urlsplit(endpoint).hostname or ""})
+        if args.protocol in ("query", "query-ablation"):
+            plan.update(protocol=2, cases=query_cases(snapshot), schema=schema_context(model_parts),
+                        querySystem=QUERY_SYSTEM,
+                        specialistInstructions=(ROOT / "fabric" / "data-agent" / "instructions.txt").read_text(
+                            encoding="utf-8"),
+                        order=["schema_only", "schema_plus_instructions", "data_agent"])
+            if args.protocol == "query-ablation":
+                plan.update(protocol=3, rawSchema=schema_context(model_parts, raw=True),
+                            queryArms=["raw_schema", "schema_only", "schema_plus_instructions"],
+                            order=["raw_schema", "schema_only", "schema_plus_instructions", "data_agent"])
+        http = RecordedHttp(credential, {"api.fabric.microsoft.com", "api.powerbi.com",
+                                        urlsplit(endpoint).hostname or ""})
         FoundryChat(http, endpoint, target["deployment"], target["version"])
         study = Study(directory, http, target, plan)
         try:
             client = DataAgentClient(http, workspace["id"], agent_id)
             for name, case in plan["cases"].items():
-                study.run_case(name, case, client)
+                if args.protocol in ("query", "query-ablation"):
+                    study.run_query_case(name, case, client, workspace["id"], model_id)
+                else:
+                    study.run_case(name, case, client)
             if (model_contract(read_definition(models, headers, model_id, model=True), snapshot) != contract
                     or read_definition(transport, headers, agent_id) != agent_parts):
                 raise RuntimeError("Source contract drifted; comparison cannot be accepted.")

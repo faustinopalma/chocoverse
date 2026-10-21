@@ -480,6 +480,31 @@ Data Agent, and the operator's configured Azure CLI identity. Run from the repos
 .\ops\Invoke-AgentComparison.ps1 -Experiment 'delegation-example-01'
 ```
 
+For the stronger same-data query comparison, use a new name and select the query protocol:
+
+```powershell
+.\ops\Invoke-AgentComparison.ps1 -Experiment 'query-knowledge-example-01' -Protocol query
+```
+
+This gives the generalist every table/column, relationship and measure expression/description, plus read-only
+access to the full enterprise model. Its generated DAX is executed, not merely displayed.
+The same generalist also runs with the exact Data Agent instructions as a knowledge-transfer control;
+the real Data Agent answers each question independently.
+The four frozen cases cover balances, unsupported dimensional grains, policy multiselection and missing observations.
+Query errors and wrong shapes are retained as failures, without automatic repairs.
+Only the configured semantic model is queried; no truth workspace or additional permissions enter the experiment.
+
+To isolate access to the curated semantic catalogue, use the ablation protocol:
+
+```powershell
+.\ops\Invoke-AgentComparison.ps1 -Experiment 'query-ablation-example-01' -Protocol query-ablation
+```
+
+It adds a raw-schema arm with the same tables, columns, relationships and query access but no measure catalogue
+in its prompt. The other three arms are unchanged. Four cases produce at most twelve direct DAX executions
+and four Data Agent calls; the ordinary query protocol executes eight direct queries and four specialist calls.
+These counts do not describe the specialist's undisclosed internal query activity.
+
 The wrapper verifies the existing model version, starts **Analysis** mode with a 45-real-minute shutdown deadline,
 runs the comparison and invokes session-scoped Stop in `finally`.
 Cleanup independently checks Paused F4 and terminal worker executions; it must not be used to take over another
@@ -489,6 +514,8 @@ The suite reserves at most sixteen generalist completions with 2,048 output toke
 a 32 KB input envelope per completion and a 30-minute logical run deadline.
 The child process is bounded to 1,900 seconds; startup and cleanup have separate limits.
 The published snapshot is rechecked before and after the suite. No inference retries are automatic.
+Local checkpoint commits retry only transient Windows replacement locks, with a short bounded delay and audit;
+this never repeats a model or Data Agent call. Persistent write failures still fail the run.
 These are request/time limits, not a monetary ceiling; F4, both inference paths and supporting services cost money.
 Retained services, including subscription Defender plans, can cost money after shutdown.
 
