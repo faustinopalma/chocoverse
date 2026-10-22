@@ -1,36 +1,25 @@
 # Should Giandoria expand its partner campaigns?
 
-Giandoria's commercial team is considering expanding partner campaigns. Before committing more stock,
-it needs to understand how much business they bring in and what the company can support.
+Giandoria is considering a larger role for partner campaigns. The commercial team needs to understand their
+sales contribution, then assess the stock and funding an expansion would require.
 
-The decision crosses sales, production and finance. A Fabric Data Agent helps the analyst connect those sources.
-We follow the evidence from recorded sales to a recommendation about expansion, keeping observed results
-separate from the assumptions a new investment would require.
+Follow a Fabric Data Agent investigation from the first question to a proposal for a controlled pilot.
+The captured answers show what the records establish and which evidence the team should gather next.
 
 ## 1. A business decision before a query
 
-Giandoria buys ingredients, makes chocolate, manages logistics and sells through its own shops and other channels.
-Microsoft Fabric brings these records together. An analyst still has to find the right source and ask it
-the right question.
+Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
+Fabric brings these records together. A *Data Agent* turns business questions into queries over configured
+sources, using their definitions to retrieve answers that can be inspected.
 
-A *Fabric Data Agent* translates business questions into queries over configured analytical sources.
-It can use SQL to query tables, DAX to calculate model-defined metrics, or KQL to explore event data.
-Microsoft documents these capabilities in the [Data Agent overview (F36)][agent-overview]
-and [runtime guide (F103)][agent-runtime].
-The analyst starts with the business problem and can inspect the generated query afterward.
-
-That connection to company data is what matters here. The agent uses source definitions and business context
-to retrieve evidence. Ordering ingredients or changing production remains a separate, authorized action.
-
-The decision needs three things: evidence of additional profitable demand, enough stock to serve it,
-and cash available to fund it. We start with the narrower question the sales records can answer:
-what do campaigns already contribute?
+Here, it uses SQL for sales records and DAX for Finance's published measures. The team can concentrate on
+the decision: **would a larger campaign generate profitable demand that Giandoria can serve and fund?**
+We start with its existing sales contribution.
 
 ## 2. Start with a fair comparison
 
-Let's look at seventy-percent dark chocolate in the central territory during August 2034.
-Campaign sales alone tell us the volume. To judge their contribution, we also need the same category's
-sales across all channels.
+For seventy-percent dark chocolate in the central territory, compare campaign sales with sales across
+all channels in the same month.
 
 **Recorded input — commercial comparison:**
 
@@ -38,57 +27,73 @@ sales across all channels.
 > territory, and what share of that category's central-territory sell-out did campaigns represent? Apply our
 > Commercial sell-out topic and show the numerator, denominator and percentage.
 
-![Campaign sell-out is 82 kg out of 1,994 kg across all channels, a 4.11% share.][commercial-answer]
+![Campaigns account for 82 kg of 1,994 kg sold: a 4.11% share.][commercial-answer]
 
-The agent returns **82 kg out of 1,994 kg: 4.11%**. Both totals use the same product, territory and month.
-Only the channel filter changes. Keeping those conditions aligned makes the percentage meaningful.
+**Campaigns contributed 4.11% of recorded sales** for this product, territory and month.
+Keeping those filters aligned makes the comparison meaningful.
 
-The execution also shows how business language reaches the data. An *ontology* describes business entities
-and their relationships. Here it resolves the product, channel and territory before SQL calculates the totals.
+The execution trace below belongs to the same commercial input above. The *ontology*, a map of business
+entities and relationships, resolves the product, channel and territory before SQL calculates the totals.
 
-The following execution trace belongs to the same commercial input above; it is not a second question.
+![Business labels are resolved before the SQL query runs.][ontology-grounding]
 
-![Entity searches resolve the business labels before the SQL query runs.][ontology-grounding]
-
-The stored labels are `dark70`, `campaigns` and `centre`. We checked the query's result against the underlying rows.
-This gives us the first sentence of the briefing: campaigns contributed 4.11% of this category's recorded
-sell-out, meaning purchases by customers.
-
-The input asks for the Commercial sell-out topic. The trace demonstrates ontology resolution and SQL execution,
-but does not establish that the separate Topics retrieval feature ran.
-
-Contribution leaves a further question open: what would have sold through other channels without the campaign?
-These totals cannot establish additional demand or profitability. Before discussing expansion, let's examine
-the company's financial position.
+This establishes contribution. Measuring *additional* demand requires a comparable baseline or control;
+assessing profitability also requires campaign costs and margins. Next, we look at the company's financial context.
 
 ## 3. Read cash as a balance
 
-Finance needs the August closing cash figure. Adding every daily balance would count money repeatedly as it
-remained in the account. We need the last observed balance in the month.
+Finance's closing-cash measure returns the last observed balance in the month. Its definition lives in
+the *semantic model*, where reusable business metrics are maintained.
 
 **Recorded input — cash close:**
 
 > For the company-wide August 2034 close, what was our closing cash in EUR? Show observation days and calendar days,
 > explain why cash balances must not be added across days, and use the semantic model measures.
 
-![August closing cash is EUR 3,435,099.60, with 31 observation days and 31 calendar days.][cash-answer]
+![August closing cash is EUR 3,435,099.60, with observations for all 31 days.][cash-answer]
 
-The result is **EUR 3,435,099.60**, with observations for all **31 days**.
-If observations were missing, we would need to check how recent the closing value was.
+The agent calls those measures through [DAX](./images/data-agent-story/cash-dax.png).
+**EUR 3,435,099.60 is the company's closing balance.** Finance would assess scheduled payments and existing
+commitments to determine how much could fund a campaign.
 
-This rule comes from the *semantic model*: the layer where Finance defines reusable metrics and their
-calculation rules. The agent generates DAX to call the existing cash and day-count measures.
-The [executed DAX](./images/data-agent-story/cash-dax.png) makes that choice inspectable.
+## 4. Recommend a measured next step
 
-This is company cash, not cash generated by campaigns or a spending allowance. Existing commitments and future
-payments have not been assessed here, so the balance cannot establish an expansion budget.
-The next constraint is physical: the stock an expansion would require.
+Before combining the findings, we ask which measures can describe the campaign itself.
 
-## 4. Make the stock assumption explicit
+**Recorded input — supported detail:**
 
-At the 3 September review, the analyst asks about two and four days of stock cover: the number of days used
-by the model to calculate a stock target. The recorded request selects both values simultaneously,
-so its answer depends on the model's multi-selection rule.
+> For August 2034, report Sold kg, Released kg and closing cash in EUR for dark70 sold through campaigns in centre.
+> If the model cannot support a metric at that product/channel/territory grain, say unavailable rather than
+> allocating or inventing it.
+
+![Sales returns 82 kg; production and cash are unavailable at the requested campaign detail.][boundaries-answer]
+
+Sales identifies product, channel and territory. Production identifies date and product; cash identifies
+company and date. These different levels of detail explain why the briefing keeps campaign sales and company
+cash separate.
+
+**Prepare a bounded pilot proposal. Launch it once Commercial, Operations and Finance establish its value,
+feasibility and spending limits.**
+
+The 82 kg establishes an existing campaign contribution. The next step is to test whether a larger campaign
+would create additional profitable sales. Three checks turn that proposal into an executable plan:
+
+| Decision gate | Evidence required before launch |
+|---|---|
+| Commercial value | A comparable baseline or control, incremental sales and margin after campaign costs. |
+| Supply feasibility | Usable stock, existing commitments and replenishment lead times for the proposed campaign. |
+| Cash exposure | Scheduled payments, a spending cap and a stop condition agreed with Finance. |
+
+The proposal should set the budget, duration and success criteria from these checks. Broad expansion remains
+conditional on the pilot's results. This is the team's recommendation; the Data Agent supplies inspectable evidence.
+
+The investigation ends here. The following demonstrations explore stock-policy rules and daily patterns;
+they complement the review rather than provide the missing launch evidence.
+
+## 5. Further analysis: stock policy
+
+A stock target depends on a policy assumption. This example shows how the semantic model handles two
+cover-day values selected together.
 
 **Recorded input — stock policy:**
 
@@ -98,53 +103,37 @@ so its answer depends on the model's multi-selection rule.
 
 ![Selecting two and four cover days together returns the three-day default and a 1,252.7 kg target.][policy-answer]
 
-The published rule requires one selected value. With two values selected together, it falls back to
-**3 days**, giving a company-wide target of **1,252.7 kg**. Three comes from that default rule; the model does not
-average the selections.
+The measure uses its **3-day default**, producing a **company-wide target of 1,252.7 kg**.
+Comparing two policies would require evaluating each separately.
 
-This execution therefore gives one default-policy target, not a comparison between two alternatives.
-Those would require separate evaluations. The agent follows the published measure; it does not place an order
-or change production.
+This is a planning target. Campaign availability requires the inventory checks above; changing production
+requires a separate authorized action.
 
-The target is not a count of stock on hand and does not prove availability for a campaign.
-Before allocating stock, Operations must reconcile usable inventory, commitments and replenishment lead times.
-The August daily records provide a first look at demand variation, not that future availability check.
+## 6. Further analysis: daily sales
 
-## 5. Look beyond the monthly total
-
-We keep the company-wide scope and examine daily sales, so we can compare them with production.
-A daily chart needs the whole month: a 25-row preview would leave six August days out.
+A daily view reveals variation hidden by the monthly total. We retrieve the complete month before charting it.
 
 **Recorded input — complete daily table:**
 
 > Show the complete daily company sell-out table for August 2034: every date from August 1 through August 31,
 > ordered by date, with Sold kg. Return all 31 rows, not just a preview of 25, and state the snapshot cutoff.
 
-The [daily result](./images/data-agent-story/daily-rows.png) contains all **31 dates**.
-We checked every date and value, including the final day, before asking for a native Fabric line chart.
+The [daily result](./images/data-agent-story/daily-rows.png) contains all **31 dates**, checked against the source.
 
 **Recorded input — native chart:**
 
 > For August 2034, show daily company Sold kg as an interactive native Fabric line chart, not a Python image.
 > Label virtual date and kg and state the snapshot cutoff.
 
-![Native Fabric line chart showing all 31 daily company sell-out values for August.][native-chart]
+![Native Fabric chart of daily company sales across all 31 August dates.][native-chart]
 
-This is the chart exported from Fabric, shown here as a static image. In Fabric, hovering over a point exposes
-its date and value; the [31 August tooltip](./images/data-agent-story/native-chart-tooltip.png) shows **398 kg**.
-The 31-point result fits within the 200-row limit documented in
-[Microsoft's visual-response guide (F107)][agent-visuals].
+This is a static export of the native chart. In Fabric, hovering reveals each date and value.
+It shows company-wide sales; assessing a campaign's daily effect would require a campaign-specific comparison.
 
-This complete series lets us examine company-wide timing. It does not isolate campaign demand or forecast
-a larger campaign. The next calculation checks whether sales and production releases move together on the same day.
+## 7. Further analysis: production timing
 
-## 6. Calculate the relationship
-
-To compare the two flows, we first total each one by date, then pair matching dates.
-Joining individual sales records directly to individual production records could multiply quantities.
-
-The agent uses *Code Interpreter*, which executes Python over retrieved data, to calculate Pearson correlation.
-This measures how closely two series vary together on a scale from -1 to +1.
+We can also explore how daily sales and production releases move together. Each flow is totalled by date
+before the two series are paired, preserving the quantities.
 
 **Recorded input — Python calculation:**
 
@@ -153,119 +142,48 @@ This measures how closely two series vary together on a scale from -1 to +1.
 > and correlation to four decimals. Show the Python execution, distinguish association from causation, and
 > explicitly say if the tool is unavailable.
 
-![The Code Interpreter execution completes successfully and exposes its input and output.][python-execution]
+![Code Interpreter executes Python over the retrieved daily data.][python-execution]
 
-The [answer](./images/data-agent-story/python-answer.png) reports **31 paired days** and a correlation of
-**-0.3069**, matching our independent calculation. The execution shows Python reading the daily dataset,
-checking August's date coverage and calculating the coefficient. The tool is described in
-[Microsoft's Code Interpreter guide (F108)][agent-python].
+The [answer](./images/data-agent-story/python-answer.png) reports **31 paired days** and a Pearson correlation
+of **-0.3069**, matching an independent calculation.
 
-There is a modest negative same-day association. With one month of company-wide observations, this is a
-descriptive result, not a production policy or a campaign-impact estimate. It does not establish that reducing
-production would increase sales. Inventory timing and production schedules are possible explanations to investigate.
-
-We have learned something about company-wide flows. Can we now attribute production and cash to the
-campaigns that started this investigation?
-
-## 7. Keep the answer at the right level
-
-We return to the original product, channel and territory. The question now requests three metrics at that
-same level, testing whether the company-wide findings can support a campaign-specific conclusion.
-
-**Recorded input — supported detail:**
-
-> For August 2034, report Sold kg, Released kg and closing cash in EUR for dark70 sold through campaigns in centre.
-> If the model cannot support a metric at that product/channel/territory grain, say unavailable rather than
-> allocating or inventing it.
-
-![The agent returns 82 kg of sell-out and declines unsupported production and cash allocations.][boundaries-answer]
-
-Sales still returns **82 kg**. Production and cash are **unavailable** at that level.
-The reason is *grain*: what one record represents. Sales records identify product, channel and territory;
-production identifies date and product; cash identifies company and date.
-
-Knowing total company cash does not tell us how much belongs to this campaign. Dividing it by the campaign's
-sales share would introduce an allocation rule that the data does not provide.
-
-That boundary improves the briefing. We can describe the campaign's contribution and the company's position
-separately. A recommendation to expand still needs campaign economics and a stock-availability assessment.
-
-## 8. Recommend a measured next step
-
-**Do not approve a broad expansion on this evidence. Prepare a bounded pilot proposal, with launch conditional
-on commercial, inventory and cash checks.** This is the analyst's recommendation from the captured results,
-not an approval issued by the Data Agent.
-
-The reasoning is specific. Campaigns recorded 82 kg, a 4.11% share in the selected product and territory.
-That establishes an existing sales contribution, but not additional profitable demand. Company cash supplies
-financial context, while the stock calculation supplies a policy target. Neither establishes resources
-available for expansion. The company-wide correlation cannot fill those gaps.
-
-The next proposal should answer three outstanding questions before any new commitment:
-
-| Decision gate | Evidence required before launch |
-|---|---|
-| Commercial value | Estimate incremental sales against a comparable baseline or control, and contribution margin after campaign costs. Separate new demand from sales displaced from other channels. |
-| Supply feasibility | Reconcile usable stock, existing commitments and replenishment lead times for the proposed product, territory and campaign period. |
-| Cash exposure | Assess scheduled payments and other commitments, then agree a spending cap and a stop condition with Finance. |
-
-No budget, duration or growth target is justified by these results alone. Commercial, Operations and Finance
-must agree those limits in the proposal. If the checks pass, a controlled pilot can measure incremental demand
-and margin within agreed stock and cash limits; if they do not, expansion remains on hold.
-
-The recommendation is therefore to authorize the next decision step, not the rollout. The Data Agent has made
-the evidence accessible and inspectable. The analyst has connected it to a decision without turning missing
-information into assumed profit, available stock or spending power.
+This modest negative same-day association describes one month of company-wide activity. Understanding its
+cause would require examining production schedules and inventory timing. Its role here is to demonstrate
+a reproducible calculation, rather than to set campaign or production policy.
 
 ---
 
 ## Evidence and further reading
 
-The answers and execution captures use data available through **3 September 2034**, with August as the last
-complete month. Numerical results were checked independently. For reproducible prompts, source definitions,
-access prerequisites and live-run cost controls, use the [reproduction guide](./29-data-agent-companion.md).
+These recorded executions use a snapshot through **3 September 2034**; August is the last complete month.
+Inputs are quoted verbatim, and numerical results were independently checked.
 
-Inputs above reproduce the recorded requests verbatim; line wrapping is for readability.
-The word "fictional" in the commercial input is retained from that execution.
-SQL, DAX and Python captures linked within a section belong to its stated input.
+The commercial trace demonstrates ontology resolution and SQL; [Topics retrieval remains unverified][topics-status].
+[M365 consumer feedback is blocked][feedback-status] by the current sharing setting.
+Reproduction steps, access requirements and feature limits belong to the
+[companion guide](./29-data-agent-companion.md). The ontology has a
+[migration requirement](./26-fabric-ontology.md) before its announced retirement on **31 January 2027**.
 
-Two capabilities remain outside the demonstrated results:
-[Topics retrieval is unverified][topics-status];
-[M365 consumer feedback is blocked][feedback-status]
-by disabled feedback sharing and requires publication and consumer access. The guide retains the supporting
-screenshots and acceptance criteria.
-
-The source labels F36 and F103-F110 identify entries in the project's
-[reference register](./16-references.md); the descriptive links above open Microsoft's documentation directly.
-The ontology used here has a
-[migration requirement](./26-fabric-ontology.md) ahead of its announced retirement on **31 January 2027**.
+Microsoft documentation: [Data Agent overview][agent-overview], [query runtime][agent-runtime],
+[native charts][agent-visuals] and [Code Interpreter][agent-python].
 
 ## Closing note — experiment with the Chocoverse
 
-This review is one investigation inside **Chocoverse**, the wider experimental universe around Giandoria.
-The [original repository, faustinopalma/chocoverse](https://github.com/faustinopalma/chocoverse),
-contains the code, scenarios, infrastructure and operating guides for exploring it.
+This review is one investigation inside **Chocoverse**, Giandoria's evolving business universe.
+The [original repository](https://github.com/faustinopalma/chocoverse) contains its code, scenarios and laboratory.
+Purchases, production, deliveries, sales and financial movements form a continuing story in **virtual time**.
+Pause it, resume it or change a scenario to explore a different course.
 
-The company has a continuing story: it buys materials, produces chocolate, ships orders, sells through several
-channels and records financial movements. The implemented, reduced-detail runtime connects these events over
-virtual time. Pausing stops that clock; resuming continues the story. Scenarios, parameters and bounded manager
-choices can be changed in code to investigate how the company evolves.
+Fabric provides complementary views: Eventhouse and Real-Time Dashboards follow operational events;
+Lakehouse, the semantic model and Power BI organize analytical snapshots and business measures.
+Ontology connects entities, the Data Agent answers questions over configured sources, and the Decision Room
+supports governed investigations.
 
-Fabric observes that story through complementary lenses. Eventhouse and Real-Time Dashboards follow changing
-operational events. Lakehouse tables preserve analytical snapshots; the semantic model and Power BI apply
-shared business measures. Ontology connects entities and relationships, while the Data Agent lets an analyst
-question configured sources. The Decision Room brings snapshot evidence into a governed investigation.
-
-These lenses have different refresh contracts. The live dashboard can advance with incoming events; the
-Data Agent and other snapshot-based experiences advance only after an explicit extraction and publication.
-This article preserves one such snapshot, so restarting the company does not silently change its evidence.
-
-The repository provides an end-to-end laboratory, not a claim that every part of the larger design is complete.
-Start with the [illustrated project tour](../README.md), check the
-[implemented scope](./README.md), then use the
-[laboratory runbook](../infra/demo/README.md) to reproduce or extend an experiment.
-Local work and cloud operations have different prerequisites; running the Azure/Fabric lab can incur charges
-and requires its start, shutdown and cost controls.
+Live views follow incoming events; snapshot-based views advance through explicit extraction and publication.
+This article retains a fixed snapshot. The [project tour](../README.md) and [implemented scope](./README.md)
+explain the current reduced-detail runtime and wider design.
+Use the [laboratory runbook](../infra/demo/README.md) to experiment; Azure/Fabric runs incur charges and require
+its start, shutdown and cost controls.
 
 [commercial-answer]: ./images/data-agent-story/commercial-answer.png
 [ontology-grounding]: ./images/data-agent-story/ontology-grounding.png

@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -19,7 +20,7 @@ test("built publication contains only explicit static files and public evidence"
   assert.deepEqual(assets.sort(), referencedAssets);
   assert.ok(!/<p>\s*<figure/.test(html));
   assert.equal((html.match(/<img src="[^"]+"[^>]* width="\d+" height="\d+"/g) ?? []).length, 7);
-  assert.equal((html.match(/class="chapter"/g) ?? []).length, 8);
+  assert.equal((html.match(/class="chapter"/g) ?? []).length, 7);
   assert.equal((html.match(/<figcaption>/g) ?? []).length, 7);
   for (let index = 1; index <= 7; index++) assert.ok(html.includes(`Exhibit 0${index}`));
   assert.equal((html.match(/data-zoom/g) ?? []).length, 7);
@@ -52,7 +53,7 @@ test("captured outputs have readable inputs and named documentation sources", as
     }
   }
   assert.ok(html.includes("same commercial input above"));
-  assert.ok(html.includes("does not establish that the separate Topics retrieval feature ran"));
+  assert.match(html, /Topics retrieval remains unverified/);
   assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
   for (const path of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {
     assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${path}`));
@@ -65,22 +66,46 @@ test("captured outputs have readable inputs and named documentation sources", as
   }
 });
 
-test("the recommendation is readable in static HTML without questions or gated answers", async () => {
+test("the recommendation precedes supplementary demos and remains readable without scripts", async () => {
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/<(?:input|select|form|progress)\b/.test(html));
   assert.match(html, /style\.css\?v=[a-f0-9]{12}/);
   assert.match(html, /story\.js\?v=[a-f0-9]{12}/);
   assert.ok(!/quiz|exercise|data-claim|answer-key|learning\.js|Your turn/i.test(html));
-  const conclusion = html.match(/<section class="chapter" id="chapter-8"[\s\S]+?<\/section>/)?.[0];
+  const conclusion = html.match(/<section class="chapter" id="chapter-4"[\s\S]+?<\/section>/)?.[0];
   assert.ok(conclusion);
-  for (const text of ["Do not approve a broad expansion", "launch conditional",
-    "Commercial value", "Supply feasibility", "Cash exposure", "No budget, duration or growth target",
-    "expansion remains on hold"]) {
+  for (const text of ["Prepare a bounded pilot proposal", "Launch it once",
+    "Commercial value", "Supply feasibility", "Cash exposure", "budget, duration and success criteria",
+    "conditional on the pilot", "rather than provide the missing launch evidence"]) {
     assert.ok(conclusion.includes(text), text);
   }
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
+  assert.ok(conclusion.includes("unavailable at the requested campaign detail"));
+  for (const index of [5, 6, 7]) {
+    assert.match(html, new RegExp(`<h2 id="heading-${index}">Further analysis:`));
+    assert.ok(html.indexOf('id="chapter-4"') < html.indexOf(`id="chapter-${index}"`));
+  }
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
   assert.ok(!/chapter-copy|chapter-8|fetch\(|localStorage|sessionStorage/.test(script));
+});
+
+test("editing preserves the seven recorded inputs and a concise reading path", async () => {
+  const source = await readFile(path.join(site, "..", "docs", "data-agent-story.md"), "utf8");
+  const inputs = [...source.matchAll(/(?:^>[^\r\n]*(?:\r?\n|$))+/gm)]
+    .map(([text]) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ").trim()).sort();
+  const hashes = inputs.map((text) => createHash("sha256").update(text).digest("hex"));
+  assert.deepEqual(hashes, [
+    "114d2d5affed3d137125e7aa95903d2cdecd6446fe84f9aa48950a2ba8742b7a",
+    "2ea70b637f61713d8b3af469229f3453af49325657ceb7b8bd3cdf996034adc4",
+    "3e3cf1575b31a7e470f3fc78dda4326cac64aea231edfcdf1ed5c3a1fec21426",
+    "972e8c3cc641239bde8d2789efab38c794584b6b5a98c6080c5de523d76a1a44",
+    "7ffbead00cb10c131efbeb19efecc15bda152eccdd1e5a1fefdfd84ce001b1dc",
+    "9762ae4789b9cecc18b46df2e672698261d357944d471a81d5cc10168696cddc",
+    "c433f170967a82800d752c7961d1058f2cd25a60043b0f45754b7183f82f73a6",
+  ]);
+  assert.ok(source.trim().split(/\s+/).length <= 1600, "Keep the full reading path within 1,600 words");
+  const decisionPath = source.slice(0, source.indexOf("## 5."));
+  assert.ok(decisionPath.trim().split(/\s+/).length <= 750, "Keep the decision path within 750 words");
 });
 
 test("the original native chart retains all 31 captured daily values", async () => {

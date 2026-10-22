@@ -2,7 +2,9 @@
 
 [Read the commercial review](https://faustinopalma.github.io/chocoverse/).
 The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
-ending in a conditional recommendation. There are no exercises or answers to unlock.
+reaching a conditional recommendation in four sections. Three further sections demonstrate stock-policy rules,
+native charts and Python calculations, explicitly separate from the evidence required to launch a campaign.
+There are no exercises or answers to unlock.
 It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
 It has no analytics, cookies, sign-in or client-side storage.
 
@@ -16,8 +18,8 @@ Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, an
 The build validates daily coverage in the original Fabric chart without maintaining a browser dataset.
 Changed chapter structure or evidence contracts fail the build or tests.
 Keep each captured output with its recorded input. Quote the original request rather than reconstructing it
-from the answer; label execution traces that share an input. Use named documentation links, with reference IDs
-as secondary identifiers. The closing note links to the original repository and distinguishes live observations
+from the answer; label execution traces that share an input. Use named documentation links.
+The closing note links to the original repository and distinguishes live observations
 from snapshot-based analysis.
 
 From the repository root, with Node.js 24 and npm installed:

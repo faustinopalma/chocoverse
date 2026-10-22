@@ -19,6 +19,8 @@ Start with the story's [business decision](./data-agent-story.md#1-a-business-de
 then follow the actual questions and screenshots. The full value chain is the setting, not an implementation claim.
 The [business lab](./21-business-lab.md) owns the available data scope.
 The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as a continuous commercial review.
+The recommendation follows the sales, cash and supported-detail evidence. Stock-policy, chart and Python examples
+follow as supplementary demonstrations; they do not establish campaign profitability or launch readiness.
 Its [build and publication guide](../site/README.md) owns the static-site workflow; the questions below run in Fabric.
 
 ## 29.2 Why this agent, rather than just another chatbot?

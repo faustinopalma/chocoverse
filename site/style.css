@@ -64,8 +64,7 @@ code { font: .9em Consolas, "Courier New", Courier, monospace; }
 figcaption { font-size: 13px; line-height: 1.6; padding: 12px 0 0; color: var(--cp-text-soft); }
 .exhibit-number { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: 10px;
   color: var(--cp-accent); font-weight: 700; margin-bottom: 4px; }
-#chapter-8 { border-bottom: 4px double var(--cp-text); }
-#chapter-8 .chapter-copy > p:first-child { border-left: 3px solid var(--cp-accent); padding-left: 24px; font-size: 21px; }
+#chapter-4 { border-bottom: 4px double var(--cp-text); }
 table { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.6; margin: 32px 0; }
 th, td { text-align: left; vertical-align: top; padding: 16px 12px; border-bottom: 1px solid var(--cp-border-strong); }
 th { border-top: 2px solid var(--cp-text); font-weight: 650; }
@@ -115,7 +114,6 @@ dialog p, dialog a { font-size: 14px; }
   .chapter-heading { position: static; display: grid; grid-template-columns: 48px 1fr; gap: 16px; margin-bottom: 24px; }
   .chapter-number { font-size: 32px; margin: 0; }
   h2 { font-size: 24px; }
-  #chapter-8 .chapter-copy > p:first-child { font-size: 19px; padding-left: 16px; }
   table { font-size: 14px; }
   th, td { padding: 12px 8px; overflow-wrap: anywhere; }
   th:first-child, td:first-child { width: 29%; }

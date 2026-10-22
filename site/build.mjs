@@ -16,10 +16,10 @@ let exhibit = 0;
 const escape = (value) => MarkdownIt().utils.escapeHtml(value);
 const references = source.match(/^\[[^\]]+\]:[^\r\n]+/gm)?.join("\n") ?? "";
 const title = source.match(/^# (.+)\r?$/m)?.[1].trim();
-const chapters = [...source.matchAll(/^## ([1-8])\. (.+)\r?$/gm)];
+const chapters = [...source.matchAll(/^## ([1-7])\. (.+)\r?$/gm)];
 const footerStart = source.indexOf("## Evidence and further reading");
-if (!title || chapters.length !== 8 || footerStart < 0) {
-  throw new Error("The story must have a title, eight numbered chapters, and an evidence section.");
+if (!title || chapters.length !== 7 || footerStart < 0) {
+  throw new Error("The story must have a title, seven numbered chapters, and an evidence section.");
 }
 for (const [index, chapter] of chapters.entries()) {
   if (Number(chapter[1]) !== index + 1) throw new Error("Chapter order changed.");
