@@ -97,20 +97,11 @@ in product sales.
 
 ---
 
-## Evidence and further reading
+## Sources
 
-These executions use a fixed enterprise snapshot through **3 March 2048**; the review covers three complete
-months ending in February. The [input/output record][evidence] retains exact responses and independently
-calculated reference values. The [reproduction guide][companion] owns source provenance and execution conditions.
-
-Inputs are quoted verbatim. Reply images are real Fabric browser screenshots; the chart is a native SVG export.
-Captures cover published sales and authoring-mode supply and backlog.
-Sales and production use calendar-day averages. Company balances use observed dates and retain company grain.
-The companion guide owns [reproduction][companion] and separate [capability tests][capabilities].
-Topics retrieval remains unverified; M365 feedback awaits an administrator-authorized sharing change.
-
-Microsoft documentation: [Data Agent overview][agent-overview], [query runtime][agent-runtime],
-[native charts][agent-visuals] and [Code Interpreter][agent-python].
+The review uses September and November 2047 and February 2048 data, available through **3 March 2048**.
+The [complete responses and checked figures][evidence] support the results shown above.
+The [technical guide][companion] explains how to reproduce the analysis and records its verification limits.
 
 ## Closing note — follow Giandoria through the Chocoverse
 
@@ -133,8 +124,3 @@ provide the implementation and reproduction instructions.
 [recovery-history]: ./images/data-agent-story/recovery-history.svg
 [evidence]: ./data-agent-recovery-evidence.json
 [companion]: ./29-data-agent-companion.md
-[capabilities]: ./29-data-agent-companion.md#295-recorded-capability-tests
-[agent-overview]: https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent
-[agent-runtime]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-runtime
-[agent-visuals]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-visuals
-[agent-python]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-code-interpreter

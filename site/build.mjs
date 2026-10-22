@@ -17,7 +17,7 @@ const escape = (value) => MarkdownIt().utils.escapeHtml(value);
 const references = source.match(/^\[[^\]]+\]:[^\r\n]+/gm)?.join("\n") ?? "";
 const title = source.match(/^# (.+)\r?$/m)?.[1].trim();
 const chapters = [...source.matchAll(/^## ([1-4])\. (.+)\r?$/gm)];
-const footerStart = source.indexOf("## Evidence and further reading");
+const footerStart = source.indexOf("## Sources");
 if (!title || chapters.length !== 4 || footerStart < 0) {
   throw new Error("The story must have a title, four numbered chapters, and an evidence section.");
 }

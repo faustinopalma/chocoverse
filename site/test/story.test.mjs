@@ -65,11 +65,11 @@ test("each question follows a concrete decision purpose and precedes its capture
   }
   assert.ok(html.includes("same input above"));
   assert.ok(html.includes("backlog in blue and finished stock in magenta"));
-  assert.ok(html.includes("real Fabric browser screenshots"));
+  assert.ok(html.includes("complete responses and checked figures"));
   assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
-  for (const name of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {
-    assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${name}`));
-  }
+  const sources = html.slice(html.indexOf("<h2>Sources</h2>"), html.indexOf("Closing note"));
+  assert.ok(sources.includes("verification limits"));
+  assert.ok(!/Topics retrieval|M365 feedback|authoring-mode|Code Interpreter/.test(sources));
   const closing = html.slice(html.indexOf("Closing note"));
   for (const phrase of ["reliable supply across its channels", "Real-Time Dashboards", "Lakehouse", "Power BI",
     "Data Agent", "Decision Room", "technical guide"]) {
@@ -143,7 +143,7 @@ test("verbatim inputs, source-row oracles and real captures retain their provena
     assert.equal(image.subarray(1, 4).toString(), "PNG");
   }
   assert.ok(source.trim().split(/\s+/).length <= 1200, "Keep the full reading path within 1,200 words");
-  assert.ok(source.slice(0, source.indexOf("## Evidence")).trim().split(/\s+/).length <= 850);
+  assert.ok(source.slice(0, source.indexOf("## Sources")).trim().split(/\s+/).length <= 850);
   const guide = await readFile(path.join(root, "docs", "29-data-agent-companion.md"), "utf8");
   assert.ok(guide.includes("/blob/1e7022f/docs/data-agent-story.md"));
   assert.ok(guide.includes("/blob/3e0642d/docs/data-agent-story.md"));
