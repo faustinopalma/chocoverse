@@ -80,19 +80,21 @@ The final February observation is **0 kg**, compared with **1,119 kg** at Novemb
 The average also reveals the workload carried during February.
 The comparison uses 30 November observations and 29 February observations.
 
-## 4. Set the next operational checkpoint
+## 4. Can Giandoria accept more orders?
 
-**Make sustained backlog clearance the next checkpoint for expansion.**
-Factory throughput has recovered; product sales and daily backlog give Operations a more complete view of readiness.
+February closes with zero backlog and combined dark and milk shipments of **404.9 kg/day**.
+Supply has recovered. How much more can Giandoria promise?
 
-| Observed signal | Next operational check |
+Each result leaves a specific question open.
+
+| What we know | What Operations still needs to check |
 |---|---|
-| Dark chocolate sales exceed September's pace; milk chocolate is at 169.9 versus 190.4 kg/day. | Review product and channel replenishment needs. |
-| Combined dark and milk shipments recover to 404.9 kg/day. | Track whether the recovered flow is sustained. |
-| February closes with zero backlog after averaging 533.3 kg. | Confirm sustained clearance and match product-level stock and open orders to new commitments. |
+| Milk sales: 169.9 versus 190.4 kg/day in September. | Which channels need replenishment? |
+| Shipment volume does not measure spare capacity. | Can production and stock cover new orders by their delivery dates? |
+| Zero closing backlog after averaging 533.3 kg. | Does it stay low as orders arrive? |
 
-The Data Agent connects business questions to governed measures, SQL records and a visual trend.
-Operations retains the decision, using each answer to focus the next check.
+Before accepting more volume, Operations needs product-level stock and open orders, delivery dates and available
+capacity. That assessment remains open. The Data Agent supplies the evidence; Operations retains the decision.
 
 ---
 

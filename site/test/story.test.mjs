@@ -107,8 +107,9 @@ test("the operational conclusion is bounded, visible and usable without scripts"
   assert.match(html, /story\.js\?v=[a-f0-9]{12}/);
   const conclusion = html.match(/<section class="chapter" id="chapter-4"[\s\S]+?<\/section>/)?.[0];
   assert.ok(conclusion);
-  for (const phrase of ["Make sustained backlog clearance the next checkpoint", "169.9 versus 190.4",
-    "404.9 kg/day", "averaging 533.3 kg", "product-level stock and open orders", "Operations retains the decision"]) {
+  for (const phrase of ["Can Giandoria accept more orders?", "169.9 versus 190.4",
+    "404.9 kg/day", "averaging 533.3 kg", "product-level stock and open orders", "Operations retains the decision",
+    "does not measure spare capacity", "That assessment remains open"]) {
     assert.ok(conclusion.includes(phrase), phrase);
   }
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
