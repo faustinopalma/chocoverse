@@ -68,7 +68,11 @@ markdown.renderer.rules.image = (tokens, index) => {
   if (dimensions.some((value) => !Number.isFinite(value) || value <= 0)) {
     throw new Error(`Missing image dimensions: ${src}`);
   }
-  return `<figure class="evidence"><a class="capture" href="${src}" data-zoom aria-label="View original evidence: ${alt}">
+  const legend = src.endsWith("/recovery-history.svg")
+    ? `<ul class="chart-legend" aria-label="Chart legend">
+      <li><span class="series-key backlog-key" aria-hidden="true"></span>Backlog</li>
+      <li><span class="series-key stock-key" aria-hidden="true"></span>Finished stock</li></ul>` : "";
+  return `<figure class="evidence">${legend}<a class="capture" href="${src}" data-zoom aria-label="View original evidence: ${alt}">
     <img src="${src}" alt="${alt}" width="${dimensions[0]}" height="${dimensions[1]}" loading="lazy" decoding="async">
     </a><figcaption><span class="exhibit-number">Exhibit ${String(++exhibit).padStart(2, "0")}</span>
     ${alt}</figcaption></figure>`;

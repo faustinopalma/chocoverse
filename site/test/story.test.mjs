@@ -65,6 +65,13 @@ test("each question follows a concrete decision purpose and precedes its capture
   }
   assert.ok(html.includes("same input above"));
   assert.ok(html.includes("backlog in blue and finished stock in magenta"));
+  const chart = html.match(/<figure class="evidence"><ul class="chart-legend"[\s\S]+?<\/figure>/)?.[0];
+  assert.ok(chart?.includes("recovery-history.svg"));
+  assert.ok(chart.includes('aria-label="Chart legend"'));
+  assert.ok(chart.includes(">Backlog</li>") && chart.includes(">Finished stock</li>"));
+  const styles = await readFile(path.join(site, "dist", "style.css"), "utf8");
+  assert.match(styles, /\.backlog-key\s*\{\s*border-color: #637cef;/);
+  assert.match(styles, /\.stock-key\s*\{\s*border-color: #e3008c;/);
   assert.ok(html.includes("complete responses and checked figures"));
   assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
   const sources = html.slice(html.indexOf("<h2>Sources</h2>"), html.indexOf("Closing note"));

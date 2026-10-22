@@ -58,6 +58,11 @@ blockquote p { margin: 0; }
 strong { font-weight: 700; }
 code { font: .9em Consolas, "Courier New", Courier, monospace; }
 .evidence { margin: 32px 0; border-top: 1px solid var(--cp-border-strong); padding-top: 16px; }
+.chart-legend { display: flex; flex-wrap: wrap; gap: 12px 24px; list-style: none; padding: 0; margin: 0 0 16px; }
+.chart-legend li { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.series-key { display: inline-block; width: 28px; border-top: 3px solid; }
+.backlog-key { border-color: #637cef; }
+.stock-key { border-color: #e3008c; }
 .capture { display: block; background: var(--cp-surface); }
 .capture:focus-visible { outline-offset: 4px; }
 .capture img { display: block; width: 100%; height: auto; object-fit: contain; }

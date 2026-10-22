@@ -34,6 +34,13 @@ and a native chart. Browser captures use the expanded response at the integrated
 Clear emulated device metrics before capture; verify the saved image against the visible answer.
 An API invocation can return matching numbers while native visualization is unavailable in that environment.
 The native SVG and its data points must be checked separately.
+The minisite adds a labelled color key outside the native SVG, including in the enlarged view, so the original
+export remains unchanged.
+
+**Spare-capacity boundary.** The configured snapshot contains actual starts, releases, shipments and company
+balances. It lacks time-phased available capacity, scheduled load and order due dates, so it cannot establish
+spare capacity in kg/day or promise additional orders. A direct companion query confirmed this boundary.
+Zero backlog and nominal capacity minus observed output are insufficient substitutes for those missing facts.
 
 The recovery evidence matches all nine product-month sales values, the three production-flow rows and both
 121-point balance series. Sales is verified in published mode; supply, backlog and the native visual are verified

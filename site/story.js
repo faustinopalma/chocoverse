@@ -21,6 +21,9 @@ function initialize() {
       image.src = original.src;
       image.alt = original.alt;
       document.querySelector("#evidence-caption").textContent = original.alt;
+      dialog.querySelector(".chart-legend")?.remove();
+      const legend = link.closest("figure").querySelector(".chart-legend");
+      if (legend) document.querySelector("#evidence-caption").after(legend.cloneNode(true));
       document.querySelector("#original-evidence").href = original.src;
       dialog.showModal();
     });
