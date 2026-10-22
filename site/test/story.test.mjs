@@ -107,13 +107,14 @@ test("the operational conclusion is bounded, visible and usable without scripts"
   assert.match(html, /story\.js\?v=[a-f0-9]{12}/);
   const conclusion = html.match(/<section class="chapter" id="chapter-4"[\s\S]+?<\/section>/)?.[0];
   assert.ok(conclusion);
-  for (const phrase of ["Can Giandoria accept more orders?", "169.9 versus 190.4",
-    "404.9 kg/day", "averaging 533.3 kg", "product-level stock and open orders", "Operations retains the decision",
-    "does not measure spare capacity", "That assessment remains open"]) {
+  for (const phrase of ["What the investigation tells us", "milk chocolate sales recover only part",
+    "404.9 kg/day", "397.2 kg/day", "533.3 kg in February", "monthly average",
+    "natural-language questions", "uneven recovery"]) {
     assert.ok(conclusion.includes(phrase), phrase);
   }
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
   assert.ok(!/increase production|lost sales were|missed deliveries were|ranked products/i.test(conclusion));
+  assert.ok(!/still needs to check|next operational check|checkpoint|<table/i.test(conclusion));
   assert.ok(html.includes("cannot separate the effects of capacity and demand"));
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
   assert.ok(!/chapter-copy|fetch\(|localStorage|sessionStorage/.test(script));
