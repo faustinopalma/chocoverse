@@ -1,20 +1,14 @@
 # Chocoverse
 
-### A chocolate company that exists only in software. Its operational headaches are surprisingly convincing.
+### A chocolate maker's operations, from seasonal demand to the decisions that connect them.
 
-> **An openly AI-generated laboratory.** Artificial intelligence researched, built, documented and exercised
-> this project. The repository owner contributed absolutely nothing, except the gloriously awkward idea in
-> [chapter 17](./docs/17-reverse-time-simulation.md) and sporadic interruptions he insisted on calling "prompts".
-> Human management, apparently, is an interrupt handler.
->
-> The joke is deliberate; so is the disclosure. Code, explanations and this showcase are extensively AI-generated.
-> Automated checks and observed cloud behavior are evidence, not independent certification or a guarantee of
-> correctness. Chapter 17 preserves the human origin of the planning idea and its prior-art caveats.
+> This project is extensively AI-generated. Tests and observed cloud behavior document specific results; they are
+> not independent certification or a guarantee of correctness. Chapter 17 records the planning method's origin
+> and prior-art caveats.
 
-**Chocoverse** is the repository. **Giandoria** is the fictional Italian chocolate company living inside it.
-The experiment connects a stoppable business simulation, Azure, Microsoft Fabric, analytical semantics and
-bounded AI investigations. It is a working learning laboratory, not a production ERP or a chocolate sales pitch.
-No actual chocolate was harmed. No actual chocolate was produced, either.
+**Chocoverse** is the repository. **Giandoria** is an Italian chocolate maker whose operations are modelled in a
+stoppable business simulation. The lab connects Azure, Microsoft Fabric, analytical semantics and bounded AI
+investigations; it is a learning environment, not a production ERP or a chocolate sales pitch.
 
 [Take the illustrated tour](#the-illustrated-tour) |
 [Read the architecture](./docs/README.md) |

@@ -10,9 +10,9 @@ This does not guarantee future tenant acceptance. Commands are in the [infra gui
 
 ## Rationale for reviewers
 
-**Risk proportionality.** The business data describes a fictional company, generated demand, transactions,
-inventories and model briefings. It contains no real customer records, confidential business facts or regulated
-personal data. Private-only routing would add a useful perimeter layer, but its incremental confidentiality
+**Risk proportionality.** The business data consists of generated demand, transactions, inventories and model
+briefings. It contains no real customer records, confidential business facts or regulated personal data.
+Private-only routing would add a useful perimeter layer, but its incremental confidentiality
 benefit is limited for this dataset. We accept that residual network exposure rather than imposing standing
 private endpoint costs, private DNS, network-integrated client connectivity and additional operating complexity
 on an intermittent lab. ACR Private Link would also require a different registry tier.

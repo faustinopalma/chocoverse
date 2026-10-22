@@ -64,7 +64,7 @@ in Privileged Identity Management first (chapter 18 §18.8).
 | Option | Meaning |
 |---|---|
 | **Giandoria** | Company and demo name: Giandoria; resource prefix `giandoria`; environment `demo`; workspace `ws-giandoria-demo` |
-| Other fictional names | Same rules: everything fictional, products named by category, never by a trademark |
+| Other company names | Products remain named by category, never by trademark |
 
 * **Needed now:** the name prefix that the sandbox uses. **Final by:** the end of phase 0, before the bootstrap.
 * **If it changes later:** after phase 1, a new universe name means a teardown and a rebuild.

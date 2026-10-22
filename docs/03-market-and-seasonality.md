@@ -189,7 +189,7 @@ flowchart LR
     R --> S[Settlement and report]
 ```
 
-| Campaign (fictional) | Real-world pattern | Volume knob (Profile M) | Planning challenge |
+| Campaign | Real-world pattern | Volume knob (Profile M) | Planning challenge |
 |---|---|---|---|
 | Fondazione Orizzonte Ricerca — November | 200 g dark pack with booklet, ≈ 2,400 squares, min €15 [M18] | 250k–400k packs | Dark chocolate has a long shelf life, so production can be levelled over the summer and early autumn |
 | Associazione Luce per la Vita — Easter | Egg (milk or dark), ≈ 4,900 squares, min €15; more than 16.7 M eggs over 30+ years [M19][M20] | 400k–600k eggs | Competes with Giandoria's own Easter eggs for the same egg lines and the same weeks |

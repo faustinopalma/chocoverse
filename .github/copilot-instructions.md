@@ -1,8 +1,7 @@
 # Giandoria — instructions for every session
 
-Giandoria is a simulated universe around a fictional Italian chocolate company, Giandoria: suppliers, factory,
-planning, channels, territory, customers and LLM agents, with every event streamed to Microsoft Fabric on an
-accelerated, stoppable sim clock.
+Giandoria is an Italian chocolate maker whose suppliers, factory, planning, channels, territory, customers and
+LLM agents are modelled on an accelerated, stoppable simulation clock. Events stream to Microsoft Fabric.
 
 ## Where the knowledge lives
 
@@ -26,8 +25,9 @@ If the code and the design disagree, stop and ask; then update the design in the
 ## Language and naming
 
 * The owner chats in Italian. Every file, code, comment, commit message and document is in **English**.
-* Everything is fictional. Never name or allude to real chocolate makers, their brands or products. Products are
-  named by category. Charity campaigns use fictional partners.
+* In narrative prose, describe Giandoria as an established Italian chocolate maker. Explain simulation and
+  generated-data boundaries only where they help readers understand scope or provenance. Never name real chocolate
+  makers, brands or products. Name products by category and use the campaign partners in chapter 02.
 
 ## Everything as code
 

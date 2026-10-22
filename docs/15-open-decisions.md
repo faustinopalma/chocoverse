@@ -112,16 +112,16 @@ The weeks refer to the plan of chapter 14 §14.3.
 
 | Option | What it means |
 |---|---|
-| **Giandoria** | Both the fictional company and the demo are Giandoria. Resource prefix `giandoria`, environment `demo`, workspace `ws-giandoria-demo` (chapter 12 §12.15) |
-| Other fictional names | Names the team prefers, under the same rules |
+| **Giandoria** | Company and demo; prefix `giandoria`; environment `demo`; workspace in chapter 12 §12.15 |
+| Other company names | Names the team prefers, under the same naming rules |
 
 Whatever the names, these rules hold:
 
-* Every company, chain, foundation, supplier, competitor and person in the universe is fictional (chapters 02 and 03).
-  Prompts never mention real brands (chapter 09 §9.6).
+* Use the companies, chains, foundations and suppliers defined in chapters 02 and 03. Prompts never mention real
+  chocolate brands (chapter 09 §9.6).
 * Products are named by category, such as gianduiotti, filled pralines, premium tablets or Easter eggs with a
   surprise, and never by a trademark.
-* Charity and corporate campaigns use fictional foundations, such as Fondazione Orizzonte Ricerca (chapter 02 §2.8).
+* Charity and corporate campaigns use the partners defined in chapter 02 §2.8.
 
 * **Why the default.** The names are neutral and Italian-sounding, and give the lab a recognisable identity. A
   trademark search is advisable before any public demo *(verify)*.
@@ -572,7 +572,7 @@ chapters.
 | Every decision has a rule-based default and a fallback; an LLM is optional for each role | Chapter 09 §9.1 |
 | Agents never see truth | Chapter 10 §10.11 |
 | The simulators own the state. Fabric observes it through events, except in the optional Fabric-in-the-loop mode (D15) | Chapter 08 |
-| The universe is fictional: no real companies, brands or people | Chapters 02 and 09 |
+| Generated business records use the defined company, partner and product names | Chapters 02 and 09 |
 | Runs are reproducible: the same scenario and seed give the same events, and forks and replays reuse history | Chapter 07 §7.11 |
 
 ---

@@ -226,7 +226,6 @@ complete month. Numerical results were checked independently. For reproducible p
 access prerequisites and live-run cost controls, use the [reproduction guide](./29-data-agent-companion.md).
 
 Inputs above reproduce the recorded requests verbatim; line wrapping is for readability.
-The word "fictional" in the commercial input is retained from that execution.
 SQL, DAX and Python captures linked within a section belong to its stated input.
 
 Two capabilities remain outside the demonstrated results:

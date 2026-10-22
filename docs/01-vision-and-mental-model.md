@@ -1,14 +1,14 @@
 # 01 — Vision and Mental Model
 
-> This chapter is the **shared mental model** of Giandoria: a simulated universe built around a fictional Italian
-> chocolate company and the market around it. It explains how the main parts connect; specialist chapters own the
+> This chapter is the **shared mental model** of Giandoria: a chocolate business and the market around it, modelled
+> as a simulation. It explains how the main parts connect; specialist chapters own the
 > detailed design, evidence and operational guidance.
 >
 > * This chapter describes the target universe, not the complete implementation. See the
 >   [index](./README.md) for current scope and [chapter 15](./15-open-decisions.md) for adopted choices and
 >   open checks.
-> * **Everything in the universe is fictional:** the company, its brands, the retailers, the suppliers, the
->   foundations and the people. Real-world facts are used only to make it realistic. Chapter 16 lists the sources.
+> * Business records and transactions are generated from calibrated assumptions. Chapter 16 lists the sources used
+>   for calibration.
 > * Numbers describe the default universe (**Profile M**) and the default scenario `easter-2031-base`. They are
 >   tunable. The specialist chapters provide their sources and mark estimates and assumptions.
 
@@ -16,10 +16,9 @@
 
 ## 1.1 The idea in one page
 
-Giandoria is a laboratory in which the fictional Piedmontese chocolate maker **Giandoria Cioccolato S.p.A.** lives
-through whole seasons. It buys ingredients and packaging, makes and ships chocolate, and sells through retail,
-wholesale, export, travel and campaign channels across a simulated Italy. Consumers buy according to the calendar,
-weather, prices, promotions and what is actually on the shelf.
+Giandoria buys ingredients and packaging, makes and ships chocolate, and sells through retail, wholesale, export,
+travel and campaign channels across Italy. Demand follows the calendar, weather, prices, promotions and what is
+actually on the shelf.
 
 Connected simulators represent the company and its surroundings. Rules and planning engines handle routine decisions;
 agents backed by large language models (LLMs) may handle judgement calls. Events carry **virtual timestamps** and flow
@@ -54,11 +53,7 @@ Six ideas hold the design together.
 
 ## 1.2 The company and its world
 
-### Giandoria at a glance
-
-Giandoria is a mid-sized fictional Piedmontese maker, with two plants, about 180 products and sales in Italy and
-abroad. It serves retail, professional, travel and campaign customers through year-round, seasonal and made-to-order
-products. The [domain model](./02-universe-domain-model.md) owns its profile, channels, sites and customer counts.
+The [domain model](./02-universe-domain-model.md) defines Giandoria's profile, channels, sites and customer counts.
 
 ### The world around the company
 
@@ -621,14 +616,10 @@ refined later without changing the event contracts.
 | Data | JSON everywhere. Delivery at least once, with deterministic IDs and duplicate monitoring. One bronze schema, typed only in silver. No change-data capture of simulator state | Every fact is an event with both timestamps, traceable to its cause | Chapter 10 §10.16 |
 | Platform | One region per environment and no disaster recovery: a lost environment is redeployed from code, and runs are regenerated from scenarios, seeds and decision logs. Public endpoints with Entra ID, one runtime container, no Fabric deployment pipelines | Everything is code; layered cost controls reduce exposure, while numeric run limits still need implementation | Chapter 11 §11.9 |
 
-### What the universe is not
+### Scope and data boundaries
 
-* **Not a copy of a real company.** Giandoria, its brands, customers, suppliers and foundations are fictional. Real
-  facts set the orders of magnitude, and the chapters mark every estimate.
-* **Not a forecast of the real market.** The default epoch lies in 2030, so that nobody mistakes the data for real
-  data (§1.5).
-* **Not a register of people.** Consumers are synthetic and aggregated. The only individuals, e-shop customers and
-  loyalty members, are synthetic too. There is no personal data.
+* The model is not a forecast of the real market. Its default epoch lies in 2030 (§1.5).
+* Consumers are aggregated segments; e-shop customers and loyalty members are generated records, not personal data.
 * **Not run by the lab's own assistants.** The Fabric data agent and the optional operations agent answer people's
   questions and watch the lab. They are tools for humans and never act inside the universe (chapter 09).
 
@@ -672,7 +663,7 @@ section 4 of chapter 06. Chapter 07 §7.2 holds the precise vocabulary of time.
 | Bronze, silver, gold | The layers in the Eventhouse: raw envelopes; typed tables with one row per document line; materialized views and functions ready for dashboards | §1.10; §10.8 |
 | Campaign product | A product made to order for a charity or corporate campaign, with a fixed quantity, a fixed date and custom packaging. Charity contracts are won by tender each year, and unsold units come back | §1.2, §1.8; §2.8, §3.6 |
 | Capacity | The Fabric compute that all Fabric items run on, sized by SKU (F4, F8, …) and billed while active. Suspending it stops capacity charges, but retained data and tenant services may still cost money | §1.11; §11.7, §13, §18 |
-| Giandoria | The laboratory as a whole: the simulated universe, the programs that run and control it, and the Fabric workspace where people watch it | §1.1 |
+| Giandoria simulation | The business model, runtime and Fabric workspace used to observe it | §1.1 |
 | Chronos | The world clock and the only component that moves time. It runs the ticks, routes in-universe messages, keeps the time ledger, takes snapshots and runs the cost meter | §1.4, §1.5; §8.5 |
 | Cost meter | Chronos's counter for tracking money, tokens and wall hours; chapter 13 describes its design, while chapter 15 records open operating limits | §1.11; §13.6 |
 | Critical ratio | Cu / (Cu + Co): the cost of one unit too few against the cost of one unit too many. It sets the quantile at which a one-shot seasonal quantity is planned | §1.6; §6.12 |
@@ -740,7 +731,7 @@ section 4 of chapter 06. Chapter 07 §7.2 holds the precise vocabulary of time.
 | Time ledger | The append-only list of segments, each mapping a wall interval to a sim interval at one speed: the only place where the two clocks meet | §1.5; §7.6 |
 | Toy wave | One of the three orders of toy surprises for the Easter kids' eggs, shipped by sea from Asia. Wave 1 is ordered in July, when only about a quarter of the volume is booked | §1.7; §5.6, §6.9 |
 | Truth | What the universe knows and the company cannot see: true demand, lost sales, real machine wear, what suppliers can really deliver. It is kept in `kqldb_truth` and `lh_evaluation` and used only for evaluation | §1.3; §3.10, §10.11 |
-| Giandoria | Giandoria Cioccolato S.p.A., the fictional Piedmontese chocolate maker at the centre of the universe | §1.1, §1.2; §2.1 |
+| Giandoria | The chocolate maker at the centre of the model | §1.1, §1.2; §2.1 |
 | Visibility | The label on every event that says who may see it: `enterprise`, `partner`, `truth` or `lab` | §1.3; §10.11 |
 | Watchdog | A job that runs every 10 minutes. It hibernates runs paused for more than 30 minutes, suspends any active capacity without a valid lease, and scales the apps to zero when no run is live | §1.11; §13.7 |
 | Watermark | For one source, the latest sim time up to which its data is complete. Dashboards show it next to `SimNow` | §1.5; §7.2, §7.9 |

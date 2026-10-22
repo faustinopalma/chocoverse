@@ -21,9 +21,8 @@ and rules for keeping references current.
 * **Values are for parametrization.** Trade and vendor figures describe typical ranges, not one plant or one
   company. The chapters mark values without a source as *(estimate)*, *(assumption)* or *(derivation)*, and claims
   still to confirm as *(verify)*.
-* **No chocolate brands.** The universe and its companies are fictional (chapter 02). The descriptions name
-  publishers, equipment vendors and ingredient suppliers, but no chocolate brand. When a source is a chocolate
-  maker's own page, or discusses one, it is described in general terms; only the link shows the site.
+* **No chocolate brands.** Product names use categories. When a source is a chocolate maker's own page, or
+  discusses one, it is described in general terms; only the link shows the site.
 * **Prices change.** Azure, Fabric and model prices were checked in October 2026, in USD. They must be checked
   again before phase 0 (§16.6).
 

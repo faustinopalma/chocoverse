@@ -268,7 +268,7 @@ D14, chapter 15).
 | Hallucinated facts | Decisions must cite evidence from the briefing or tool results; validation rejects references to non-existent orders, suppliers or plans |
 | Model outage or throttling | Retries with backoff, then a circuit breaker; affected roles switch to fallback rules and the run continues |
 | Cost overrun | Per-run and per-role budgets in tokens and money (USD). The run's cost meter (chapter 13 §13.6) checks them every wall minute. Above the token budget, roles degrade to rules; above the money budget, the run pauses (`lab.budget.*` events) |
-| Inappropriate content | Content filters stay on in Foundry. All names are fictional; prompts never mention real brands |
+| Inappropriate content | Foundry filters stay on; use chapter 02 names and categories, never real brands |
 | Silent drift after a prompt change | Prompts are versioned. A change is first evaluated with replay with substitution (§9.4) |
 
 ---

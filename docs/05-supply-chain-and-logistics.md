@@ -46,8 +46,7 @@ daily shuttle, which creates an inter-plant dependency (chapter 02).
 
 ## 5.2 Materials: volumes, sources and lead times
 
-Volumes are for Profile M (≈ 20,000 t of finished products, chapter 04). Supplier names are the fictional ones
-from chapter 02.
+Volumes are for Profile M (≈ 20,000 t of finished products, chapter 04). Supplier names follow chapter 02.
 
 | Material | Volume per year | Suppliers | Lead time | Price reference | Storage | Source |
 |---|---|---|---|---|---|---|
@@ -176,7 +175,7 @@ design-specific, have long lead times and become worthless after the season.
 | Item | Why it is critical | Lead time | Risk |
 |---|---|---|---|
 | Toy surprises (kids eggs, Junior Easter eggs) | Licensed designs; Asian supply; minimum order quantities | 9–15 weeks door to port + ≈ 1 week inland [P33] | Sea delays; a design approval slip moves everything |
-| Licensed artwork approvals | The licensor must approve each design *(fictional licences)* | 2–6 weeks *(estimate)* | Late approval delays foil printing |
+| Licensed artwork approvals | Licensor approves each design | 2–6 weeks *(estimate)* | Late approval delays foil printing |
 | Printed seasonal foils | One design per SKU and year | 6–10 weeks *(estimate)* | Printer capacity is tight in autumn |
 | Egg boxes and gift boxes | SKU-specific | 4–8 weeks *(estimate)* | As above |
 | Charity packaging | The foundation must approve the artwork | Weeks; the contract is signed months ahead (chapter 03 §3.6) | Fixed public date |

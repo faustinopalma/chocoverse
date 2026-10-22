@@ -2,7 +2,7 @@
 
 > This chapter describes **what exists** in the Giandoria universe: the company, its brands and products,
 > its plants and warehouses, the territory, the stores, the customers, the suppliers and the competitors.
-> All names are **fictional**. Numbers describe the default **Profile M** universe and are tunable (§2.12).
+> Numbers describe the default **Profile M** universe and are tunable (§2.12).
 
 ---
 
@@ -10,7 +10,7 @@
 
 | Attribute | Value (Profile M, tunable) |
 |---|---|
-| Legal name | Giandoria Cioccolato S.p.A. (fictional) |
+| Legal name | Giandoria Cioccolato S.p.A. |
 | Story | Founded in Turin in 1872 as a chocolate workshop. Today a mid-to-large Piedmontese group that combines a premium heritage line, a high-volume kids line, a professional line and contract manufacturing |
 | Headquarters | Turin (Piedmont) |
 | Net revenue | ≈ €300 M per year |
@@ -180,7 +180,7 @@ A loyalty programme with synthetic members makes repeat purchases and customer l
 
 ## 2.7 B2B customers
 
-### Modern trade chains (fictional)
+### Modern trade chains
 
 | Chain | Format | Stores | Footprint | Behaviour |
 |---|---|---|---|---|
@@ -197,7 +197,7 @@ Each chain has its own DC, ordering policy, payment terms, promotion calendar an
 
 ### Other customers
 
-| Customer type | Examples (fictional) | Count | Notes |
+| Customer type | Examples | Count | Notes |
 |---|---|---:|---|
 | Regional wholesalers | "Ingrosso Dolciario Lombardo", "Distribuzione Sud Dolci" | 12 | Serve bars, tobacconists, pastry shops; monthly buying with seasonal bookings |
 | Cash-and-carry network | "IngroPiù Cash & Carry" | 1 (20 depots) | Weekly orders |
@@ -213,9 +213,9 @@ Each chain has its own DC, ordering policy, payment terms, promotion calendar an
 
 Italy has well-established charity campaigns that sell chocolate in town squares on fixed dates
 (for example AIRC in November, AIL at Easter and Telethon before Christmas, each with a €15 minimum donation in 2025)
-[M18][M19][M21]. Giandoria reproduces this **pattern** with fictional partners:
+[M18][M19][M21]. Giandoria uses the same **campaign pattern** with these partners:
 
-| Fictional partner | Cause | Product | Public date (pattern) | Points of distribution (pattern) |
+| Partner | Cause | Product | Public date (pattern) | Points of distribution (pattern) |
 |---|---|---|---|---|
 | **Fondazione Orizzonte Ricerca** | Cancer research | 200 g dark chocolate pack + booklet | One Saturday in early or mid November | ≈ 2,400 squares and schools |
 | **Associazione Luce per la Vita** | Blood cancers | 300 g milk or dark Easter egg | Weekend 2–3 weeks before Easter | ≈ 4,900 squares |
@@ -244,7 +244,7 @@ Segment sizes come from province population and demographics; preferences differ
 
 ---
 
-## 2.10 Suppliers (fictional)
+## 2.10 Suppliers
 
 | Category | Supplier | Origin | Typical lead time | Notes |
 |---|---|---|---|---|

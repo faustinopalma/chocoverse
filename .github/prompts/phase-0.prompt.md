@@ -102,7 +102,8 @@ Checks 11 and 19 need the Fabric administrator; check 27 may too.
   `RequestDisallowedByPolicy` error is a fact to record, not something to work around.
 * Never leave the capacity running. End with capacity/app state and cost against confirmed D16 limits. If state or
   billing was not queried, say so; local hibernation is not cloud suspension.
-* Everything stays fictional; all files are in English; the owner chats in Italian.
+* Write Giandoria as an established Italian company; all files are in English; the owner chats in Italian.
+  Never name real chocolate makers, brands or products; use product categories and the partners in chapter 02.
 * Prefer small, readable scripts that the bootstrap can reuse over clever one-off commands.
 * Apply the reader-value test to summaries and details alike. Keep only information needed to understand,
   decide, reproduce or troubleshoot; local evidence retention does not imply public documentation.

@@ -501,7 +501,7 @@ reference data. It runs in stage 5 of every release (chapter 12 §12.2) and when
 * **Validated before it is written.** Referential integrity. Every SKU has a BOM, a routing and at least one line.
   Every material has a supply lane. Every store and customer site lies in a province. The lines can make the planned
   annual volume with the shift patterns of chapter 04 §4.8, with a margin. Every seasonal or campaign SKU belongs to a
-  season or campaign. Every name is fictional.
+  season or campaign. Names and product categories follow chapter 02.
 * **Not the plans in flight.** Open orders, bookings, stock and plan versions on the first day are created by the
   warm start (chapter 06 §6.14, decision D11), either synthetically or by backfill and fork.
 

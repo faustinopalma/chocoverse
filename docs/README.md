@@ -1,4 +1,4 @@
-# Giandoria — a simulated chocolate universe on Azure and Microsoft Fabric
+# Giandoria — a chocolate business simulation on Azure and Microsoft Fabric
 
 For a short visual introduction, start with the [Chocoverse illustrated tour](../README.md).
 For an analyst's perspective, follow the [Data Agent commercial review](https://faustinopalma.github.io/chocoverse/)
@@ -7,10 +7,10 @@ This index is the navigation and implementation-status guide. The
 [mental-model chapter](./01-vision-and-mental-model.md) explains the target universe; the chapters below own its
 detailed design.
 
-**Target design.** Giandoria is a fictional Piedmontese chocolate maker surrounded by a simulated market, suppliers,
-factory, customers and channels. Rules and planning engines handle routine decisions; role-based agents may handle
-judgement calls. The universe uses virtual time and emits events for Microsoft Fabric to observe. Everything is
-fictional; chapter 16 lists the real-world sources used for calibration.
+**Target design.** Giandoria is a Piedmontese chocolate maker operating in a modelled market with suppliers,
+customers and channels. Rules and planning engines handle routine decisions; role-based agents may handle
+judgement calls. Virtual time drives the simulation, whose events flow to Microsoft Fabric for observation.
+Chapter 16 lists the sources used to calibrate the model.
 
 **Implemented today.** The repository has durable local run state, Azure demo infrastructure and a verified,
 bounded Fabric publish/replay path. The reduced-detail business runtime has produced two simulated years of data,
@@ -81,7 +81,7 @@ and approval.
 
 | Ch. | Document | What it answers |
 |---:|---|---|
-| 01 | [Vision and mental model](./01-vision-and-mental-model.md) | How the fictional company, truth, time, planning and observation fit together. Includes worked seasonal examples and a glossary. **Start here** |
+| 01 | [Vision and mental model](./01-vision-and-mental-model.md) | How company, truth, time and planning connect; examples and glossary. **Start here** |
 | 02 | [The universe: domain model](./02-universe-domain-model.md) | Who and what exists: Giandoria, its brands and products, the sites, the territory, the own stores, B2B customers, campaigns, consumers, suppliers, competitors, the size profiles |
 | 03 | [Market, demand and seasonality](./03-market-and-seasonality.md) | Where demand comes from and why it peaks: ten layers of demand, the Italian calendar, Easter and Christmas, campaigns, weather, tourism, prices and promotions |
 | 04 | [The factory: processes, lines and machines](./04-factory-and-processes.md) | How chocolate is made and how long it takes: the process chain, plants and lines, machine states, wear, changeovers, quality holds, shifts, energy, telemetry |
