@@ -109,10 +109,10 @@ The separate S&OP evidence-to-decision experiment is isolated and does not write
 [Data Agent boundaries](./docs/24-data-agent-showcase.md) |
 [Secretless application authentication](./docs/25-data-agent-authentication.md)
 
-**Should Giandoria expand its partner campaigns?** Follow the
-[Data Agent commercial review](https://faustinopalma.github.io/chocoverse/) from a sales comparison to a
-conditional recommendation, or read the [illustrated Markdown edition](./docs/data-agent-story.md).
-Learn to check business rules, interpret a chart and recognize which conclusions the data supports.
+**What should Giandoria check before promising more volume?** Follow the
+[Data Agent inventory review](https://faustinopalma.github.io/chocoverse/) from observed balances to an
+operational next step, or read the [illustrated Markdown edition](./docs/data-agent-story.md).
+Check the current position, examine its persistence and identify the detail needed to act.
 
 **Does delegation actually help?** The [CEO and line-lead experiment](./docs/28-data-agent-delegation-experiment.md)
 compares the same generalist alone and with the Data Agent on real snapshot questions.

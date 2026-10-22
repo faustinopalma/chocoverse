@@ -7,56 +7,61 @@ import { fileURLToPath } from "node:url";
 import path from "node:path";
 
 const site = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-test("built publication contains only explicit static files and public evidence", async () => {
+const root = path.dirname(site);
+test("publication contains only explicit static files and the new investigation evidence", async () => {
   const dir = path.join(site, "dist");
-  const files = await readdir(dir);
-  assert.deepEqual(files.sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css"]);
+  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css"]);
   const assets = await readdir(path.join(dir, "assets"));
-  assert.ok(assets.length >= 7);
-  assert.ok(assets.every((name) => /^[a-z0-9-]+\.(png|svg)$/.test(name)));
+  assert.deepEqual(assets.sort(), [
+    "inventory-detail.png", "inventory-history.svg", "inventory-persistence.png", "inventory-position.png",
+  ]);
   const html = await readFile(path.join(dir, "index.html"), "utf8");
   const referencedAssets = [...new Set([...html.matchAll(/(?:href|src)="assets\/([^"]+)"/g)]
     .map(([, name]) => name))].sort();
-  assert.deepEqual(assets.sort(), referencedAssets);
+  assert.deepEqual(assets, referencedAssets);
   assert.ok(!/<p>\s*<figure/.test(html));
-  assert.equal((html.match(/<img src="[^"]+"[^>]* width="\d+" height="\d+"/g) ?? []).length, 7);
-  assert.equal((html.match(/class="chapter"/g) ?? []).length, 7);
-  assert.equal((html.match(/<figcaption>/g) ?? []).length, 7);
-  for (let index = 1; index <= 7; index++) assert.ok(html.includes(`Exhibit 0${index}`));
-  assert.equal((html.match(/data-zoom/g) ?? []).length, 7);
-  assert.ok(!html.includes("{{"));
-  assert.ok(!html.includes(".local/"));
-  assert.ok(!html.includes("The Road Ahead"));
-  assert.ok(!html.includes("[commercial-answer]"));
-  assert.ok(!html.includes("src=\"https://"));
+  assert.equal((html.match(/<img src="[^"]+"[^>]* width="\d+" height="\d+"/g) ?? []).length, 4);
+  assert.equal((html.match(/class="chapter"/g) ?? []).length, 4);
+  assert.equal((html.match(/<figcaption>/g) ?? []).length, 4);
+  for (let index = 1; index <= 4; index++) assert.ok(html.includes(`Exhibit 0${index}`));
+  assert.equal((html.match(/data-zoom/g) ?? []).length, 4);
+  for (const privateText of ["{{", ".local/", "The Road Ahead", "Deck Pomeriggio", 'src="https://']) {
+    assert.ok(!html.includes(privateText), privateText);
+  }
   for (const [, url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     assert.ok(!url.includes("\\"));
     if (url.startsWith("#")) assert.ok(html.includes(`id="${url.slice(1)}"`), url);
     else if (!url.startsWith("https://")) await readFile(path.join(dir, url.split("?")[0]));
     else if (url.startsWith("https://github.com/faustinopalma/chocoverse/blob/main/")) {
-      const relative = url.split("/blob/main/")[1].split("#")[0];
-      await readFile(path.join(site, "..", relative));
+      await readFile(path.join(root, url.split("/blob/main/")[1].split("#")[0]));
     }
   }
-  for (const fact of ["82 kg", "1,994 kg", "4.11%", "1,252.7", "-0.3069", "3,435,099.60", "unverified", "blocked"]) {
+  for (const fact of ["0 kg", "37 kg", "7 of 30", "24–26 August", "unverified", "blocked"]) {
     assert.ok(html.includes(fact), fact);
   }
+  assert.ok(!/campaign expansion|bounded pilot|campaign sales|Commercial review/i.test(html));
 });
 
-test("captured outputs have readable inputs and named documentation sources", async () => {
+test("every captured answer follows its exact recorded input and a useful question purpose", async () => {
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
-  assert.equal((html.match(/<blockquote>/g) ?? []).length, 7);
-  const sections = [...html.matchAll(/<section class="chapter" id="chapter-(\d)"[\s\S]+?<\/section>/g)];
-  for (const [section, number] of sections) {
-    if (section.includes("<figure")) {
-      assert.ok(section.indexOf("<blockquote>") < section.indexOf("<figure"), `Chapter ${number} needs its input first`);
-    }
+  assert.equal((html.match(/<blockquote>/g) ?? []).length, 3);
+  const purposes = [
+    "Operations first needs the latest recorded finished stock and backlog.",
+    "We therefore examine the preceding 30 days.",
+    "Operations now needs to identify which products require attention.",
+  ];
+  for (let number = 1; number <= 3; number++) {
+    const section = html.match(new RegExp(`<section class="chapter" id="chapter-${number}"[\\s\\S]+?</section>`))?.[0];
+    assert.ok(section);
+    assert.ok(section.includes(purposes[number - 1]));
+    assert.ok(section.indexOf(purposes[number - 1]) < section.indexOf("<blockquote>"));
+    assert.ok(section.indexOf("<blockquote>") < section.indexOf("<figure"));
   }
-  assert.ok(html.includes("same commercial input above"));
-  assert.match(html, /Topics retrieval remains unverified/);
+  assert.ok(html.includes("same input above"));
+  assert.ok(html.includes("rendered exports of the actual response text"));
   assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
-  for (const path of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {
-    assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${path}`));
+  for (const name of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {
+    assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${name}`));
   }
   assert.ok(html.includes('href="https://github.com/faustinopalma/chocoverse"'));
   const closing = html.slice(html.indexOf("Closing note"));
@@ -66,7 +71,7 @@ test("captured outputs have readable inputs and named documentation sources", as
   }
 });
 
-test("the recommendation precedes supplementary demos and remains readable without scripts", async () => {
+test("the conclusion stays within the evidence and is readable without scripts", async () => {
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/<(?:input|select|form|progress)\b/.test(html));
   assert.match(html, /style\.css\?v=[a-f0-9]{12}/);
@@ -74,47 +79,72 @@ test("the recommendation precedes supplementary demos and remains readable witho
   assert.ok(!/quiz|exercise|data-claim|answer-key|learning\.js|Your turn/i.test(html));
   const conclusion = html.match(/<section class="chapter" id="chapter-4"[\s\S]+?<\/section>/)?.[0];
   assert.ok(conclusion);
-  for (const text of ["Prepare a bounded pilot proposal", "Launch it once",
-    "Commercial value", "Supply feasibility", "Cash exposure", "budget, duration and success criteria",
-    "conditional on the pilot", "rather than provide the missing launch evidence"]) {
+  for (const text of ["Review the recurring stock-and-backlog condition", "before promising additional volume",
+    "Check replenishment and allocation timing", "product-level usable stock, reservations and open orders",
+    "replenishment lead times before confirming volume", "Operations retains the decision"]) {
     assert.ok(conclusion.includes(text), text);
   }
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
-  assert.ok(conclusion.includes("unavailable at the requested campaign detail"));
-  for (const index of [5, 6, 7]) {
-    assert.match(html, new RegExp(`<h2 id="heading-${index}">Further analysis:`));
-    assert.ok(html.indexOf('id="chapter-4"') < html.indexOf(`id="chapter-${index}"`));
-  }
+  assert.ok(!/increase production|lost sales were|missed deliveries were|ranked products/i.test(conclusion));
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
-  assert.ok(!/chapter-copy|chapter-8|fetch\(|localStorage|sessionStorage/.test(script));
+  assert.ok(!/chapter-copy|fetch\(|localStorage|sessionStorage/.test(script));
 });
 
-test("editing preserves the seven recorded inputs and a concise reading path", async () => {
-  const source = await readFile(path.join(site, "..", "docs", "data-agent-story.md"), "utf8");
+test("all three verbatim questions match the retained execution record and stay concise", async () => {
+  const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
+  const record = JSON.parse(await readFile(path.join(root, "docs", "data-agent-inventory-evidence.json"), "utf8"));
   const inputs = [...source.matchAll(/(?:^>[^\r\n]*(?:\r?\n|$))+/gm)]
-    .map(([text]) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ").trim()).sort();
-  const hashes = inputs.map((text) => createHash("sha256").update(text).digest("hex"));
-  assert.deepEqual(hashes, [
-    "114d2d5affed3d137125e7aa95903d2cdecd6446fe84f9aa48950a2ba8742b7a",
-    "2ea70b637f61713d8b3af469229f3453af49325657ceb7b8bd3cdf996034adc4",
-    "3e3cf1575b31a7e470f3fc78dda4326cac64aea231edfcdf1ed5c3a1fec21426",
-    "972e8c3cc641239bde8d2789efab38c794584b6b5a98c6080c5de523d76a1a44",
-    "7ffbead00cb10c131efbeb19efecc15bda152eccdd1e5a1fefdfd84ce001b1dc",
-    "9762ae4789b9cecc18b46df2e672698261d357944d471a81d5cc10168696cddc",
-    "c433f170967a82800d752c7961d1058f2cd25a60043b0f45754b7183f82f73a6",
+    .map(([text]) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ").trim());
+  assert.equal(record.snapshotThroughDate, "2034-09-03");
+  assert.deepEqual(inputs, record.exchanges.map(exchange => exchange.input));
+  assert.deepEqual(inputs.map(text => createHash("sha256").update(text).digest("hex")), [
+    "7ab79926609e3d038d336370cdbd5b42f24577304c1a663cefc532f423883cfb",
+    "4760c22f6d24d26a7e60b1739d4298ec78d81d28971f4bb00ad5871bf0b6edaf",
+    "7d186300156777f3ec9ed1b2b9aa6229140854cd84e3f665a73f935185f9bf83",
   ]);
-  assert.ok(source.trim().split(/\s+/).length <= 1600, "Keep the full reading path within 1,600 words");
-  const decisionPath = source.slice(0, source.indexOf("## 5."));
-  assert.ok(decisionPath.trim().split(/\s+/).length <= 750, "Keep the decision path within 750 words");
+  assert.match(record.exchanges[0].answer, /Backlog \(observed\): 37 kg/);
+  assert.match(record.exchanges[1].answer, /Observation count: 30 observed dates/);
+  assert.match(record.exchanges[1].answer, /positive backlog: 7 observations/);
+  assert.match(record.exchanges[2].answer, /cannot be derived.*observed inventory balances/);
+  assert.ok(source.trim().split(/\s+/).length <= 1200, "Keep the full reading path within 1,200 words");
+  assert.ok(source.slice(0, source.indexOf("## Evidence")).trim().split(/\s+/).length <= 800,
+    "Keep the decision path within 800 words");
+  const guide = await readFile(path.join(root, "docs", "29-data-agent-companion.md"), "utf8");
+  assert.ok(guide.includes("## 29.5 Recorded capability tests"));
+  assert.ok(guide.includes("/blob/3e0642d/docs/data-agent-story.md"), "Retain all seven earlier inputs and captures");
 });
 
-test("the original native chart retains all 31 captured daily values", async () => {
-  const svg = await readFile(path.join(site, "dist", "assets", "native-chart.svg"), "utf8");
+test("the new native chart retains both complete series and the independently checked recurrence", async () => {
+  const svg = await readFile(path.join(site, "dist", "assets", "inventory-history.svg"), "utf8");
+  const points = [...svg.matchAll(/<[^>]+aria-roledescription="point"[^>]*>/g)].map(([mark]) => {
+    const match = mark.match(/aria-label="Observation date: ([A-Za-z]+ \d{2}); Closing balance \(kg\): (\d+); series: (FinishedKg|BacklogKg);/);
+    assert.ok(match, mark);
+    return { date: match[1], kg: Number(match[2]), series: match[3] };
+  });
+  const dates = Array.from({ length: 30 }, (_, i) => i < 27 ? `Aug ${String(i + 5).padStart(2, "0")}` :
+    `Sep ${String(i - 26).padStart(2, "0")}`);
+  const finished = points.filter(point => point.series === "FinishedKg");
+  const backlog = points.filter(point => point.series === "BacklogKg");
+  assert.equal(points.length, 60);
+  for (const series of [finished, backlog]) assert.deepEqual(series.map(point => point.date), dates);
+  assert.deepEqual(finished.map(point => point.kg), [
+    0, 114, 111, 176, 146, 85, 77, 223, 238, 129, 339, 496, 499, 488, 508,
+    42, 0, 9, 51, 0, 0, 0, 2, 0, 11, 16, 30, 35, 15, 0,
+  ]);
+  assert.deepEqual(backlog.map(point => point.kg), [
+    417, 90, 280, 76, 256, 85, 84, 161, 49, 6, 0, 0, 0, 0, 0,
+    0, 76, 12, 0, 371, 395, 402, 18, 40, 0, 42, 0, 0, 3, 37,
+  ]);
+  assert.equal(finished.filter((point, i) => point.kg === 0 && backlog[i].kg > 0).length, 7);
+});
+
+test("the archived native sales chart retains all 31 captured values", async () => {
+  const svg = await readFile(path.join(root, "docs", "images", "data-agent-story", "native-chart.svg"), "utf8");
   const points = [...svg.matchAll(/<[^>]+aria-roledescription="point"[^>]*>/g)].map(([mark]) => {
     const [, day, kg] = mark.match(/aria-label="Virtual date: Aug (\d{2}), 2034; Sold kg: (\d+)"/);
     return { day: Number(day), kg: Number(kg) };
   });
-  assert.deepEqual(points.map(({ day }) => day), Array.from({ length: 31 }, (_, index) => index + 1));
+  assert.deepEqual(points.map(({ day }) => day), Array.from({ length: 31 }, (_, i) => i + 1));
   assert.deepEqual(points.map(({ kg }) => kg), [
     415, 395, 400, 396, 430, 438, 452, 399, 384, 416, 381, 398, 440, 451, 409, 411,
     404, 416, 387, 466, 454, 407, 390, 422, 419, 399, 447, 437, 402, 410, 398,

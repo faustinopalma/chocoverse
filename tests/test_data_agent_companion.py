@@ -3,6 +3,7 @@ import copy
 import json
 import unittest
 from datetime import date, timedelta
+from pathlib import Path
 from uuid import uuid4
 from unittest.mock import Mock
 
@@ -93,6 +94,37 @@ class CompanionTests(unittest.TestCase):
                 rows[0]["invented"] = 1
             with self.subTest(mode=mode), self.assertRaises(ValueError):
                 check_answer(case, json.dumps(rows))
+
+    def test_inventory_cases_preserve_observation_dates_and_do_not_fill_missing_days(self):
+        cases = scenarios(self.snapshot)
+        self.assertEqual(cases["inventory"]["expected"],
+                         {"date": "2034-08-31", "finished_kg": 100, "backlog_kg": 1})
+        history = cases["inventory-history"]
+        self.assertIn("2034-08-05 through 2034-09-03", history["question"])
+        self.assertEqual(history["expected"]["observation_days"], 27)
+        self.assertEqual(history["expected"]["zero_stock_positive_backlog_days"], 0)
+        self.assertEqual(len(history["expected"]["rows"]), 27)
+        changed = copy.deepcopy(self.snapshot)
+        changed["tables"]["Balances"].pop(10)
+        changed["tables"]["Balances"][10][1] = 0
+        revised = scenarios(changed)["inventory-history"]["expected"]
+        self.assertEqual(revised["observation_days"], 26)
+        self.assertEqual(revised["zero_stock_positive_backlog_days"], 1)
+        self.assertEqual(check_answer(history, "A chart was requested"), "NeedsUIVerification")
+        self.assertFalse(cases["inventory-detail"]["expected"]["product_stock_available"])
+
+    def test_inventory_case_requires_an_actual_balance(self):
+        self.snapshot["tables"]["Balances"] = []
+        with self.assertRaisesRegex(ValueError, "observed company balances"):
+            scenarios(self.snapshot)
+
+    def test_inventory_prompts_match_the_retained_browser_execution(self):
+        record = json.loads((Path(__file__).resolve().parents[1] / "docs" /
+                             "data-agent-inventory-evidence.json").read_text(encoding="utf-8"))
+        cases = scenarios(self.snapshot)
+        for exchange in record["exchanges"]:
+            with self.subTest(case=exchange["case"]):
+                self.assertEqual(cases[exchange["case"]]["question"], exchange["input"])
 
     def test_short_calendar_month_does_not_imply_31_rows(self):
         for year, count in ((2034, 28), (2036, 29)):

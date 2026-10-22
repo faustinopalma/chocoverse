@@ -1,9 +1,10 @@
 # The Data Agent story minisite
 
-[Read the commercial review](https://faustinopalma.github.io/chocoverse/).
+[Read the inventory review](https://faustinopalma.github.io/chocoverse/).
 The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
-reaching a conditional recommendation in four sections. Three further sections demonstrate stock-policy rules,
-native charts and Python calculations, explicitly separate from the evidence required to launch a campaign.
+reaching an operational next step in four sections. Each question has a stated purpose: establish the current
+inventory position, check its persistence, then assess whether product-level priorities are supported.
+Other feature demonstrations remain in the [technical guide](../docs/29-data-agent-companion.md).
 There are no exercises or answers to unlock.
 It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
 It has no analytics, cookies, sign-in or client-side storage.
@@ -15,7 +16,7 @@ All reasoning is visible without JavaScript; scripts only provide theme selectio
 ## Edit and validate
 
 Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, and viewing controls in `story.js`.
-The build validates daily coverage in the original Fabric chart without maintaining a browser dataset.
+Tests retain coverage checks for the archived Fabric chart without publishing it in the new investigation.
 Changed chapter structure or evidence contracts fail the build or tests.
 Keep each captured output with its recorded input. Quote the original request rather than reconstructing it
 from the answer; label execution traces that share an input. Use named documentation links.

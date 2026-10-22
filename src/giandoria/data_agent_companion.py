@@ -99,13 +99,55 @@ def correlation(rows: list[dict]) -> float | None:
 def scenarios(snapshot: dict) -> dict[str, dict]:
     rows = daily_rows(snapshot)
     start, end = rows[0]["date"], rows[-1]["date"]
-    cases = query_cases(snapshot)
     coefficient = correlation(rows)
     commercial = [r for r in snapshot["tables"]["Sales"]
                   if start <= r[0] <= end and r[2] == "dark70" and r[3] == "centre"]
     campaign_kg = sum(r[4] for r in commercial if r[1] == "campaigns")
     all_channels_kg = sum(r[4] for r in commercial)
+    observations = sorted(r for r in snapshot["tables"]["Balances"] if r[0] <= snapshot["throughDate"])
+    if not observations:
+        raise ValueError("Inventory investigation requires observed company balances.")
+    cases = query_cases(snapshot)
+    latest = observations[-1]
+    history_start = (date.fromisoformat(snapshot["throughDate"]) - timedelta(days=29)).isoformat()
+    history = [r for r in observations if history_start <= r[0]]
     return {
+        "inventory": {
+            "source": "story", "check": "manual",
+            "question": (
+                "Before we promise additional volume, what does our latest company inventory observation show? "
+                "Use the semantic model measures. Report the observation date, finished stock "
+                "and backlog in kg. Keep balances at company level and distinguish observed facts from "
+                "delivery commitments."
+            ),
+            "expected": {"date": latest[0], "finished_kg": latest[1], "backlog_kg": latest[2]},
+        },
+        "inventory-history": {
+            "source": "story", "check": "manual",
+            "question": (
+                f"To decide whether this calls for an operational review rather than reacting to one day, "
+                f"show company finished stock and backlog for each observed date from {history_start} through "
+                f"{snapshot['throughDate']}. Use the Lakehouse SQL source. Return every observed date, then "
+                "create a native line chart with both series. Report the observation count and how many "
+                "observations have zero finished stock and positive backlog. Treat missing dates as unknown, "
+                "not zero. These are balances: do not sum them across days or infer lost sales."
+            ),
+            "expected": {
+                "rows": [{"date": r[0], "finished_kg": r[1], "backlog_kg": r[2]} for r in history],
+                "observation_days": len(history),
+                "zero_stock_positive_backlog_days": sum(r[1] == 0 and r[2] > 0 for r in history),
+            },
+        },
+        "inventory-detail": {
+            "source": "story", "check": "manual",
+            "question": (
+                "Which products should Operations replenish first? Break down the latest observed finished "
+                "stock and backlog by product using the semantic model. If those balances are only recorded "
+                "at company level, state that limit and the additional records needed for a product priority "
+                "list. Keep sales and production flows distinct from inventory balances."
+            ),
+            "expected": {"product_stock_available": False, "product_backlog_available": False},
+        },
         "sql": {
             "source": "sql", "check": "metrics",
             "question": (
@@ -396,7 +438,8 @@ def main() -> None:
     export.add_argument("--source", choices=tuple(NAMES), required=True)
     export.add_argument("--trial", required=True, help="Unique private export reservation; not a passing trial.")
     run = commands.add_parser("run")
-    run.add_argument("--case", choices=("sql", "topics", "dax", "policy", "rows", "python", "visual", "boundaries"),
+    run.add_argument("--case", choices=("sql", "topics", "dax", "policy", "rows", "python", "visual", "boundaries",
+                                       "inventory", "inventory-history", "inventory-detail"),
                      required=True)
     run.add_argument("--trial", required=True, help="Unique local reservation; never automatically retry inference.")
     run.add_argument("--source", choices=tuple(NAMES), help="Defaults to the scenario's isolated companion.")

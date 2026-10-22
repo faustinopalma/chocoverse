@@ -16,10 +16,10 @@ let exhibit = 0;
 const escape = (value) => MarkdownIt().utils.escapeHtml(value);
 const references = source.match(/^\[[^\]]+\]:[^\r\n]+/gm)?.join("\n") ?? "";
 const title = source.match(/^# (.+)\r?$/m)?.[1].trim();
-const chapters = [...source.matchAll(/^## ([1-7])\. (.+)\r?$/gm)];
+const chapters = [...source.matchAll(/^## ([1-4])\. (.+)\r?$/gm)];
 const footerStart = source.indexOf("## Evidence and further reading");
-if (!title || chapters.length !== 7 || footerStart < 0) {
-  throw new Error("The story must have a title, seven numbered chapters, and an evidence section.");
+if (!title || chapters.length !== 4 || footerStart < 0) {
+  throw new Error("The story must have a title, four numbered chapters, and an evidence section.");
 }
 for (const [index, chapter] of chapters.entries()) {
   if (Number(chapter[1]) !== index + 1) throw new Error("Chapter order changed.");
@@ -73,16 +73,6 @@ markdown.renderer.rules.image = (tokens, index) => {
     ${alt}</figcaption></figure>`;
 };
 const render = (text) => markdown.render(`${text}\n\n${references}`);
-const nativeChart = await readFile(path.join(root, "docs", "images", "data-agent-story", "native-chart.svg"), "utf8");
-const daily = [...nativeChart.matchAll(/<[^>]+aria-roledescription="point"[^>]*>/g)].map(([mark]) => {
-  const match = mark.match(/aria-label="Virtual date: Aug (\d{2}), 2034; Sold kg: (\d+)"/);
-  if (!match) throw new Error("Unrecognized native chart point.");
-  return { day: Number(match[1]), kg: Number(match[2]) };
-});
-if (daily.length !== 31 || daily.some((item, index) => item.day !== index + 1)) {
-  throw new Error("The native chart must contain all 31 ordered August dates.");
-}
-
 const sectionHtml = chapters.map((chapter, index) => {
   const number = Number(chapter[1]);
   const end = chapters[index + 1]?.index ?? source.lastIndexOf("---", footerStart);
@@ -115,4 +105,4 @@ for (const file of ["style.css", "story.js"]) {
 for (const asset of assets) {
   await copyFile(path.join(root, "docs", "images", "data-agent-story", asset), path.join(output, "assets", asset));
 }
-console.log(`Built ${chapters.length} chapters, ${assets.size} public evidence assets, ${daily.length} checked dates.`);
+console.log(`Built ${chapters.length} chapters, ${assets.size} public evidence assets.`);

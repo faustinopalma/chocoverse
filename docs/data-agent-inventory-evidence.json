@@ -1,0 +1,22 @@
+{
+  "snapshotThroughDate": "2034-09-03",
+  "source": "Fabric authoring conversation; verbatim response prose exported from the DOM",
+  "presentation": "Rendered exports, not screenshots of the Fabric application",
+  "exchanges": [
+    {
+      "case": "inventory",
+      "input": "Before we promise additional volume, what does our latest company inventory observation show? Use the semantic model measures. Report the observation date, finished stock and backlog in kg. Keep balances at company level and distinguish observed facts from delivery commitments.",
+      "answer": "Snapshot cutoff: 2034-09-03.\n\nThe latest company-level observed inventory is dated 2034-09-03:\n\nFinished stock (observed): 0 kg\nBacklog (observed): 37 kg\n\nThese are closing balance observations from the semantic model, not delivery commitments. The absence of finished stock alongside backlog indicates no observed finished-goods buffer at that snapshot. Source: result_0.json."
+    },
+    {
+      "case": "inventory-history",
+      "input": "To decide whether this calls for an operational review rather than reacting to one day, show company finished stock and backlog for each observed date from 2034-08-05 through 2034-09-03. Use the Lakehouse SQL source. Return every observed date, then create a native line chart with both series. Report the observation count and how many observations have zero finished stock and positive backlog. Treat missing dates as unknown, not zero. These are balances: do not sum them across days or infer lost sales.",
+      "answer": "Snapshot cutoff: 2034-09-03.\n\nUsing the Lakehouse company-observation balances for 2034-08-05 through 2034-09-03:\n\nObservation count: 30 observed dates\nZero finished stock with positive backlog: 7 observations\nMissing dates were not imputed; each plotted point is an observed company-level closing balance.\n\nThe daily observations are returned in result_2.json, and the native line chart is available in report_specs_4.json. The chart keeps finished stock and backlog as separate balance series—no cross-day summing and no inference of lost sales."
+    },
+    {
+      "case": "inventory-detail",
+      "input": "Which products should Operations replenish first? Break down the latest observed finished stock and backlog by product using the semantic model. If those balances are only recorded at company level, state that limit and the additional records needed for a product priority list. Keep sales and production flows distinct from inventory balances.",
+      "answer": "Snapshot cutoff: 2034-09-03.\n\nA product replenishment priority list cannot be derived from the available observed inventory balances. The semantic model returns only a company total for the latest observation—no product is specified:\n\nFinished stock (observed): 0 kg\nBacklog (observed): 37 kg\nObservation date: 2034-09-03\n\nTo prioritize products, Operations would need product-level records at a common observation date, at minimum:\n\nFinished-goods inventory by product (closing balance),\nBacklog by product (closing balance or clearly defined open demand),\nOptionally, product-level allocation/reservation status and due dates to distinguish urgency.\n\nSales and production measures should not substitute for these inventory balances: sell-out measures customer demand, while started, released, and shipped quantities are production flows rather than stock positions. Source: result_5.json."
+    }
+  ]
+}

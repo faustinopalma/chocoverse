@@ -15,12 +15,19 @@ The private presentation, its slide mapping, generated slides and rehearsal evid
 
 ## 29.1 Audience and scope
 
-Start with the story's [business decision](./data-agent-story.md#1-a-business-decision-before-a-query),
+Start with the story's [inventory position](./data-agent-story.md#1-establish-the-current-position),
 then follow the actual questions and screenshots. The full value chain is the setting, not an implementation claim.
 The [business lab](./21-business-lab.md) owns the available data scope.
-The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as a continuous commercial review.
-The recommendation follows the sales, cash and supported-detail evidence. Stock-policy, chart and Python examples
-follow as supplementary demonstrations; they do not establish campaign profitability or launch readiness.
+The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as an operational review.
+Its questions establish the latest inventory, check persistence and test whether product priorities are supported.
+The CLI cases are `inventory`, `inventory-history` and `inventory-detail`, all using the story companion.
+Their expected values come from the same fixed snapshot; the runs require manual inspection of the actual
+answer and execution steps. An API invocation can return matching numbers while native visualization is
+unavailable in that invocation environment. The recorded browser conversation produced the native chart.
+The story retains its exact [input/output prose](./data-agent-inventory-evidence.json).
+Reply images are labelled rendered DOM exports; the chart is the unmodified native SVG.
+Only useful steps belong in that investigation. Other features have separate
+[capability tests](#295-recorded-capability-tests).
 Its [build and publication guide](../site/README.md) owns the static-site workflow; the questions below run in Fabric.
 
 ## 29.2 Why this agent, rather than just another chatbot?
@@ -41,10 +48,10 @@ The [controlled delegation experiment](./28-data-agent-delegation-experiment.md)
 retrieval helped when detail was missing; supplying the same business rules directly also helped; the specialist
 made mistakes. Show that result instead of staging a deliberately disadvantaged competitor.
 
-## 29.3 One story, eight feature demonstrations
+## 29.3 Feature acceptance gates
 
-Suggested full route: 25-35 minutes *(estimate)*. Keep a shorter route of opening, cash, row completeness and limits
-for a 10-minute slot *(estimate)*. Use the same snapshot and virtual month throughout.
+Use the operational story as the presentation reading path. Select the following independent tests when
+a particular feature needs explanation; they are not successive steps in one business decision.
 The generated demo pack supplies the exact dates, questions and independently calculated expected answers.
 
 ### A. SQL: the commercial analyst's vocabulary
@@ -263,7 +270,56 @@ If there is no valid recording, explain the prerequisite and show the prepared q
 
 End with `boundaries` and the controlled comparison: **less query writing, more evidence checking**.
 
-## 29.5 Sources and ownership
+## 29.5 Recorded capability tests
+
+These checks demonstrate tool behavior, rather than justify inventory or campaign decisions.
+The [earlier commercial example](https://github.com/faustinopalma/chocoverse/blob/3e0642d/docs/data-agent-story.md)
+retains its original seven inputs, captures and results, including ontology resolution, sales share and cash.
+The following inputs are repeated here so each technical capture remains understandable on its own.
+
+### Cover-policy default
+
+Purpose: verify the published multi-selection rule, rather than choose a service-level policy.
+
+> At snapshot end 2034-09-03, suppose the Cover policy slicer has both 2 and 4 selected simultaneously, not two
+> separate scenarios. Which cover-days value and stock target in kg does the semantic model return? Use the
+> published one-decimal kg precision. Does this change production?
+
+![The model returns its three-day default and a company-wide target of 1,252.7 kg.](./images/data-agent-story/policy-answer.png)
+
+### Complete daily output
+
+Purpose: check row completeness before downstream analysis.
+
+> Show the complete daily company sell-out table for August 2034: every date from August 1 through August 31,
+> ordered by date, with Sold kg. Return all 31 rows, not just a preview of 25, and state the snapshot cutoff.
+
+![The captured daily result contains all 31 August dates.](./images/data-agent-story/daily-rows.png)
+
+### Native visualization
+
+Purpose: verify that the runtime creates a native chart, rather than merely describing one.
+
+> For August 2034, show daily company Sold kg as an interactive native Fabric line chart, not a Python image.
+> Label virtual date and kg and state the snapshot cutoff.
+
+![Static export of the native chart, retaining all 31 daily values.](./images/data-agent-story/native-chart.svg)
+
+### Code Interpreter
+
+Purpose: verify an executed Python calculation against independently paired daily facts.
+
+> Use Code Interpreter to calculate the Pearson correlation between daily company Sold kg and Released kg for
+> August 2034. Aggregate each flow by date before combining it, include all days, and report the paired-day count
+> and correlation to four decimals. Show the Python execution, distinguish association from causation, and
+> explicitly say if the tool is unavailable.
+
+![Code Interpreter executes Python for the correlation request above.](./images/data-agent-story/python-execution.png)
+
+The [same request's answer](./images/data-agent-story/python-answer.png) reports 31 paired days and -0.3069.
+This is a same-day association, not a causal explanation or a production-planning rule.
+
+## 29.6 Sources and ownership
 
 [data_agent_companion.py](../src/giandoria/data_agent_companion.py) owns scenario generation, companion definitions,
 bounded trials and answer grading. [Its tests](../tests/test_data_agent_companion.py) cover completeness,

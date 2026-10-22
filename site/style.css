@@ -60,7 +60,8 @@ code { font: .9em Consolas, "Courier New", Courier, monospace; }
 .evidence { margin: 32px 0; border-top: 1px solid var(--cp-border-strong); padding-top: 16px; }
 .capture { display: block; background: var(--cp-surface); }
 .capture:focus-visible { outline-offset: 4px; }
-.capture img { display: block; width: 100%; height: auto; max-height: 360px; object-fit: contain; }
+.capture img { display: block; width: 100%; height: auto; object-fit: contain; }
+.capture img[src$=".svg"] { max-height: 520px; }
 figcaption { font-size: 13px; line-height: 1.6; padding: 12px 0 0; color: var(--cp-text-soft); }
 .exhibit-number { display: block; text-transform: uppercase; letter-spacing: .08em; font-size: 10px;
   color: var(--cp-accent); font-weight: 700; margin-bottom: 4px; }
