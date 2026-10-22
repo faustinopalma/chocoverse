@@ -1,17 +1,25 @@
 # How far has Giandoria's supply recovered?
 
 Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
-A channel expansion, a temporary moulding restriction and a capacity increase create a supply-recovery
-review: **what has recovered, and what should Operations check before the next expansion?**
+In this simulated scenario, it expands supermarket and export demand in September.
+A temporary restriction on its chocolate-moulding line follows in late October.
+At the end of November, **1,119 kg of orders remain to be shipped**. This outstanding volume is the company's
+*backlog*.
 
-Follow three questions to a Fabric Data Agent. Compare product sales, trace the pattern through the factory,
-then assess outstanding backlog. Each answer gives the next question a purpose.
+Giandoria increases moulding capacity in late December. By the end of February, Operations needs to assess
+whether the business can take on more volume while fulfilling existing orders.
+**Has the extra capacity translated into recovered sales and a sustained reduction in outstanding orders?**
+
+We use a Fabric Data Agent to compare product sales, follow the change through production and shipments,
+then check the daily backlog. September provides the starting point, November captures the restricted period,
+and February shows performance after the capacity increase.
 
 ## 1. Measure the commercial change
 
-Product comparisons show which part of the business drives the change.
-We compare September, November and February to locate the commercial signal across the episode.
-The semantic model supplies the sell-out definition; calendar-day averages make the month lengths comparable.
+Operations first needs to see which products' customer purchases recovered after the restriction.
+We compare *sell-out*, the chocolate customers actually bought, across the three months.
+This identifies the products to follow through the factory next.
+The semantic model defines the sales measure; calendar-day averages make the month lengths comparable.
 
 **Recorded input — product sales:**
 
@@ -27,8 +35,9 @@ The next investigation therefore follows dark and milk chocolate, which share th
 
 ## 2. Follow the pattern through the factory
 
-Operations needs to establish whether factory throughput follows the sales pattern.
-Starts, releases and shipments locate the change along the supply flow.
+Operations now needs to check whether the factory is supplying the products behind the sales change.
+*Throughput* is the volume moving through production over time. Comparing production starts, releases
+and shipments shows whether the recovery extends along that flow.
 The Lakehouse contains these product-level production records.
 
 **Recorded input — production flow:**
@@ -47,8 +56,8 @@ Throughput has recovered to September's pace. The next question is how that reco
 
 ## 3. Check the backlog behind the recovery
 
-Throughput describes pace; backlog describes outstanding company volume.
-Operations needs its daily path as well as the closing position to assess how far the recovery has progressed.
+The factory's recovered pace now needs to translate into clearing outstanding orders.
+Operations needs the daily backlog as well as the closing position to judge whether that clearance is sustained.
 
 **Recorded input — backlog recovery:**
 

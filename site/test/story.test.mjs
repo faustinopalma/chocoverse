@@ -52,9 +52,9 @@ test("each question follows a concrete decision purpose and precedes its capture
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.equal((html.match(/<blockquote>/g) ?? []).length, 3);
   const purposes = [
-    "Product comparisons show which part of the business drives the change.",
-    "Operations needs to establish whether factory throughput follows the sales pattern.",
-    "Operations needs its daily path as well as the closing position",
+    "Operations first needs to see which products' customer purchases recovered after the restriction.",
+    "Operations now needs to check whether the factory is supplying the products behind the sales change.",
+    "Operations needs the daily backlog as well as the closing position",
   ];
   for (let number = 1; number <= 3; number++) {
     const section = html.match(new RegExp(`<section class="chapter" id="chapter-${number}"[\\s\\S]+?</section>`))?.[0];
@@ -75,6 +75,18 @@ test("each question follows a concrete decision purpose and precedes its capture
     "Decision Room", "explicit extraction and publication", "reduced-detail", "incur charges"]) {
     assert.ok(closing.includes(phrase), phrase);
   }
+});
+
+test("the opening establishes the outstanding orders, decision and comparison periods before any query", async () => {
+  const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
+  const opening = source.slice(0, source.indexOf("## 1."));
+  for (const phrase of ["simulated scenario", "1,119 kg of orders remain to be shipped",
+    "*backlog*", "take on more volume while fulfilling existing orders",
+    "September provides the starting point", "November captures the restricted period",
+    "February shows performance after the capacity increase"]) {
+    assert.ok(opening.includes(phrase), phrase);
+  }
+  assert.ok(!opening.includes("create a supply-recovery review"));
 });
 
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {
