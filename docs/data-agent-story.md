@@ -97,10 +97,8 @@ Operations retains the decision, using each answer to focus the next check.
 ## Evidence and further reading
 
 These executions use a fixed enterprise snapshot through **3 March 2048**; the review covers three complete
-months ending in February. The [scenario plan][scenario] retains the demand
-and capacity assumptions; enterprise records supply the outcomes.
-The retained run includes a January update aligning planning and execution capacity.
-The [input/output record][evidence] owns provenance, exact responses and independently calculated reference values.
+months ending in February. The [input/output record][evidence] retains exact responses and independently
+calculated reference values. The [reproduction guide][companion] owns source provenance and execution conditions.
 
 Inputs are quoted verbatim. Reply images are real Fabric browser screenshots; the chart is a native SVG export.
 Captures cover published sales and authoring-mode supply and backlog.
@@ -111,29 +109,25 @@ Topics retrieval remains unverified; M365 feedback awaits an administrator-autho
 Microsoft documentation: [Data Agent overview][agent-overview], [query runtime][agent-runtime],
 [native charts][agent-visuals] and [Code Interpreter][agent-python].
 
-## Closing note — experiment with the Chocoverse
+## Closing note — follow Giandoria through the Chocoverse
 
 This investigation is one episode inside **Chocoverse**, Giandoria's evolving business universe.
-The [original repository](https://github.com/faustinopalma/chocoverse) contains its code, scenarios and laboratory.
-Purchases, production, deliveries, sales and financial movements form a continuing story in **virtual time**.
-Pause it, resume it or change a scenario to explore a different course.
+Purchases lead to production, production supplies deliveries, and customer purchases generate financial movements.
+The next review can follow how Giandoria turns this recovery into reliable supply across its channels.
 
 Fabric provides complementary lenses: Eventhouse and Real-Time Dashboards follow operational events;
 Lakehouse, the semantic model and Power BI organize analytical snapshots and business measures.
 Ontology connects entities, the Data Agent answers questions over configured sources, and the Decision Room
 supports governed investigations.
 
-Live views follow incoming events; snapshot-based views advance through explicit extraction and publication.
-This article retains a fixed snapshot. The [project tour](../README.md) and [implemented scope](./README.md)
-explain the current reduced-detail runtime and wider design.
-Use the [laboratory runbook](../infra/demo/README.md) to experiment; Azure/Fabric runs incur charges and require
-its start, shutdown and cost controls.
+The [project tour](../README.md) introduces the wider Chocoverse.
+The [original repository](https://github.com/faustinopalma/chocoverse) and [technical guide][companion]
+provide the implementation and reproduction instructions.
 
 [recovery-sales]: ./images/data-agent-story/recovery-sales.png
 [recovery-flow]: ./images/data-agent-story/recovery-flow.png
 [recovery-backlog]: ./images/data-agent-story/recovery-backlog.png
 [recovery-history]: ./images/data-agent-story/recovery-history.svg
-[scenario]: ../config/scenarios/channel-expansion-maintenance.json
 [evidence]: ./data-agent-recovery-evidence.json
 [companion]: ./29-data-agent-companion.md
 [capabilities]: ./29-data-agent-companion.md#295-recorded-capability-tests

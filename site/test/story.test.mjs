@@ -71,8 +71,8 @@ test("each question follows a concrete decision purpose and precedes its capture
     assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${name}`));
   }
   const closing = html.slice(html.indexOf("Closing note"));
-  for (const phrase of ["virtual time", "Real-Time Dashboards", "Lakehouse", "Power BI", "Data Agent",
-    "Decision Room", "explicit extraction and publication", "reduced-detail", "incur charges"]) {
+  for (const phrase of ["reliable supply across its channels", "Real-Time Dashboards", "Lakehouse", "Power BI",
+    "Data Agent", "Decision Room", "technical guide"]) {
     assert.ok(closing.includes(phrase), phrase);
   }
 });
@@ -90,6 +90,8 @@ test("the opening establishes the outstanding orders, decision and comparison pe
   assert.ok(!opening.includes("create a supply-recovery review"));
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/simulat/i.test(html), "Keep simulation labels out of the reader-facing story");
+  assert.ok(!/virtual time|reduced-detail runtime|Pause it, resume it|fictional|not real/i.test(html),
+    "Preserve the business world's narrative immersion through the closing note");
 });
 
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {
@@ -106,7 +108,6 @@ test("the operational conclusion is bounded, visible and usable without scripts"
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
   assert.ok(!/increase production|lost sales were|missed deliveries were|ranked products/i.test(conclusion));
   assert.ok(html.includes("isolating each intervention"));
-  assert.ok(html.includes("January update aligning planning and execution capacity"));
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
   assert.ok(!/chapter-copy|fetch\(|localStorage|sessionStorage/.test(script));
 });
