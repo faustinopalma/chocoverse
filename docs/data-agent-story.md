@@ -1,103 +1,102 @@
-# What should Giandoria check before promising more volume?
+# How far has Giandoria's supply recovered?
 
 Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
-Each part of the value chain contributes records to Fabric. Before confirming additional volume,
-Operations needs to understand stock and outstanding demand.
+A channel expansion, a temporary moulding restriction and a capacity increase create a supply-recovery
+review: **what has recovered, and what should Operations check before the next expansion?**
 
-Follow three questions to a Fabric Data Agent: establish the inventory position, check whether the signal
-recurs, then find the detail needed to act. Each answer determines the next step.
+Follow three questions to a Fabric Data Agent. Compare product sales, trace the pattern through the factory,
+then assess outstanding backlog. Each answer gives the next question a purpose.
 
-## 1. Establish the current position
+## 1. Measure the commercial change
 
-Operations first needs the latest recorded finished stock and backlog. These balances show the starting
-position for a supply review; production releases and sales describe flows over a period.
-The semantic model gives those concepts explicit measures.
+Product comparisons show which part of the business drives the change.
+We compare September, November and February to locate the commercial signal across the episode.
+The semantic model supplies the sell-out definition; calendar-day averages make the month lengths comparable.
 
-**Recorded input — inventory position:**
+**Recorded input — product sales:**
 
-> Before we promise additional volume, what does our latest company inventory observation show? Use the semantic
-> model measures. Report the observation date, finished stock and backlog in kg. Keep balances at company level
-> and distinguish observed facts from delivery commitments.
+> How did daily sales change across September 2047, November 2047 and February 2048? Use our semantic-model
+> sell-out measures. Give one table with each product's average kg per calendar day in the three months,
+> rounded to one decimal. Identify the products behind the change.
 
-![The observed company position on 3 September: 0 kg finished stock and 37 kg backlog.][inventory-position]
+![Fabric response: product sell-out per calendar day across the three review months.][recovery-sales]
 
-The answer retrieves the published balances. **Zero recorded finished stock alongside backlog**
-gives Operations a concrete reason to investigate supply. Its significance depends on whether this is an
-isolated observation or a recurring condition.
+Dark chocolate moves from **211.5 to 147.6 to 227.2 kg/day**; milk chocolate from
+**190.4 to 106.9 to 169.9 kg/day**. Seasonal gianduja follows a different path, peaking in November.
+The next investigation therefore follows dark and milk chocolate, which share the moulding line.
 
-## 2. Check whether the condition recurs
+## 2. Follow the pattern through the factory
 
-A single closing observation can reflect timing. We therefore examine the preceding 30 days.
-If stock recovers consistently, the latest observation deserves a different interpretation from repeated
-zero-stock observations with outstanding demand.
+Operations needs to establish whether factory throughput follows the sales pattern.
+Starts, releases and shipments locate the change along the supply flow.
+The Lakehouse contains these product-level production records.
 
-**Recorded input — persistence:**
+**Recorded input — production flow:**
 
-> To decide whether this calls for an operational review rather than reacting to one day, show company finished
-> stock and backlog for each observed date from 2034-08-05 through 2034-09-03. Use the Lakehouse SQL source.
-> Return every observed date, then create a native line chart with both series. Report the observation count
-> and how many observations have zero finished stock and positive backlog. Treat missing dates as unknown,
-> not zero. These are balances: do not sum them across days or infer lost sales.
+> Does the sales pattern also appear in supply? Use Lakehouse SQL to compare September 2047, November 2047
+> and February 2048. Combine dark70 and milk and return one row per month with started, released and shipped
+> kg per calendar day, rounded to one decimal. Keep production flows distinct from sell-out.
 
-![The agent returns 30 observed dates and identifies seven zero-stock observations with positive backlog.][inventory-persistence]
+![Fabric response: combined dark and milk production starts, releases and shipments per calendar day.][recovery-flow]
 
-The following native chart belongs to the **same input above**. SQL retrieves the daily company observations;
-the visualization shows how stock and backlog change together.
+Combined shipments move from **397.2 to 253.1 to 404.9 kg/day**. Starts and releases show the same
+November dip and February recovery. This is consistent with the episode's moulding restriction and capacity
+response. The comparison describes the observed run; isolating each intervention's effect calls for controlled runs.
 
-![Native Fabric chart: finished stock and backlog, with all 30 observations in each series.][inventory-history]
+Throughput has recovered to September's pace. The next question is how that recovery reaches outstanding orders.
 
-The condition recurs on **7 of 30 observed dates**, including three consecutive dates on 24–26 August.
-This supports a review of replenishment and allocation timing. Quantifying missed sales, service failures
-or production constraints would require their own records.
+## 3. Check the backlog behind the recovery
 
-## 3. Find the detail needed to act
+Throughput describes pace; backlog describes outstanding company volume.
+Operations needs its daily path as well as the closing position to assess how far the recovery has progressed.
 
-Operations now needs to identify which products require attention. Company totals establish the signal;
-a replenishment priority list requires product-level stock and outstanding orders.
-We ask whether the available model supports that next step.
+**Recorded input — backlog recovery:**
 
-**Recorded input — product priorities:**
+> Has the company also reduced its backlog? Use the Lakehouse's observed company balances from 2047-11-01
+> through 2048-02-29. Plot daily backlog and finished stock as a native line chart. For November and February,
+> report average observed backlog, last observed backlog and the number of observed dates.
+> Use every available observation.
 
-> Which products should Operations replenish first? Break down the latest observed finished stock and backlog
-> by product using the semantic model. If those balances are only recorded at company level, state that limit
-> and the additional records needed for a product priority list. Keep sales and production flows distinct
-> from inventory balances.
+![Fabric response: November and February company backlog, with observed-date counts.][recovery-backlog]
 
-![The agent identifies the company-level boundary and the records needed for product priorities.][inventory-detail]
+The native chart belongs to the **same input above**, using all **121 observed dates** in each series.
 
-The semantic model keeps these balances at company level. Product-level inventory and open orders,
-with reservations and due dates, would let Operations rank replenishment needs.
-Sell-out records completed purchases; production records starts, releases and shipments.
-Both remain distinct from available stock and total demand.
+![Native Fabric chart: daily company backlog and finished stock from November through February.][recovery-history]
 
-## 4. Turn the evidence into a next action
+Average observed backlog falls from **983.0 kg in November to 533.3 kg in February**.
+The final February observation is **0 kg**, compared with **1,119 kg** at November's close.
+Together, the average and closing balance show a substantial recovery and the workload carried during February.
+The comparison uses 30 November observations and 29 February observations.
 
-**Review the recurring stock-and-backlog condition before promising additional volume.**
-The investigation identifies a recurring signal and the detail required to make a product-level decision.
+## 4. Set the next operational checkpoint
 
-| What the evidence supports | Next operational step |
+**Make sustained backlog clearance the next checkpoint for expansion.**
+Factory throughput has recovered; product sales and daily backlog give Operations a more complete view of readiness.
+
+| Observed signal | Next operational check |
 |---|---|
-| Seven observed zero-stock dates with backlog in a 30-day window. | Check replenishment and allocation timing. |
-| Stock and backlog are recorded at company level. | Obtain product-level usable stock, reservations and open orders. |
-| Delivery commitments require quantities and dates. | Match those records to replenishment lead times before confirming volume. |
+| Dark chocolate sales exceed September's pace; milk chocolate is at 169.9 versus 190.4 kg/day. | Review product and channel replenishment needs. |
+| Combined dark and milk shipments recover to 404.9 kg/day. | Track whether the recovered flow is sustained. |
+| February closes with zero backlog after averaging 533.3 kg. | Confirm sustained clearance and match product-level stock and open orders to new commitments. |
 
-The Data Agent connects everyday questions to governed measures, SQL results and a visual trend.
-Operations retains the decision: use the signal to focus the review, then use the right detail to act.
+The Data Agent connects business questions to governed measures, SQL records and a visual trend.
+Operations retains the decision, using each answer to focus the next check.
 
 ---
 
 ## Evidence and further reading
 
-These executions use a fixed enterprise snapshot through **3 September 2034**.
-Inputs are quoted verbatim. Results and all 60 chart points were checked against the source snapshot.
-The reply images are **rendered exports of the actual response text**, labelled accordingly; the chart is an
-unmodified native Fabric SVG export. The [input/output record](./data-agent-inventory-evidence.json) retains
-the response prose.
+These executions use a fixed enterprise snapshot through **3 March 2048**; the review covers three complete
+months ending in February. Dates are simulated business dates. The [scenario plan][scenario] retains the demand
+and capacity assumptions; enterprise records supply the outcomes.
+The retained run includes a January update aligning planning and execution capacity.
+The [input/output record][evidence] owns provenance, exact responses and independently calculated reference values.
 
-The [companion guide](./29-data-agent-companion.md) owns reproduction, access requirements and separate
-[capability tests](./29-data-agent-companion.md#295-recorded-capability-tests) for cash, stock-policy defaults,
-row completeness and Python. Topics retrieval remains unverified; M365 feedback remains blocked by the
-current sharing setting. These statuses are independent of the inventory findings.
+Inputs are quoted verbatim. Reply images are real Fabric browser screenshots; the chart is a native SVG export.
+Captures cover published sales and authoring-mode supply and backlog.
+Sales and production use calendar-day averages. Company balances use observed dates and retain company grain.
+The companion guide owns [reproduction][companion] and separate [capability tests][capabilities].
+Topics retrieval remains unverified; M365 feedback awaits an administrator-authorized sharing change.
 
 Microsoft documentation: [Data Agent overview][agent-overview], [query runtime][agent-runtime],
 [native charts][agent-visuals] and [Code Interpreter][agent-python].
@@ -120,10 +119,14 @@ explain the current reduced-detail runtime and wider design.
 Use the [laboratory runbook](../infra/demo/README.md) to experiment; Azure/Fabric runs incur charges and require
 its start, shutdown and cost controls.
 
-[inventory-position]: ./images/data-agent-story/inventory-position.png
-[inventory-persistence]: ./images/data-agent-story/inventory-persistence.png
-[inventory-history]: ./images/data-agent-story/inventory-history.svg
-[inventory-detail]: ./images/data-agent-story/inventory-detail.png
+[recovery-sales]: ./images/data-agent-story/recovery-sales.png
+[recovery-flow]: ./images/data-agent-story/recovery-flow.png
+[recovery-backlog]: ./images/data-agent-story/recovery-backlog.png
+[recovery-history]: ./images/data-agent-story/recovery-history.svg
+[scenario]: ../config/scenarios/channel-expansion-maintenance.json
+[evidence]: ./data-agent-recovery-evidence.json
+[companion]: ./29-data-agent-companion.md
+[capabilities]: ./29-data-agent-companion.md#295-recorded-capability-tests
 [agent-overview]: https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent
 [agent-runtime]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-runtime
 [agent-visuals]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-visuals

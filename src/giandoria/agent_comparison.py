@@ -106,7 +106,7 @@ def answer_format(fields: list[str]) -> dict:
     }}
 
 
-def query_cases(snapshot: dict) -> dict[str, dict]:
+def query_cases(snapshot: dict, *, include_missing_observations: bool = True) -> dict[str, dict]:
     last = date.fromisoformat(snapshot["throughDate"])
     end = last.replace(day=1) - timedelta(days=1)
     start = end.replace(day=1)
@@ -118,9 +118,9 @@ def query_cases(snapshot: dict) -> dict[str, dict]:
         first = (first.replace(day=28) + timedelta(days=4)).replace(day=1)
     missing_end = first.replace(day=calendar.monthrange(first.year, first.month)[1])
     missing = [r for r in snapshot["tables"]["Balances"] if first.isoformat() <= r[0] <= missing_end.isoformat()]
-    if not selected or missing or missing_end > last:
+    if not selected or include_missing_observations and (missing or missing_end > last):
         raise ValueError("Equal-access protocol requires an observed last complete month and unobserved first month.")
-    return {
+    result = {
         "cash_close": {
             "question": (
                 f"Prepare the company's cash close for virtual {start} through {end}: cash_eur, "
@@ -148,7 +148,9 @@ def query_cases(snapshot: dict) -> dict[str, dict]:
                 sum(r[4] for r in sales if (last - timedelta(days=29)).isoformat() <= r[0] <= last.isoformat())
                 / min(30, (last - date.fromisoformat(snapshot["firstDate"])).days + 1) * 3, 1)},
         },
-        "missing_observations": {
+    }
+    if include_missing_observations:
+        result["missing_observations"] = {
             "question": (
                 f"Prepare the company's report for virtual {first} through {missing_end}: sold_kg, cash_eur, "
                 "observation_days and calendar_days. Distinguish zero observed days (report the count as 0) "
@@ -156,8 +158,8 @@ def query_cases(snapshot: dict) -> dict[str, dict]:
             ),
             "expected": {"sold_kg": sum(r[4] for r in sales if first.isoformat() <= r[0] <= missing_end.isoformat()),
                          "cash_eur": None, "observation_days": 0, "calendar_days": (missing_end - first).days + 1},
-        },
-    }
+        }
+    return result
 
 
 def schema_context(parts: dict, *, raw: bool = False) -> dict:

@@ -10,7 +10,7 @@ from unittest.mock import Mock, patch
 
 from giandoria.fabric_deploy import RecordedRequests
 from giandoria.showcase import (
-    FACTS, imported_table, measures, model_definition, publish, report_definition, validate_snapshot,
+    FACTS, extract_snapshot, imported_table, measures, model_definition, publish, report_definition, validate_snapshot, verify,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -29,6 +29,42 @@ def sample():
 
 
 class ShowcaseTests(unittest.TestCase):
+    @patch("giandoria.showcase.dax")
+    def test_reconciliation_keeps_absent_prior_year_sales_blank(self, dax):
+        dax.side_effect = [
+            [{"[Sold]": 10, "[Revenue]": 100, "[Purchases]": 10, "[Started]": 20, "[Released]": 15,
+              "[Shipped]": 12, "[Cash]": 130, "[Days]": 3, "[ChannelFinance]": None,
+              "[Target2]": 20, "[Target4]": 40}],
+            [{"[DefaultCover]": 3, "[MultipleCover]": 3, "[ProductFinance]": None,
+              "[TerritoryBalance]": None, "[ChannelProduction]": None}],
+            [{"[Sold]": 10, "[PY]": None, "[YoY]": None, "[YTD]": 10, "[Rolling]": 10}],
+            [{"Channel[Channel]": "export", "[Sold]": 10, "[Share]": 1, "[Rank]": 1}],
+            [{"[Amount]": 90}],
+            [{"[Stock]": None, "[Gap]": None}],
+        ]
+        result = verify(Mock(), "workspace", "model", sample())
+        self.assertIsNone(result["virtualPeriod"]["[PY]"])
+        self.assertEqual(dax.call_count, 6)
+
+    @patch("giandoria.showcase.query")
+    def test_bounded_episode_uses_one_sequence_and_start_for_every_fact(self, query):
+        snapshot = sample()
+        query.side_effect = [[["2032-03-02", 100]], *snapshot["tables"].values()]
+        result = extract_snapshot(Mock(), {"queryServiceUri": "test", "databaseId": "db"},
+                                  from_date="20320228")
+        self.assertEqual(result, snapshot)
+        for call in query.call_args_list[1:]:
+            text = call.args[3]
+            self.assertIn("let upper_sequence=long(100);", text)
+            self.assertIn("let cutoff=datetime(2032-03-02);", text)
+            self.assertIn("todatetime(event.simlocaldate) >= datetime(2032-02-28)", text)
+            self.assertIn("< cutoff", text)
+        query.reset_mock(side_effect=True)
+        query.return_value = [["2032-03-02", 100]]
+        for start in ("2032-03-02", "2032-04-01", "not-a-date"):
+            with self.subTest(start=start), self.assertRaises(ValueError):
+                extract_snapshot(Mock(), {"queryServiceUri": "test", "databaseId": "db"}, from_date=start)
+
     def setUp(self):
         self.config = json.loads((ROOT / "config" / "business.json").read_text())
         self.snapshot = sample()

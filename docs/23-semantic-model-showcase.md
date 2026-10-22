@@ -30,6 +30,9 @@ The construction sequence is:
 3. Freeze its virtual local date as an **exclusive cutoff**, and its sequence as an upper bound.
 4. Run all four extraction queries with those same bounds. Sales, production and finance events are
    deduplicated by event ID before aggregation. Balances select the highest-sequence observation per date.
+   An optional inclusive virtual start date bounds a specific analytical episode consistently across all four
+   facts; it leaves retained event history unchanged. Prior-year measures stay blank when that episode's
+   published snapshot contains no corresponding prior-year sales.
 5. Reject duplicate fact keys, unknown configured dimension members, malformed rows, dates outside
    the snapshot and invalid quantities. Negative cash is valid; it must not become zero.
 6. Generate the continuous Date dimension, configured dimensions, disconnected helper tables and explicit DAX.

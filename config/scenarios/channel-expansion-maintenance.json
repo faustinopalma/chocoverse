@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "run_id": "business-demo-001",
+  "changes": [
+    {
+      "id": "channel-growth",
+      "tick": 151824,
+      "reason": "Modern trade and export expansion (scenario assumption).",
+      "demand_percent": {"modern_trade": 180, "export": 150},
+      "line_capacity_kg": {}
+    },
+    {
+      "id": "moulding-maintenance",
+      "tick": 152544,
+      "reason": "Temporary moulding capacity restriction during maintenance (scenario assumption).",
+      "demand_percent": {},
+      "line_capacity_kg": {"moulding": 260}
+    },
+    {
+      "id": "moulding-recovery",
+      "tick": 153984,
+      "reason": "Restore moulding capacity and add shifts (scenario assumption).",
+      "demand_percent": {},
+      "line_capacity_kg": {"moulding": 780}
+    }
+  ]
+}

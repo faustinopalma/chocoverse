@@ -1,0 +1,2222 @@
+{
+  "version": 1,
+  "snapshotDigest": "3df09908ad3274f20b6ce87efaf6ab9fac960cde83b51aa65d1ce3af7725ce96",
+  "snapshotFirstDate": "2047-08-27",
+  "snapshotThroughDate": "2048-03-03",
+  "upperEnterpriseSequence": 2567897,
+  "timeBasis": "Simulated Europe/Rome business dates",
+  "scenarioPlan": "../config/scenarios/channel-expansion-maintenance.json",
+  "provenance": {
+    "history": "Retained company history; prospective interventions only.",
+    "planningCapacityAlignment": "Planning and Factory effective capacities aligned from tick 154545 in January 2048.",
+    "scope": "Observed run, including its runtime update; controlled intervention attribution is a separate exercise.",
+    "capture": "Actual Fabric expanded-response screenshots and an unmodified native chart SVG.",
+    "execution": "Readback-verified story companion; published sales and fresh authoring supply/backlog sessions."
+  },
+  "exchanges": [
+    {
+      "case": "recovery-sales",
+      "input": "How did daily sales change across September 2047, November 2047 and February 2048? Use our semantic-model sell-out measures. Give one table with each product's average kg per calendar day in the three months, rounded to one decimal. Identify the products behind the change.",
+      "inputSha256": "adcc47ae7dc62b5a01a7d14985a8fd3dc0db886fa873ecd6e2aa71ea0fdba94f",
+      "answer": "Snapshot cutoff: 2048-03-03. Using semantic-model sell-out measures, average sales per calendar day changed as follows:\n\nProduct\tSep 2047 kg/day\tNov 2047 kg/day\tFeb 2048 kg/day\ndark70\t211.5\t147.6\t227.2\nmilk\t190.4\t106.9\t169.9\nseasonal_gianduja\t50.1\t100.2\t67.1\n\nProducts behind the change\n\nThe September-to-November decline was led by milk (\u221283.5 kg/day) and dark70 (\u221263.9 kg/day), partly offset by seasonal_gianduja (+50.1 kg/day).\nThe November-to-February rebound was driven by dark70 (+79.6 kg/day) and milk (+63.0 kg/day); seasonal_gianduja fell by 33.1 kg/day.\nRelative to September, February was higher for dark70 (+15.7 kg/day) and seasonal_gianduja (+17.0 kg/day), while milk remained lower (\u221220.5 kg/day).\n\nComplete result table: result_0.json.",
+      "executionMode": "Published browser",
+      "verification": "Matched source-row oracle",
+      "expected": [
+        {
+          "month": "2047-09",
+          "product": "dark70",
+          "sold_kg": 6344,
+          "days": 30,
+          "sold_kg_per_day": 211.46666666666667
+        },
+        {
+          "month": "2047-09",
+          "product": "milk",
+          "sold_kg": 5713,
+          "days": 30,
+          "sold_kg_per_day": 190.43333333333334
+        },
+        {
+          "month": "2047-09",
+          "product": "seasonal_gianduja",
+          "sold_kg": 1504,
+          "days": 30,
+          "sold_kg_per_day": 50.13333333333333
+        },
+        {
+          "month": "2047-11",
+          "product": "dark70",
+          "sold_kg": 4429,
+          "days": 30,
+          "sold_kg_per_day": 147.63333333333333
+        },
+        {
+          "month": "2047-11",
+          "product": "milk",
+          "sold_kg": 3208,
+          "days": 30,
+          "sold_kg_per_day": 106.93333333333334
+        },
+        {
+          "month": "2047-11",
+          "product": "seasonal_gianduja",
+          "sold_kg": 3005,
+          "days": 30,
+          "sold_kg_per_day": 100.16666666666667
+        },
+        {
+          "month": "2048-02",
+          "product": "dark70",
+          "sold_kg": 6590,
+          "days": 29,
+          "sold_kg_per_day": 227.24137931034483
+        },
+        {
+          "month": "2048-02",
+          "product": "milk",
+          "sold_kg": 4928,
+          "days": 29,
+          "sold_kg_per_day": 169.93103448275863
+        },
+        {
+          "month": "2048-02",
+          "product": "seasonal_gianduja",
+          "sold_kg": 1945,
+          "days": 29,
+          "sold_kg_per_day": 67.06896551724138
+        }
+      ],
+      "screenshot": "recovery-sales.png",
+      "screenshotSha256": "8e2e47d668f0a588387f56e242f744580ceed4d76757a8064c483bd91279fe0f",
+      "inspectedRoute": "ont_giandoria: Analyzed sm_giandoria_showcase SemanticModel"
+    },
+    {
+      "case": "recovery-flow",
+      "input": "Does the sales pattern also appear in supply? Use Lakehouse SQL to compare September 2047, November 2047 and February 2048. Combine dark70 and milk and return one row per month with started, released and shipped kg per calendar day, rounded to one decimal. Keep production flows distinct from sell-out.",
+      "inputSha256": "5964a7f1e01b8d74d141df34acb7ab117ab6d184c01f00a62cb98a95bff9d314",
+      "answer": "Snapshot cutoff: 2048-03-03.\n\nYes. For combined Dark70 + Milk, supply broadly follows the sell-out pattern: both drop sharply in November 2047 and recover in February 2048.\n\nSeptember 2047: started 407.2, released 401.9, shipped 397.2 kg/day.\nNovember 2047: started 253.1, released 253.1, shipped 253.1 kg/day\u2014the low point, matching sell-out\u2019s decline to 254.6 kg/day.\nFebruary 2048: started 406.2, released 408.0, shipped 404.9 kg/day\u2014recovering alongside sell-out at 397.2 kg/day.\n\nProduction flows remain distinct from customer sell-out; the alignment is a measured monthly pattern, not evidence of causation. Full three-row result: result_0.json.",
+      "executionMode": "Authoring browser",
+      "verification": "Matched source-row oracle",
+      "expected": [
+        {
+          "month": "2047-09",
+          "days": 30,
+          "started_kg_per_day": 407.1666666666667,
+          "released_kg_per_day": 401.8666666666667,
+          "shipped_kg_per_day": 397.1666666666667
+        },
+        {
+          "month": "2047-11",
+          "days": 30,
+          "started_kg_per_day": 253.06666666666666,
+          "released_kg_per_day": 253.06666666666666,
+          "shipped_kg_per_day": 253.06666666666666
+        },
+        {
+          "month": "2048-02",
+          "days": 29,
+          "started_kg_per_day": 406.2068965517241,
+          "released_kg_per_day": 408.0344827586207,
+          "shipped_kg_per_day": 404.86206896551727
+        }
+      ],
+      "screenshot": "recovery-flow.png",
+      "screenshotSha256": "6ac67963765f1a37b451cb572b358cc95abda1604fdc8c07bbf8ff4fe29aafb7",
+      "inspectedSqlStep": "Response\nData\nSteps completed\n1\nont_giandoria\nGenerated SQL\nExecution and output\nOutput\nWITH RequestedMonths AS (\n    SELECT '2047-09' AS [Month]\n    UNION ALL SELECT '2047-11'\n    UNION ALL SELECT '2048-02'\n), CalendarDays AS (\n    SELECT\n        LEFT(v.[Date], 7) AS [Month],\n        COUNT(*) AS CalendarDays\n    FROM dbo.virtualday_v1_3df09908ad3274f2 AS v\n    INNER JOIN RequestedMonths AS rm\n        ON LEFT(v.[Date], 7) = rm.[Month]\n    GROUP BY LEFT(v.[Date], 7)\n), SelloutMonthly AS (\n    SELECT\n        LEFT(v.[Date], 7) AS [Month],\n        s.Product,\n        SUM(s.SoldKg) AS SoldKg\n    FROM dbo.sellout_v1_3df09908ad3274f2 AS s\n    INNER JOIN dbo.virtualday_v1_3df09908ad3274f2 AS v\n        ON s.[Date] = v.[Date]\n    INNER JOIN RequestedMonths AS rm\n        ON LEFT(v.[Date], 7) = rm.[Month]\n    WHERE s.Product IN ('dark70', 'milk')\n    GROUP BY LEFT(v.[Date], 7), s.Product\n), SelloutCombined AS (\n    SELECT\n        [Month],\n        SUM(SoldKg) AS SoldKg\n    FROM SelloutMonthly\n    GROUP BY [Month]\n), ProductionDailyProduct AS (\n    SELECT\n        LEFT(v.[Date], 7) AS [Month],\n        p.[Date],\n        p.Product,\n        SUM(p.StartedKg) AS StartedKg,\n        SUM(p.ReleasedKg) AS ReleasedKg,\n        SUM(p.ShippedKg) AS ShippedKg\n    FROM dbo.productionflow_v1_3df09908ad3274f2 AS p\n    INNER JOIN dbo.virtualday_v1_3df09908ad3274f2 AS v\n        ON v.[Date] = p.[Date]\n    INNER JOIN RequestedMonths AS rm\n        ON LEFT(v.[Date], 7) = rm.[Month]\n    WHERE p.Product IN ('dark70', 'milk')\n    GROUP BY LEFT(v.[Date], 7), p.[Date], p.Product\n), ProductionMonthly AS (\n    SELECT\n        [Month],\n        Product,\n        SUM(StartedKg) AS StartedKg,\n        SUM(ReleasedKg) AS ReleasedKg,\n        SUM(ShippedKg) AS ShippedKg\n    FROM ProductionDailyProduct\n    GROUP BY [Month], Product\n), ProductionCombined AS (\n    SELECT\n        [Month],\n        SUM(StartedKg) AS StartedKg,\n        SUM(ReleasedKg) AS ReleasedKg,\n        SUM(ShippedKg) AS ShippedKg\n    FROM ProductionMonthly\n    GROUP BY [Month]\n)\nSELECT\n    rm.[Month],\n    ROUND(CAST(sc.SoldKg AS decimal(19,4)) / cd.CalendarDays, 1) AS [Sold kg per calendar day],\n    ROUND(CAST(pc.StartedKg AS decimal(19,4)) / cd.CalendarDays, 1) AS [Started kg per calendar day],\n    ROUND(CAST(pc.ReleasedKg AS decimal(19,4)) / cd.CalendarDays, 1) AS [Released kg per calendar day],\n    ROUND(CAST(pc.ShippedKg AS decimal(19,4)) / cd.CalendarDays, 1) AS [Shipped kg per calendar day]\nFROM RequestedMonths AS rm\nINNER JOIN CalendarDays AS cd\n    ON cd.[Month] = rm.[Month]\nLEFT JOIN SelloutCombined AS sc\n    ON sc.[Month] = rm.[Month]\nLEFT JOIN ProductionCombined AS pc\n    ON pc.[Month] = rm.[Month]\nORDER BY rm.[Month];\nOpen Data Source Topic\nOpening the sell-out rules to ensure the monthly sales metric is calculated correctly.\nOpen Data Source Topic\nOpening the production-flow rules to ensure supply measures remain separate from sell-out.\nRow Sampling\nChecking the virtual calendar date format for the requested month filters.\nEntity Fuzzy Search\nResolving the stored product labels for the requested monthly comparison.\nExecute SQL\nCalculating separate monthly sell-out and production totals for dark70 and milk, then dividing each by virtual-calendar days.\nSubmit Final SQL\nI used the commercial sell-out and factory-flow rules: sell-out is summed from SoldKg, while started, released, and shipped remain separate production measures. For products resolved as `dark70` and `milk`, the query aggregates each source independently by month and product, combines the two products within each source, and only then aligns the monthly aggregates. Daily values use the count of dates from the VirtualDay calendar for each requested month.\nResults for \"Assess whether the sell-out pattern is reflected in supply for the combined Dark70 and Milk products across September 2047, November 2047, and February 2048. Report one row per month with started, released, and shipped kilograms per calendar day, keeping production flows distinct from sell-out.\""
+    },
+    {
+      "case": "recovery-backlog",
+      "input": "Has the company also reduced its backlog? Use the Lakehouse's observed company balances from 2047-11-01 through 2048-02-29. Plot daily backlog and finished stock as a native line chart. For November and February, report average observed backlog, last observed backlog and the number of observed dates. Use every available observation.",
+      "inputSha256": "126a05002a70b9de56f248f3cff212fdfb449ab6d677e5353d75cd33643d8bcc",
+      "answer": "Snapshot cutoff: 2048-03-03.\n\nYes\u2014backlog was reduced by February. The average observed backlog fell from 983.0 kg in November 2047 to 533.3 kg in February 2048, and the final observed backlog fell from 1,119 kg to 0 kg.\n\nMonth\tAverage observed backlog\tLast observed backlog\tObserved dates\nNovember 2047\t983.0 kg\t1,119 kg\t30\nFebruary 2048\t533.3 kg\t0 kg\t29\n\nThe native daily line chart plots observed backlog and finished stock for all 121 available observations from 2047-11-01 through 2048-02-29. Missing measurements were not imputed.\n\nFiles: result_2.json (daily data) and report_specs_4.json (native line-chart specification).",
+      "executionMode": "Authoring browser",
+      "verification": "Matched source-row oracle",
+      "expected": {
+        "months": [
+          {
+            "month": "2047-11",
+            "observed_dates": 30,
+            "average_backlog_kg": 983.0,
+            "last_date": "2047-11-30",
+            "last_backlog_kg": 1119
+          },
+          {
+            "month": "2048-02",
+            "observed_dates": 29,
+            "average_backlog_kg": 533.2758620689655,
+            "last_date": "2048-02-29",
+            "last_backlog_kg": 0
+          }
+        ],
+        "daily": [
+          {
+            "date": "2047-11-01",
+            "finished_kg": 78,
+            "backlog_kg": 813
+          },
+          {
+            "date": "2047-11-02",
+            "finished_kg": 0,
+            "backlog_kg": 1157
+          },
+          {
+            "date": "2047-11-03",
+            "finished_kg": 0,
+            "backlog_kg": 967
+          },
+          {
+            "date": "2047-11-04",
+            "finished_kg": 0,
+            "backlog_kg": 978
+          },
+          {
+            "date": "2047-11-05",
+            "finished_kg": 24,
+            "backlog_kg": 822
+          },
+          {
+            "date": "2047-11-06",
+            "finished_kg": 0,
+            "backlog_kg": 883
+          },
+          {
+            "date": "2047-11-07",
+            "finished_kg": 0,
+            "backlog_kg": 950
+          },
+          {
+            "date": "2047-11-08",
+            "finished_kg": 0,
+            "backlog_kg": 1008
+          },
+          {
+            "date": "2047-11-09",
+            "finished_kg": 0,
+            "backlog_kg": 967
+          },
+          {
+            "date": "2047-11-10",
+            "finished_kg": 0,
+            "backlog_kg": 1025
+          },
+          {
+            "date": "2047-11-11",
+            "finished_kg": 0,
+            "backlog_kg": 895
+          },
+          {
+            "date": "2047-11-12",
+            "finished_kg": 101,
+            "backlog_kg": 837
+          },
+          {
+            "date": "2047-11-13",
+            "finished_kg": 4,
+            "backlog_kg": 889
+          },
+          {
+            "date": "2047-11-14",
+            "finished_kg": 0,
+            "backlog_kg": 1268
+          },
+          {
+            "date": "2047-11-15",
+            "finished_kg": 0,
+            "backlog_kg": 1290
+          },
+          {
+            "date": "2047-11-16",
+            "finished_kg": 0,
+            "backlog_kg": 1314
+          },
+          {
+            "date": "2047-11-17",
+            "finished_kg": 0,
+            "backlog_kg": 908
+          },
+          {
+            "date": "2047-11-18",
+            "finished_kg": 0,
+            "backlog_kg": 964
+          },
+          {
+            "date": "2047-11-19",
+            "finished_kg": 0,
+            "backlog_kg": 1124
+          },
+          {
+            "date": "2047-11-20",
+            "finished_kg": 0,
+            "backlog_kg": 1081
+          },
+          {
+            "date": "2047-11-21",
+            "finished_kg": 0,
+            "backlog_kg": 955
+          },
+          {
+            "date": "2047-11-22",
+            "finished_kg": 0,
+            "backlog_kg": 860
+          },
+          {
+            "date": "2047-11-23",
+            "finished_kg": 7,
+            "backlog_kg": 822
+          },
+          {
+            "date": "2047-11-24",
+            "finished_kg": 91,
+            "backlog_kg": 852
+          },
+          {
+            "date": "2047-11-25",
+            "finished_kg": 59,
+            "backlog_kg": 858
+          },
+          {
+            "date": "2047-11-26",
+            "finished_kg": 75,
+            "backlog_kg": 848
+          },
+          {
+            "date": "2047-11-27",
+            "finished_kg": 0,
+            "backlog_kg": 909
+          },
+          {
+            "date": "2047-11-28",
+            "finished_kg": 11,
+            "backlog_kg": 890
+          },
+          {
+            "date": "2047-11-29",
+            "finished_kg": 0,
+            "backlog_kg": 1237
+          },
+          {
+            "date": "2047-11-30",
+            "finished_kg": 0,
+            "backlog_kg": 1119
+          },
+          {
+            "date": "2047-12-01",
+            "finished_kg": 0,
+            "backlog_kg": 982
+          },
+          {
+            "date": "2047-12-02",
+            "finished_kg": 0,
+            "backlog_kg": 946
+          },
+          {
+            "date": "2047-12-03",
+            "finished_kg": 108,
+            "backlog_kg": 912
+          },
+          {
+            "date": "2047-12-04",
+            "finished_kg": 124,
+            "backlog_kg": 910
+          },
+          {
+            "date": "2047-12-05",
+            "finished_kg": 103,
+            "backlog_kg": 833
+          },
+          {
+            "date": "2047-12-06",
+            "finished_kg": 94,
+            "backlog_kg": 822
+          },
+          {
+            "date": "2047-12-07",
+            "finished_kg": 123,
+            "backlog_kg": 836
+          },
+          {
+            "date": "2047-12-08",
+            "finished_kg": 0,
+            "backlog_kg": 920
+          },
+          {
+            "date": "2047-12-09",
+            "finished_kg": 0,
+            "backlog_kg": 924
+          },
+          {
+            "date": "2047-12-10",
+            "finished_kg": 0,
+            "backlog_kg": 888
+          },
+          {
+            "date": "2047-12-11",
+            "finished_kg": 9,
+            "backlog_kg": 936
+          },
+          {
+            "date": "2047-12-12",
+            "finished_kg": 0,
+            "backlog_kg": 1313
+          },
+          {
+            "date": "2047-12-13",
+            "finished_kg": 0,
+            "backlog_kg": 1287
+          },
+          {
+            "date": "2047-12-14",
+            "finished_kg": 0,
+            "backlog_kg": 1310
+          },
+          {
+            "date": "2047-12-15",
+            "finished_kg": 0,
+            "backlog_kg": 983
+          },
+          {
+            "date": "2047-12-16",
+            "finished_kg": 0,
+            "backlog_kg": 941
+          },
+          {
+            "date": "2047-12-17",
+            "finished_kg": 88,
+            "backlog_kg": 856
+          },
+          {
+            "date": "2047-12-18",
+            "finished_kg": 43,
+            "backlog_kg": 891
+          },
+          {
+            "date": "2047-12-19",
+            "finished_kg": 0,
+            "backlog_kg": 923
+          },
+          {
+            "date": "2047-12-20",
+            "finished_kg": 0,
+            "backlog_kg": 914
+          },
+          {
+            "date": "2047-12-21",
+            "finished_kg": 0,
+            "backlog_kg": 893
+          },
+          {
+            "date": "2047-12-22",
+            "finished_kg": 0,
+            "backlog_kg": 910
+          },
+          {
+            "date": "2047-12-23",
+            "finished_kg": 0,
+            "backlog_kg": 930
+          },
+          {
+            "date": "2047-12-24",
+            "finished_kg": 0,
+            "backlog_kg": 1330
+          },
+          {
+            "date": "2047-12-25",
+            "finished_kg": 0,
+            "backlog_kg": 1240
+          },
+          {
+            "date": "2047-12-26",
+            "finished_kg": 0,
+            "backlog_kg": 765
+          },
+          {
+            "date": "2047-12-27",
+            "finished_kg": 14,
+            "backlog_kg": 593
+          },
+          {
+            "date": "2047-12-28",
+            "finished_kg": 0,
+            "backlog_kg": 974
+          },
+          {
+            "date": "2047-12-29",
+            "finished_kg": 0,
+            "backlog_kg": 1047
+          },
+          {
+            "date": "2047-12-30",
+            "finished_kg": 105,
+            "backlog_kg": 1134
+          },
+          {
+            "date": "2047-12-31",
+            "finished_kg": 8,
+            "backlog_kg": 761
+          },
+          {
+            "date": "2048-01-01",
+            "finished_kg": 124,
+            "backlog_kg": 675
+          },
+          {
+            "date": "2048-01-02",
+            "finished_kg": 146,
+            "backlog_kg": 557
+          },
+          {
+            "date": "2048-01-03",
+            "finished_kg": 171,
+            "backlog_kg": 827
+          },
+          {
+            "date": "2048-01-04",
+            "finished_kg": 143,
+            "backlog_kg": 1094
+          },
+          {
+            "date": "2048-01-05",
+            "finished_kg": 73,
+            "backlog_kg": 730
+          },
+          {
+            "date": "2048-01-06",
+            "finished_kg": 251,
+            "backlog_kg": 604
+          },
+          {
+            "date": "2048-01-07",
+            "finished_kg": 26,
+            "backlog_kg": 343
+          },
+          {
+            "date": "2048-01-08",
+            "finished_kg": 0,
+            "backlog_kg": 726
+          },
+          {
+            "date": "2048-01-09",
+            "finished_kg": 0,
+            "backlog_kg": 1153
+          },
+          {
+            "date": "2048-01-10",
+            "finished_kg": 13,
+            "backlog_kg": 722
+          },
+          {
+            "date": "2048-01-11",
+            "finished_kg": 0,
+            "backlog_kg": 962
+          },
+          {
+            "date": "2048-01-12",
+            "finished_kg": 59,
+            "backlog_kg": 610
+          },
+          {
+            "date": "2048-01-13",
+            "finished_kg": 80,
+            "backlog_kg": 886
+          },
+          {
+            "date": "2048-01-14",
+            "finished_kg": 88,
+            "backlog_kg": 962
+          },
+          {
+            "date": "2048-01-15",
+            "finished_kg": 93,
+            "backlog_kg": 867
+          },
+          {
+            "date": "2048-01-16",
+            "finished_kg": 89,
+            "backlog_kg": 801
+          },
+          {
+            "date": "2048-01-17",
+            "finished_kg": 88,
+            "backlog_kg": 842
+          },
+          {
+            "date": "2048-01-18",
+            "finished_kg": 80,
+            "backlog_kg": 633
+          },
+          {
+            "date": "2048-01-19",
+            "finished_kg": 478,
+            "backlog_kg": 603
+          },
+          {
+            "date": "2048-01-20",
+            "finished_kg": 161,
+            "backlog_kg": 522
+          },
+          {
+            "date": "2048-01-21",
+            "finished_kg": 49,
+            "backlog_kg": 454
+          },
+          {
+            "date": "2048-01-22",
+            "finished_kg": 91,
+            "backlog_kg": 820
+          },
+          {
+            "date": "2048-01-23",
+            "finished_kg": 26,
+            "backlog_kg": 1240
+          },
+          {
+            "date": "2048-01-24",
+            "finished_kg": 18,
+            "backlog_kg": 1009
+          },
+          {
+            "date": "2048-01-25",
+            "finished_kg": 11,
+            "backlog_kg": 926
+          },
+          {
+            "date": "2048-01-26",
+            "finished_kg": 76,
+            "backlog_kg": 789
+          },
+          {
+            "date": "2048-01-27",
+            "finished_kg": 71,
+            "backlog_kg": 858
+          },
+          {
+            "date": "2048-01-28",
+            "finished_kg": 243,
+            "backlog_kg": 505
+          },
+          {
+            "date": "2048-01-29",
+            "finished_kg": 447,
+            "backlog_kg": 370
+          },
+          {
+            "date": "2048-01-30",
+            "finished_kg": 229,
+            "backlog_kg": 149
+          },
+          {
+            "date": "2048-01-31",
+            "finished_kg": 152,
+            "backlog_kg": 223
+          },
+          {
+            "date": "2048-02-01",
+            "finished_kg": 160,
+            "backlog_kg": 316
+          },
+          {
+            "date": "2048-02-02",
+            "finished_kg": 19,
+            "backlog_kg": 603
+          },
+          {
+            "date": "2048-02-03",
+            "finished_kg": 0,
+            "backlog_kg": 839
+          },
+          {
+            "date": "2048-02-04",
+            "finished_kg": 4,
+            "backlog_kg": 793
+          },
+          {
+            "date": "2048-02-05",
+            "finished_kg": 11,
+            "backlog_kg": 965
+          },
+          {
+            "date": "2048-02-06",
+            "finished_kg": 0,
+            "backlog_kg": 1331
+          },
+          {
+            "date": "2048-02-07",
+            "finished_kg": 0,
+            "backlog_kg": 881
+          },
+          {
+            "date": "2048-02-08",
+            "finished_kg": 0,
+            "backlog_kg": 664
+          },
+          {
+            "date": "2048-02-09",
+            "finished_kg": 24,
+            "backlog_kg": 459
+          },
+          {
+            "date": "2048-02-10",
+            "finished_kg": 0,
+            "backlog_kg": 994
+          },
+          {
+            "date": "2048-02-11",
+            "finished_kg": 59,
+            "backlog_kg": 750
+          },
+          {
+            "date": "2048-02-12",
+            "finished_kg": 17,
+            "backlog_kg": 525
+          },
+          {
+            "date": "2048-02-13",
+            "finished_kg": 323,
+            "backlog_kg": 272
+          },
+          {
+            "date": "2048-02-14",
+            "finished_kg": 135,
+            "backlog_kg": 97
+          },
+          {
+            "date": "2048-02-15",
+            "finished_kg": 145,
+            "backlog_kg": 241
+          },
+          {
+            "date": "2048-02-16",
+            "finished_kg": 0,
+            "backlog_kg": 412
+          },
+          {
+            "date": "2048-02-17",
+            "finished_kg": 0,
+            "backlog_kg": 354
+          },
+          {
+            "date": "2048-02-18",
+            "finished_kg": 43,
+            "backlog_kg": 194
+          },
+          {
+            "date": "2048-02-19",
+            "finished_kg": 50,
+            "backlog_kg": 156
+          },
+          {
+            "date": "2048-02-20",
+            "finished_kg": 0,
+            "backlog_kg": 663
+          },
+          {
+            "date": "2048-02-21",
+            "finished_kg": 0,
+            "backlog_kg": 1042
+          },
+          {
+            "date": "2048-02-22",
+            "finished_kg": 0,
+            "backlog_kg": 1183
+          },
+          {
+            "date": "2048-02-23",
+            "finished_kg": 82,
+            "backlog_kg": 620
+          },
+          {
+            "date": "2048-02-24",
+            "finished_kg": 79,
+            "backlog_kg": 539
+          },
+          {
+            "date": "2048-02-25",
+            "finished_kg": 423,
+            "backlog_kg": 572
+          },
+          {
+            "date": "2048-02-26",
+            "finished_kg": 259,
+            "backlog_kg": 0
+          },
+          {
+            "date": "2048-02-27",
+            "finished_kg": 474,
+            "backlog_kg": 0
+          },
+          {
+            "date": "2048-02-28",
+            "finished_kg": 285,
+            "backlog_kg": 0
+          },
+          {
+            "date": "2048-02-29",
+            "finished_kg": 180,
+            "backlog_kg": 0
+          }
+        ]
+      },
+      "screenshot": "recovery-backlog.png",
+      "screenshotSha256": "60cd2ff41da09ddabba043914cf3e2a7f9a7f25ecf471385e98941d4185f1eaf",
+      "inspectedSqlStep": "Response\nData\nSteps completed\n1\nont_giandoria\nGenerated SQL\nExecution and output\nOutput\nWITH Observations AS (\n    SELECT\n        [Date],\n        BacklogKg,\n        FinishedKg,\n        CONVERT(char(7), CONVERT(date, [Date]), 120) AS [Month]\n    FROM dbo.companyobservation_v1_3df09908ad3274f2\n    WHERE [Date] >= '2047-11-01'\n      AND [Date] <= '2048-02-29'\n), Monthly AS (\n    SELECT\n        [Month],\n        AVG(CAST(BacklogKg AS decimal(19, 4))) AS AverageObservedBacklogKg,\n        MAX([Date]) AS LastObservationDate,\n        COUNT(DISTINCT [Date]) AS ObservedDates\n    FROM Observations\n    WHERE [Month] IN ('2047-11', '2048-02')\n    GROUP BY [Month]\n)\nSELECT\n    o.[Date],\n    o.BacklogKg AS DailyBacklogKg,\n    o.FinishedKg AS DailyFinishedStockKg,\n    o.[Month],\n    CASE WHEN o.[Month] IN ('2047-11', '2048-02') THEN m.AverageObservedBacklogKg END AS AverageObservedBacklogKg,\n    CASE WHEN o.[Month] IN ('2047-11', '2048-02') THEN last_o.BacklogKg END AS LastObservedBacklogKg,\n    CASE WHEN o.[Month] IN ('2047-11', '2048-02') THEN m.ObservedDates END AS ObservedDates\nFROM Observations AS o\nLEFT JOIN Monthly AS m\n    ON o.[Month] = m.[Month]\nLEFT JOIN Observations AS last_o\n    ON last_o.[Month] = m.[Month]\n   AND last_o.[Date] = m.LastObservationDate\nORDER BY o.[Date] ASC;\nExecute SQL\nRetrieving the requested daily balances and month-level closing-balance statistics without summing balances.\nResults for \"For November 2047 and February 2048, report the average observed backlog, last observed backlog, and number of observed dates, using every available observed company-balance record from 2047-11-01 through 2048-02-29. Also state whether backlog was reduced.\""
+    }
+  ],
+  "chart": {
+    "file": "recovery-history.svg",
+    "sha256": "c51b242f9a2cc7a8b4834b5ee3fd3bb75cc9e7b610afdfdc7528d6691d750d87",
+    "points": [
+      {
+        "date": "2047-11-01",
+        "series": "BacklogKg",
+        "kg": 813,
+        "label": "Virtual date: Nov 01, 2047; Kilograms: 813; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-01",
+        "series": "FinishedKg",
+        "kg": 78,
+        "label": "Virtual date: Nov 01, 2047; Kilograms: 78; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-02",
+        "series": "BacklogKg",
+        "kg": 1157,
+        "label": "Virtual date: Nov 02, 2047; Kilograms: 1157; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-02",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 02, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-03",
+        "series": "BacklogKg",
+        "kg": 967,
+        "label": "Virtual date: Nov 03, 2047; Kilograms: 967; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-03",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 03, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-04",
+        "series": "BacklogKg",
+        "kg": 978,
+        "label": "Virtual date: Nov 04, 2047; Kilograms: 978; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-04",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 04, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-05",
+        "series": "BacklogKg",
+        "kg": 822,
+        "label": "Virtual date: Nov 05, 2047; Kilograms: 822; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-05",
+        "series": "FinishedKg",
+        "kg": 24,
+        "label": "Virtual date: Nov 05, 2047; Kilograms: 24; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-06",
+        "series": "BacklogKg",
+        "kg": 883,
+        "label": "Virtual date: Nov 06, 2047; Kilograms: 883; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-06",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 06, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-07",
+        "series": "BacklogKg",
+        "kg": 950,
+        "label": "Virtual date: Nov 07, 2047; Kilograms: 950; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-07",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 07, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-08",
+        "series": "BacklogKg",
+        "kg": 1008,
+        "label": "Virtual date: Nov 08, 2047; Kilograms: 1008; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-08",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 08, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-09",
+        "series": "BacklogKg",
+        "kg": 967,
+        "label": "Virtual date: Nov 09, 2047; Kilograms: 967; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-09",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 09, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-10",
+        "series": "BacklogKg",
+        "kg": 1025,
+        "label": "Virtual date: Nov 10, 2047; Kilograms: 1025; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-10",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 10, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-11",
+        "series": "BacklogKg",
+        "kg": 895,
+        "label": "Virtual date: Nov 11, 2047; Kilograms: 895; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-11",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 11, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-12",
+        "series": "BacklogKg",
+        "kg": 837,
+        "label": "Virtual date: Nov 12, 2047; Kilograms: 837; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-12",
+        "series": "FinishedKg",
+        "kg": 101,
+        "label": "Virtual date: Nov 12, 2047; Kilograms: 101; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-13",
+        "series": "BacklogKg",
+        "kg": 889,
+        "label": "Virtual date: Nov 13, 2047; Kilograms: 889; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-13",
+        "series": "FinishedKg",
+        "kg": 4,
+        "label": "Virtual date: Nov 13, 2047; Kilograms: 4; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-14",
+        "series": "BacklogKg",
+        "kg": 1268,
+        "label": "Virtual date: Nov 14, 2047; Kilograms: 1268; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-14",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 14, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-15",
+        "series": "BacklogKg",
+        "kg": 1290,
+        "label": "Virtual date: Nov 15, 2047; Kilograms: 1290; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-15",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 15, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-16",
+        "series": "BacklogKg",
+        "kg": 1314,
+        "label": "Virtual date: Nov 16, 2047; Kilograms: 1314; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-16",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 16, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-17",
+        "series": "BacklogKg",
+        "kg": 908,
+        "label": "Virtual date: Nov 17, 2047; Kilograms: 908; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-17",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 17, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-18",
+        "series": "BacklogKg",
+        "kg": 964,
+        "label": "Virtual date: Nov 18, 2047; Kilograms: 964; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-18",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 18, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-19",
+        "series": "BacklogKg",
+        "kg": 1124,
+        "label": "Virtual date: Nov 19, 2047; Kilograms: 1124; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-19",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 19, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-20",
+        "series": "BacklogKg",
+        "kg": 1081,
+        "label": "Virtual date: Nov 20, 2047; Kilograms: 1081; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-20",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 20, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-21",
+        "series": "BacklogKg",
+        "kg": 955,
+        "label": "Virtual date: Nov 21, 2047; Kilograms: 955; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-21",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 21, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-22",
+        "series": "BacklogKg",
+        "kg": 860,
+        "label": "Virtual date: Nov 22, 2047; Kilograms: 860; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-22",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 22, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-23",
+        "series": "BacklogKg",
+        "kg": 822,
+        "label": "Virtual date: Nov 23, 2047; Kilograms: 822; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-23",
+        "series": "FinishedKg",
+        "kg": 7,
+        "label": "Virtual date: Nov 23, 2047; Kilograms: 7; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-24",
+        "series": "BacklogKg",
+        "kg": 852,
+        "label": "Virtual date: Nov 24, 2047; Kilograms: 852; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-24",
+        "series": "FinishedKg",
+        "kg": 91,
+        "label": "Virtual date: Nov 24, 2047; Kilograms: 91; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-25",
+        "series": "BacklogKg",
+        "kg": 858,
+        "label": "Virtual date: Nov 25, 2047; Kilograms: 858; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-25",
+        "series": "FinishedKg",
+        "kg": 59,
+        "label": "Virtual date: Nov 25, 2047; Kilograms: 59; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-26",
+        "series": "BacklogKg",
+        "kg": 848,
+        "label": "Virtual date: Nov 26, 2047; Kilograms: 848; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-26",
+        "series": "FinishedKg",
+        "kg": 75,
+        "label": "Virtual date: Nov 26, 2047; Kilograms: 75; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-27",
+        "series": "BacklogKg",
+        "kg": 909,
+        "label": "Virtual date: Nov 27, 2047; Kilograms: 909; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-27",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 27, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-28",
+        "series": "BacklogKg",
+        "kg": 890,
+        "label": "Virtual date: Nov 28, 2047; Kilograms: 890; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-28",
+        "series": "FinishedKg",
+        "kg": 11,
+        "label": "Virtual date: Nov 28, 2047; Kilograms: 11; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-29",
+        "series": "BacklogKg",
+        "kg": 1237,
+        "label": "Virtual date: Nov 29, 2047; Kilograms: 1237; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-29",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 29, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-11-30",
+        "series": "BacklogKg",
+        "kg": 1119,
+        "label": "Virtual date: Nov 30, 2047; Kilograms: 1119; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-11-30",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Nov 30, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-01",
+        "series": "BacklogKg",
+        "kg": 982,
+        "label": "Virtual date: Dec 01, 2047; Kilograms: 982; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-01",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 01, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-02",
+        "series": "BacklogKg",
+        "kg": 946,
+        "label": "Virtual date: Dec 02, 2047; Kilograms: 946; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-02",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 02, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-03",
+        "series": "BacklogKg",
+        "kg": 912,
+        "label": "Virtual date: Dec 03, 2047; Kilograms: 912; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-03",
+        "series": "FinishedKg",
+        "kg": 108,
+        "label": "Virtual date: Dec 03, 2047; Kilograms: 108; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-04",
+        "series": "BacklogKg",
+        "kg": 910,
+        "label": "Virtual date: Dec 04, 2047; Kilograms: 910; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-04",
+        "series": "FinishedKg",
+        "kg": 124,
+        "label": "Virtual date: Dec 04, 2047; Kilograms: 124; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-05",
+        "series": "BacklogKg",
+        "kg": 833,
+        "label": "Virtual date: Dec 05, 2047; Kilograms: 833; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-05",
+        "series": "FinishedKg",
+        "kg": 103,
+        "label": "Virtual date: Dec 05, 2047; Kilograms: 103; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-06",
+        "series": "BacklogKg",
+        "kg": 822,
+        "label": "Virtual date: Dec 06, 2047; Kilograms: 822; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-06",
+        "series": "FinishedKg",
+        "kg": 94,
+        "label": "Virtual date: Dec 06, 2047; Kilograms: 94; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-07",
+        "series": "BacklogKg",
+        "kg": 836,
+        "label": "Virtual date: Dec 07, 2047; Kilograms: 836; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-07",
+        "series": "FinishedKg",
+        "kg": 123,
+        "label": "Virtual date: Dec 07, 2047; Kilograms: 123; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-08",
+        "series": "BacklogKg",
+        "kg": 920,
+        "label": "Virtual date: Dec 08, 2047; Kilograms: 920; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-08",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 08, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-09",
+        "series": "BacklogKg",
+        "kg": 924,
+        "label": "Virtual date: Dec 09, 2047; Kilograms: 924; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-09",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 09, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-10",
+        "series": "BacklogKg",
+        "kg": 888,
+        "label": "Virtual date: Dec 10, 2047; Kilograms: 888; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-10",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 10, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-11",
+        "series": "BacklogKg",
+        "kg": 936,
+        "label": "Virtual date: Dec 11, 2047; Kilograms: 936; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-11",
+        "series": "FinishedKg",
+        "kg": 9,
+        "label": "Virtual date: Dec 11, 2047; Kilograms: 9; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-12",
+        "series": "BacklogKg",
+        "kg": 1313,
+        "label": "Virtual date: Dec 12, 2047; Kilograms: 1313; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-12",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 12, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-13",
+        "series": "BacklogKg",
+        "kg": 1287,
+        "label": "Virtual date: Dec 13, 2047; Kilograms: 1287; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-13",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 13, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-14",
+        "series": "BacklogKg",
+        "kg": 1310,
+        "label": "Virtual date: Dec 14, 2047; Kilograms: 1310; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-14",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 14, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-15",
+        "series": "BacklogKg",
+        "kg": 983,
+        "label": "Virtual date: Dec 15, 2047; Kilograms: 983; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-15",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 15, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-16",
+        "series": "BacklogKg",
+        "kg": 941,
+        "label": "Virtual date: Dec 16, 2047; Kilograms: 941; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-16",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 16, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-17",
+        "series": "BacklogKg",
+        "kg": 856,
+        "label": "Virtual date: Dec 17, 2047; Kilograms: 856; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-17",
+        "series": "FinishedKg",
+        "kg": 88,
+        "label": "Virtual date: Dec 17, 2047; Kilograms: 88; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-18",
+        "series": "BacklogKg",
+        "kg": 891,
+        "label": "Virtual date: Dec 18, 2047; Kilograms: 891; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-18",
+        "series": "FinishedKg",
+        "kg": 43,
+        "label": "Virtual date: Dec 18, 2047; Kilograms: 43; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-19",
+        "series": "BacklogKg",
+        "kg": 923,
+        "label": "Virtual date: Dec 19, 2047; Kilograms: 923; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-19",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 19, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-20",
+        "series": "BacklogKg",
+        "kg": 914,
+        "label": "Virtual date: Dec 20, 2047; Kilograms: 914; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-20",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 20, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-21",
+        "series": "BacklogKg",
+        "kg": 893,
+        "label": "Virtual date: Dec 21, 2047; Kilograms: 893; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-21",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 21, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-22",
+        "series": "BacklogKg",
+        "kg": 910,
+        "label": "Virtual date: Dec 22, 2047; Kilograms: 910; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-22",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 22, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-23",
+        "series": "BacklogKg",
+        "kg": 930,
+        "label": "Virtual date: Dec 23, 2047; Kilograms: 930; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-23",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 23, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-24",
+        "series": "BacklogKg",
+        "kg": 1330,
+        "label": "Virtual date: Dec 24, 2047; Kilograms: 1330; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-24",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 24, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-25",
+        "series": "BacklogKg",
+        "kg": 1240,
+        "label": "Virtual date: Dec 25, 2047; Kilograms: 1240; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-25",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 25, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-26",
+        "series": "BacklogKg",
+        "kg": 765,
+        "label": "Virtual date: Dec 26, 2047; Kilograms: 765; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-26",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 26, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-27",
+        "series": "BacklogKg",
+        "kg": 593,
+        "label": "Virtual date: Dec 27, 2047; Kilograms: 593; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-27",
+        "series": "FinishedKg",
+        "kg": 14,
+        "label": "Virtual date: Dec 27, 2047; Kilograms: 14; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-28",
+        "series": "BacklogKg",
+        "kg": 974,
+        "label": "Virtual date: Dec 28, 2047; Kilograms: 974; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-28",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 28, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-29",
+        "series": "BacklogKg",
+        "kg": 1047,
+        "label": "Virtual date: Dec 29, 2047; Kilograms: 1047; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-29",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Dec 29, 2047; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-30",
+        "series": "BacklogKg",
+        "kg": 1134,
+        "label": "Virtual date: Dec 30, 2047; Kilograms: 1134; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-30",
+        "series": "FinishedKg",
+        "kg": 105,
+        "label": "Virtual date: Dec 30, 2047; Kilograms: 105; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2047-12-31",
+        "series": "BacklogKg",
+        "kg": 761,
+        "label": "Virtual date: Dec 31, 2047; Kilograms: 761; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2047-12-31",
+        "series": "FinishedKg",
+        "kg": 8,
+        "label": "Virtual date: Dec 31, 2047; Kilograms: 8; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-01",
+        "series": "BacklogKg",
+        "kg": 675,
+        "label": "Virtual date: Jan 01, 2048; Kilograms: 675; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-01",
+        "series": "FinishedKg",
+        "kg": 124,
+        "label": "Virtual date: Jan 01, 2048; Kilograms: 124; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-02",
+        "series": "BacklogKg",
+        "kg": 557,
+        "label": "Virtual date: Jan 02, 2048; Kilograms: 557; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-02",
+        "series": "FinishedKg",
+        "kg": 146,
+        "label": "Virtual date: Jan 02, 2048; Kilograms: 146; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-03",
+        "series": "BacklogKg",
+        "kg": 827,
+        "label": "Virtual date: Jan 03, 2048; Kilograms: 827; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-03",
+        "series": "FinishedKg",
+        "kg": 171,
+        "label": "Virtual date: Jan 03, 2048; Kilograms: 171; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-04",
+        "series": "BacklogKg",
+        "kg": 1094,
+        "label": "Virtual date: Jan 04, 2048; Kilograms: 1094; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-04",
+        "series": "FinishedKg",
+        "kg": 143,
+        "label": "Virtual date: Jan 04, 2048; Kilograms: 143; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-05",
+        "series": "BacklogKg",
+        "kg": 730,
+        "label": "Virtual date: Jan 05, 2048; Kilograms: 730; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-05",
+        "series": "FinishedKg",
+        "kg": 73,
+        "label": "Virtual date: Jan 05, 2048; Kilograms: 73; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-06",
+        "series": "BacklogKg",
+        "kg": 604,
+        "label": "Virtual date: Jan 06, 2048; Kilograms: 604; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-06",
+        "series": "FinishedKg",
+        "kg": 251,
+        "label": "Virtual date: Jan 06, 2048; Kilograms: 251; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-07",
+        "series": "BacklogKg",
+        "kg": 343,
+        "label": "Virtual date: Jan 07, 2048; Kilograms: 343; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-07",
+        "series": "FinishedKg",
+        "kg": 26,
+        "label": "Virtual date: Jan 07, 2048; Kilograms: 26; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-08",
+        "series": "BacklogKg",
+        "kg": 726,
+        "label": "Virtual date: Jan 08, 2048; Kilograms: 726; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-08",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Jan 08, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-09",
+        "series": "BacklogKg",
+        "kg": 1153,
+        "label": "Virtual date: Jan 09, 2048; Kilograms: 1153; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-09",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Jan 09, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-10",
+        "series": "BacklogKg",
+        "kg": 722,
+        "label": "Virtual date: Jan 10, 2048; Kilograms: 722; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-10",
+        "series": "FinishedKg",
+        "kg": 13,
+        "label": "Virtual date: Jan 10, 2048; Kilograms: 13; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-11",
+        "series": "BacklogKg",
+        "kg": 962,
+        "label": "Virtual date: Jan 11, 2048; Kilograms: 962; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-11",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Jan 11, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-12",
+        "series": "BacklogKg",
+        "kg": 610,
+        "label": "Virtual date: Jan 12, 2048; Kilograms: 610; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-12",
+        "series": "FinishedKg",
+        "kg": 59,
+        "label": "Virtual date: Jan 12, 2048; Kilograms: 59; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-13",
+        "series": "BacklogKg",
+        "kg": 886,
+        "label": "Virtual date: Jan 13, 2048; Kilograms: 886; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-13",
+        "series": "FinishedKg",
+        "kg": 80,
+        "label": "Virtual date: Jan 13, 2048; Kilograms: 80; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-14",
+        "series": "BacklogKg",
+        "kg": 962,
+        "label": "Virtual date: Jan 14, 2048; Kilograms: 962; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-14",
+        "series": "FinishedKg",
+        "kg": 88,
+        "label": "Virtual date: Jan 14, 2048; Kilograms: 88; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-15",
+        "series": "BacklogKg",
+        "kg": 867,
+        "label": "Virtual date: Jan 15, 2048; Kilograms: 867; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-15",
+        "series": "FinishedKg",
+        "kg": 93,
+        "label": "Virtual date: Jan 15, 2048; Kilograms: 93; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-16",
+        "series": "BacklogKg",
+        "kg": 801,
+        "label": "Virtual date: Jan 16, 2048; Kilograms: 801; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-16",
+        "series": "FinishedKg",
+        "kg": 89,
+        "label": "Virtual date: Jan 16, 2048; Kilograms: 89; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-17",
+        "series": "BacklogKg",
+        "kg": 842,
+        "label": "Virtual date: Jan 17, 2048; Kilograms: 842; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-17",
+        "series": "FinishedKg",
+        "kg": 88,
+        "label": "Virtual date: Jan 17, 2048; Kilograms: 88; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-18",
+        "series": "BacklogKg",
+        "kg": 633,
+        "label": "Virtual date: Jan 18, 2048; Kilograms: 633; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-18",
+        "series": "FinishedKg",
+        "kg": 80,
+        "label": "Virtual date: Jan 18, 2048; Kilograms: 80; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-19",
+        "series": "BacklogKg",
+        "kg": 603,
+        "label": "Virtual date: Jan 19, 2048; Kilograms: 603; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-19",
+        "series": "FinishedKg",
+        "kg": 478,
+        "label": "Virtual date: Jan 19, 2048; Kilograms: 478; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-20",
+        "series": "BacklogKg",
+        "kg": 522,
+        "label": "Virtual date: Jan 20, 2048; Kilograms: 522; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-20",
+        "series": "FinishedKg",
+        "kg": 161,
+        "label": "Virtual date: Jan 20, 2048; Kilograms: 161; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-21",
+        "series": "BacklogKg",
+        "kg": 454,
+        "label": "Virtual date: Jan 21, 2048; Kilograms: 454; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-21",
+        "series": "FinishedKg",
+        "kg": 49,
+        "label": "Virtual date: Jan 21, 2048; Kilograms: 49; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-22",
+        "series": "BacklogKg",
+        "kg": 820,
+        "label": "Virtual date: Jan 22, 2048; Kilograms: 820; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-22",
+        "series": "FinishedKg",
+        "kg": 91,
+        "label": "Virtual date: Jan 22, 2048; Kilograms: 91; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-23",
+        "series": "BacklogKg",
+        "kg": 1240,
+        "label": "Virtual date: Jan 23, 2048; Kilograms: 1240; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-23",
+        "series": "FinishedKg",
+        "kg": 26,
+        "label": "Virtual date: Jan 23, 2048; Kilograms: 26; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-24",
+        "series": "BacklogKg",
+        "kg": 1009,
+        "label": "Virtual date: Jan 24, 2048; Kilograms: 1009; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-24",
+        "series": "FinishedKg",
+        "kg": 18,
+        "label": "Virtual date: Jan 24, 2048; Kilograms: 18; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-25",
+        "series": "BacklogKg",
+        "kg": 926,
+        "label": "Virtual date: Jan 25, 2048; Kilograms: 926; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-25",
+        "series": "FinishedKg",
+        "kg": 11,
+        "label": "Virtual date: Jan 25, 2048; Kilograms: 11; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-26",
+        "series": "BacklogKg",
+        "kg": 789,
+        "label": "Virtual date: Jan 26, 2048; Kilograms: 789; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-26",
+        "series": "FinishedKg",
+        "kg": 76,
+        "label": "Virtual date: Jan 26, 2048; Kilograms: 76; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-27",
+        "series": "BacklogKg",
+        "kg": 858,
+        "label": "Virtual date: Jan 27, 2048; Kilograms: 858; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-27",
+        "series": "FinishedKg",
+        "kg": 71,
+        "label": "Virtual date: Jan 27, 2048; Kilograms: 71; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-28",
+        "series": "BacklogKg",
+        "kg": 505,
+        "label": "Virtual date: Jan 28, 2048; Kilograms: 505; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-28",
+        "series": "FinishedKg",
+        "kg": 243,
+        "label": "Virtual date: Jan 28, 2048; Kilograms: 243; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-29",
+        "series": "BacklogKg",
+        "kg": 370,
+        "label": "Virtual date: Jan 29, 2048; Kilograms: 370; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-29",
+        "series": "FinishedKg",
+        "kg": 447,
+        "label": "Virtual date: Jan 29, 2048; Kilograms: 447; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-30",
+        "series": "BacklogKg",
+        "kg": 149,
+        "label": "Virtual date: Jan 30, 2048; Kilograms: 149; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-30",
+        "series": "FinishedKg",
+        "kg": 229,
+        "label": "Virtual date: Jan 30, 2048; Kilograms: 229; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-01-31",
+        "series": "BacklogKg",
+        "kg": 223,
+        "label": "Virtual date: Jan 31, 2048; Kilograms: 223; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-01-31",
+        "series": "FinishedKg",
+        "kg": 152,
+        "label": "Virtual date: Jan 31, 2048; Kilograms: 152; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-01",
+        "series": "BacklogKg",
+        "kg": 316,
+        "label": "Virtual date: Feb 01, 2048; Kilograms: 316; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-01",
+        "series": "FinishedKg",
+        "kg": 160,
+        "label": "Virtual date: Feb 01, 2048; Kilograms: 160; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-02",
+        "series": "BacklogKg",
+        "kg": 603,
+        "label": "Virtual date: Feb 02, 2048; Kilograms: 603; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-02",
+        "series": "FinishedKg",
+        "kg": 19,
+        "label": "Virtual date: Feb 02, 2048; Kilograms: 19; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-03",
+        "series": "BacklogKg",
+        "kg": 839,
+        "label": "Virtual date: Feb 03, 2048; Kilograms: 839; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-03",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 03, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-04",
+        "series": "BacklogKg",
+        "kg": 793,
+        "label": "Virtual date: Feb 04, 2048; Kilograms: 793; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-04",
+        "series": "FinishedKg",
+        "kg": 4,
+        "label": "Virtual date: Feb 04, 2048; Kilograms: 4; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-05",
+        "series": "BacklogKg",
+        "kg": 965,
+        "label": "Virtual date: Feb 05, 2048; Kilograms: 965; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-05",
+        "series": "FinishedKg",
+        "kg": 11,
+        "label": "Virtual date: Feb 05, 2048; Kilograms: 11; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-06",
+        "series": "BacklogKg",
+        "kg": 1331,
+        "label": "Virtual date: Feb 06, 2048; Kilograms: 1331; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-06",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 06, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-07",
+        "series": "BacklogKg",
+        "kg": 881,
+        "label": "Virtual date: Feb 07, 2048; Kilograms: 881; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-07",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 07, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-08",
+        "series": "BacklogKg",
+        "kg": 664,
+        "label": "Virtual date: Feb 08, 2048; Kilograms: 664; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-08",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 08, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-09",
+        "series": "BacklogKg",
+        "kg": 459,
+        "label": "Virtual date: Feb 09, 2048; Kilograms: 459; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-09",
+        "series": "FinishedKg",
+        "kg": 24,
+        "label": "Virtual date: Feb 09, 2048; Kilograms: 24; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-10",
+        "series": "BacklogKg",
+        "kg": 994,
+        "label": "Virtual date: Feb 10, 2048; Kilograms: 994; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-10",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 10, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-11",
+        "series": "BacklogKg",
+        "kg": 750,
+        "label": "Virtual date: Feb 11, 2048; Kilograms: 750; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-11",
+        "series": "FinishedKg",
+        "kg": 59,
+        "label": "Virtual date: Feb 11, 2048; Kilograms: 59; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-12",
+        "series": "BacklogKg",
+        "kg": 525,
+        "label": "Virtual date: Feb 12, 2048; Kilograms: 525; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-12",
+        "series": "FinishedKg",
+        "kg": 17,
+        "label": "Virtual date: Feb 12, 2048; Kilograms: 17; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-13",
+        "series": "BacklogKg",
+        "kg": 272,
+        "label": "Virtual date: Feb 13, 2048; Kilograms: 272; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-13",
+        "series": "FinishedKg",
+        "kg": 323,
+        "label": "Virtual date: Feb 13, 2048; Kilograms: 323; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-14",
+        "series": "BacklogKg",
+        "kg": 97,
+        "label": "Virtual date: Feb 14, 2048; Kilograms: 97; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-14",
+        "series": "FinishedKg",
+        "kg": 135,
+        "label": "Virtual date: Feb 14, 2048; Kilograms: 135; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-15",
+        "series": "BacklogKg",
+        "kg": 241,
+        "label": "Virtual date: Feb 15, 2048; Kilograms: 241; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-15",
+        "series": "FinishedKg",
+        "kg": 145,
+        "label": "Virtual date: Feb 15, 2048; Kilograms: 145; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-16",
+        "series": "BacklogKg",
+        "kg": 412,
+        "label": "Virtual date: Feb 16, 2048; Kilograms: 412; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-16",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 16, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-17",
+        "series": "BacklogKg",
+        "kg": 354,
+        "label": "Virtual date: Feb 17, 2048; Kilograms: 354; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-17",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 17, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-18",
+        "series": "BacklogKg",
+        "kg": 194,
+        "label": "Virtual date: Feb 18, 2048; Kilograms: 194; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-18",
+        "series": "FinishedKg",
+        "kg": 43,
+        "label": "Virtual date: Feb 18, 2048; Kilograms: 43; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-19",
+        "series": "BacklogKg",
+        "kg": 156,
+        "label": "Virtual date: Feb 19, 2048; Kilograms: 156; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-19",
+        "series": "FinishedKg",
+        "kg": 50,
+        "label": "Virtual date: Feb 19, 2048; Kilograms: 50; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-20",
+        "series": "BacklogKg",
+        "kg": 663,
+        "label": "Virtual date: Feb 20, 2048; Kilograms: 663; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-20",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 20, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-21",
+        "series": "BacklogKg",
+        "kg": 1042,
+        "label": "Virtual date: Feb 21, 2048; Kilograms: 1042; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-21",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 21, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-22",
+        "series": "BacklogKg",
+        "kg": 1183,
+        "label": "Virtual date: Feb 22, 2048; Kilograms: 1183; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-22",
+        "series": "FinishedKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 22, 2048; Kilograms: 0; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-23",
+        "series": "BacklogKg",
+        "kg": 620,
+        "label": "Virtual date: Feb 23, 2048; Kilograms: 620; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-23",
+        "series": "FinishedKg",
+        "kg": 82,
+        "label": "Virtual date: Feb 23, 2048; Kilograms: 82; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-24",
+        "series": "BacklogKg",
+        "kg": 539,
+        "label": "Virtual date: Feb 24, 2048; Kilograms: 539; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-24",
+        "series": "FinishedKg",
+        "kg": 79,
+        "label": "Virtual date: Feb 24, 2048; Kilograms: 79; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-25",
+        "series": "BacklogKg",
+        "kg": 572,
+        "label": "Virtual date: Feb 25, 2048; Kilograms: 572; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-25",
+        "series": "FinishedKg",
+        "kg": 423,
+        "label": "Virtual date: Feb 25, 2048; Kilograms: 423; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-26",
+        "series": "BacklogKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 26, 2048; Kilograms: 0; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-26",
+        "series": "FinishedKg",
+        "kg": 259,
+        "label": "Virtual date: Feb 26, 2048; Kilograms: 259; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-27",
+        "series": "BacklogKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 27, 2048; Kilograms: 0; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-27",
+        "series": "FinishedKg",
+        "kg": 474,
+        "label": "Virtual date: Feb 27, 2048; Kilograms: 474; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-28",
+        "series": "BacklogKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 28, 2048; Kilograms: 0; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-28",
+        "series": "FinishedKg",
+        "kg": 285,
+        "label": "Virtual date: Feb 28, 2048; Kilograms: 285; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      },
+      {
+        "date": "2048-02-29",
+        "series": "BacklogKg",
+        "kg": 0,
+        "label": "Virtual date: Feb 29, 2048; Kilograms: 0; series: DailyBacklogKg; Series: DailyBacklogKg"
+      },
+      {
+        "date": "2048-02-29",
+        "series": "FinishedKg",
+        "kg": 180,
+        "label": "Virtual date: Feb 29, 2048; Kilograms: 180; series: DailyFinishedStockKg; Series: DailyFinishedStockKg"
+      }
+    ]
+  }
+}

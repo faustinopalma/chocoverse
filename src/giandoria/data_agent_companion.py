@@ -2,6 +2,7 @@
 
 import argparse
 import base64
+import calendar
 import csv
 import json
 import math
@@ -96,6 +97,55 @@ def correlation(rows: list[dict]) -> float | None:
     return numerator / denominator if denominator else None
 
 
+def recovery_scenarios(snapshot: dict) -> dict[str, dict]:
+    periods = ("2047-09", "2047-11", "2048-02")
+    if snapshot["firstDate"] > "2047-09-01" or snapshot["throughDate"] < "2048-02-29":
+        return {}
+    sales, production = [], []
+    for month in periods:
+        year, number = map(int, month.split("-"))
+        days = calendar.monthrange(year, number)[1]
+        for product in ("dark70", "milk", "seasonal_gianduja"):
+            total = sum(r[4] for r in snapshot["tables"]["Sales"] if r[0].startswith(month) and r[2] == product)
+            sales.append({"month": month, "product": product, "sold_kg": total, "days": days,
+                          "sold_kg_per_day": total / days})
+        selected = [r for r in snapshot["tables"]["Production"]
+                    if r[0].startswith(month) and r[1] in ("dark70", "milk")]
+        production.append({"month": month, "days": days,
+                           **{label: sum(r[index] for r in selected) / days
+                              for index, label in ((2, "started_kg_per_day"), (3, "released_kg_per_day"),
+                                                   (4, "shipped_kg_per_day"))}})
+    rows = sorted(r for r in snapshot["tables"]["Balances"] if "2047-11-01" <= r[0] <= "2048-02-29")
+    balances = []
+    for month in ("2047-11", "2048-02"):
+        observed = [r for r in rows if r[0].startswith(month)]
+        if not observed:
+            raise ValueError(f"The recovery story requires observed company balances in {month}.")
+        balances.append({"month": month, "observed_dates": len(observed),
+                         "average_backlog_kg": sum(r[2] for r in observed) / len(observed),
+                         "last_date": observed[-1][0], "last_backlog_kg": observed[-1][2]})
+    return {
+        "recovery-sales": {"source": "story", "check": "manual", "expected": sales, "question": (
+            "How did daily sales change across September 2047, November 2047 and February 2048? "
+            "Use our semantic-model sell-out measures. Give one table with each product's average kg "
+            "per calendar day in the three months, rounded to one decimal. Identify the products behind the change."
+        )},
+        "recovery-flow": {"source": "story", "check": "manual", "expected": production, "question": (
+            "Does the sales pattern also appear in supply? Use Lakehouse SQL to compare September 2047, "
+            "November 2047 and February 2048. Combine dark70 and milk and return one row per month with "
+            "started, released and shipped kg per calendar day, rounded to one decimal. "
+            "Keep production flows distinct from sell-out."
+        )},
+        "recovery-backlog": {"source": "story", "check": "manual",
+                             "expected": {"months": balances, "daily": rows}, "question": (
+            "Has the company also reduced its backlog? Use the Lakehouse's observed company balances "
+            "from 2047-11-01 through 2048-02-29. Plot daily backlog and finished stock as a native line chart. "
+            "For November and February, report average observed backlog, last observed backlog and the "
+            "number of observed dates. Use every available observation."
+        )},
+    }
+
+
 def scenarios(snapshot: dict) -> dict[str, dict]:
     rows = daily_rows(snapshot)
     start, end = rows[0]["date"], rows[-1]["date"]
@@ -107,11 +157,12 @@ def scenarios(snapshot: dict) -> dict[str, dict]:
     observations = sorted(r for r in snapshot["tables"]["Balances"] if r[0] <= snapshot["throughDate"])
     if not observations:
         raise ValueError("Inventory investigation requires observed company balances.")
-    cases = query_cases(snapshot)
+    cases = query_cases(snapshot, include_missing_observations=False)
     latest = observations[-1]
     history_start = (date.fromisoformat(snapshot["throughDate"]) - timedelta(days=29)).isoformat()
     history = [r for r in observations if history_start <= r[0]]
     return {
+        **recovery_scenarios(snapshot),
         "inventory": {
             "source": "story", "check": "manual",
             "question": (
@@ -439,7 +490,8 @@ def main() -> None:
     export.add_argument("--trial", required=True, help="Unique private export reservation; not a passing trial.")
     run = commands.add_parser("run")
     run.add_argument("--case", choices=("sql", "topics", "dax", "policy", "rows", "python", "visual", "boundaries",
-                                       "inventory", "inventory-history", "inventory-detail"),
+                                       "inventory", "inventory-history", "inventory-detail",
+                                       "recovery-sales", "recovery-flow", "recovery-backlog"),
                      required=True)
     run.add_argument("--trial", required=True, help="Unique local reservation; never automatically retry inference.")
     run.add_argument("--source", choices=tuple(NAMES), help="Defaults to the scenario's isolated companion.")
@@ -451,6 +503,8 @@ def main() -> None:
     if args.command in ("run", "export") and not re.fullmatch(r"[a-z0-9][a-z0-9-]{0,63}", args.trial):
         raise ValueError("Trial must be a safe lowercase identifier, at most 64 characters.")
     cases = scenarios(snapshot)
+    if args.command == "run" and args.case not in cases:
+        raise ValueError("The selected case requires a snapshot covering its complete analytical episode.")
     source = args.source or cases[args.case]["source"]
     workspace = json.loads((ROOT / ".local" / "demo-workspace.json").read_text(encoding="utf-8"))
     if workspace["displayName"] != "ws-giandoria-demo" or ontology["workspaceId"] != workspace["id"]:

@@ -316,7 +316,7 @@ def report_definition(model_id: str, commercial: bool) -> dict[str, dict]:
     return parts
 
 
-def extract_snapshot(http: RecordedHttp, fabric: dict) -> dict:
+def extract_snapshot(http: RecordedHttp, fabric: dict, *, from_date: str | None = None) -> dict:
     endpoint, database = fabric["queryServiceUri"], fabric["databaseId"]
     anchor = query(http, endpoint, database, '''bronze_business
 | where run_id == "business-demo-001" and event_type == "world.business.observed"
@@ -326,12 +326,20 @@ def extract_snapshot(http: RecordedHttp, fabric: dict) -> dict:
         raise ValueError("A single enterprise observation is required to anchor the showcase.")
     cutoff, sequence = anchor[0]
     date.fromisoformat(cutoff)
+    if from_date is not None:
+        from_date = date.fromisoformat(from_date).isoformat()
+        if date.fromisoformat(from_date) >= date.fromisoformat(cutoff):
+            raise ValueError("Snapshot start must precede its exclusive virtual cutoff.")
     if type(sequence) is not int or sequence < 1:
         raise ValueError("Invalid showcase sequence anchor.")
     header = f"let cutoff=datetime({cutoff}); let upper_sequence=long({sequence});\n"
     tables = {}
     for name in FACTS:
         text = (ROOT / "fabric" / "showcase" / f"{name.lower()}.kql").read_text()
+        if from_date is not None:
+            text = text.replace("bronze_business\n", (
+                f'bronze_business\n| where todatetime(event.simlocaldate) >= datetime({from_date})\n'
+            ), 1)
         tables[name] = query(http, endpoint, database, header + text)
         if not tables[name]:
             raise ValueError(f"Showcase requires populated enterprise {name} facts.")
@@ -520,9 +528,12 @@ def verify(http: RecordedHttp, workspace: str, model_id: str, snapshot: dict) ->
         "YTD", [Sales YTD kg], "Rolling", [Sales rolling 30d kg]),
         DATESBETWEEN('Date'[Date], {dax_date(month_start)}, {dax_date(previous_month_end)}))''')[0]
     py_sales = sold_between(prior_start, prior_end)
+    py_observed = any(prior_start.isoformat() <= row[0] <= prior_end.isoformat()
+                      for row in snapshot["tables"]["Sales"])
     current_sales = sold_between(month_start, previous_month_end)
     period_expected = {
-        "[Sold]": current_sales, "[PY]": py_sales, "[YoY]": current_sales / py_sales - 1 if py_sales else None,
+        "[Sold]": current_sales, "[PY]": py_sales if py_observed else None,
+        "[YoY]": current_sales / py_sales - 1 if py_sales else None,
         "[YTD]": sold_between(date(previous_month_end.year, 1, 1), previous_month_end),
         "[Rolling]": sold_between(previous_month_end - timedelta(days=29), previous_month_end),
     }
@@ -564,7 +575,10 @@ def verify(http: RecordedHttp, workspace: str, model_id: str, snapshot: dict) ->
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--reuse-snapshot", action="store_true", help="Republish the last extracted snapshot without querying Kusto.")
+    parser.add_argument("--from-date", help="Inclusive virtual date for a bounded analytical episode (YYYY-MM-DD).")
     args = parser.parse_args()
+    if args.reuse_snapshot and args.from_date is not None:
+        parser.error("--from-date applies only to a fresh extraction")
     local = ROOT / ".local"
     workspace = json.loads((local / "demo-workspace.json").read_text())
     fabric = json.loads((local / "business-fabric.json").read_text())
@@ -578,7 +592,8 @@ def main() -> None:
     http = RecordedHttp(credential, {endpoint.hostname, "api.powerbi.com"})
     try:
         snapshot_path = local / "showcase-snapshot.json"
-        snapshot = json.loads(snapshot_path.read_text()) if args.reuse_snapshot else extract_snapshot(http, fabric)
+        snapshot = (json.loads(snapshot_path.read_text()) if args.reuse_snapshot else
+                    extract_snapshot(http, fabric, from_date=args.from_date))
         validate_snapshot(snapshot, config)
         snapshot_path.write_text(json.dumps(snapshot), encoding="utf-8")
         transport = RecordedRequests(ROOT, workspace["id"], time.monotonic() + 900, ITEMS, marker=MARKER)

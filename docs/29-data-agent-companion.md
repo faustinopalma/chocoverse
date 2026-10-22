@@ -15,17 +15,34 @@ The private presentation, its slide mapping, generated slides and rehearsal evid
 
 ## 29.1 Audience and scope
 
-Start with the story's [inventory position](./data-agent-story.md#1-establish-the-current-position),
-then follow the actual questions and screenshots. The full value chain is the setting, not an implementation claim.
+Start with the story's [sales comparison](./data-agent-story.md#1-measure-the-commercial-change),
+then follow the actual questions and screenshots. The full value chain provides the business setting.
 The [business lab](./21-business-lab.md) owns the available data scope.
-The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as an operational review.
-Its questions establish the latest inventory, check persistence and test whether product priorities are supported.
-The CLI cases are `inventory`, `inventory-history` and `inventory-detail`, all using the story companion.
-Their expected values come from the same fixed snapshot; the runs require manual inspection of the actual
-answer and execution steps. An API invocation can return matching numbers while native visualization is
-unavailable in that invocation environment. The recorded browser conversation produced the native chart.
-The story retains its exact [input/output prose](./data-agent-inventory-evidence.json).
-Reply images are labelled rendered DOM exports; the chart is the unmodified native SVG.
+The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as a supply-recovery review.
+Its questions connect the product sales pattern to production flows, then assess the outstanding company backlog.
+The [scenario plan](../config/scenarios/channel-expansion-maintenance.json) supplies explicit demand and capacity
+assumptions. Enterprise events supply the measured outcomes; scenario assumptions stay distinct from observations.
+
+The CLI cases are `recovery-sales`, `recovery-flow` and `recovery-backlog`, all using the story companion.
+They require a fixed snapshot covering September 2047, November 2047 and February 2048.
+Sales and production use calendar-day averages, including February's 29 days. Balance averages use only observed
+dates; balances are never summed over time or allocated to products. Their independent oracles come from the
+source rows. Manually inspect the answer, selected source and actual execution steps before accepting a trial.
+
+The story retains exact [inputs and outputs](./data-agent-recovery-evidence.json), real Fabric browser screenshots
+and a native chart. Browser captures use the expanded response at the integrated browser's native dimensions.
+Clear emulated device metrics before capture; verify the saved image against the visible answer.
+An API invocation can return matching numbers while native visualization is unavailable in that environment.
+The native SVG and its data points must be checked separately.
+
+The recovery evidence matches all nine product-month sales values, the three production-flow rows and both
+121-point balance series. Sales is verified in published mode; supply, backlog and the native visual are verified
+in authoring mode. Rehearse published SQL routing separately before a consumer demonstration.
+A declined tool request is a failed trial: retain it and verify the selected source.
+
+The earlier [inventory rehearsal](https://github.com/faustinopalma/chocoverse/blob/1e7022f/docs/data-agent-story.md)
+and its [retained prose](./data-agent-inventory-evidence.json) remain historical evidence.
+Its `inventory`, `inventory-history` and `inventory-detail` cases remain available for compatible snapshots.
 Only useful steps belong in that investigation. Other features have separate
 [capability tests](#295-recorded-capability-tests).
 Its [build and publication guide](../site/README.md) owns the static-site workflow; the questions below run in Fabric.
@@ -272,7 +289,7 @@ End with `boundaries` and the controlled comparison: **less query writing, more 
 
 ## 29.5 Recorded capability tests
 
-These checks demonstrate tool behavior, rather than justify inventory or campaign decisions.
+These historical checks demonstrate tool behavior separately from the recovery review.
 The [earlier commercial example](https://github.com/faustinopalma/chocoverse/blob/3e0642d/docs/data-agent-story.md)
 retains its original seven inputs, captures and results, including ontology resolution, sales share and cash.
 The following inputs are repeated here so each technical capture remains understandable on its own.

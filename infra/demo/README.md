@@ -299,6 +299,38 @@ browser session is required to view the UI. The integrated test browser does not
 The [dashboard engineering guide](../../docs/22-dashboard-engineering.md) describes source ownership,
 all metrics, definition generation, safe publication, browser checks and regression-test methodology.
 
+### Prospective scenario interventions
+
+Preserve the existing company and baseline configuration. Use an ignored JSON plan with `version: 1`,
+`run_id: "business-demo-001"` and an ordered `changes` array. Each change requires `id`, `tick`, `reason`,
+`demand_percent` and `line_capacity_kg`. IDs are unique lowercase identifiers. Ticks are strictly increasing
+multiples of 24, at or after the stopped checkpoint tick. For example, `{"modern_trade": 180}` means 180% of
+baseline market demand; `{"moulding": 260}` means a 260 kg daily line capacity. Either map can be empty.
+The [design](../../docs/21-business-lab.md#prospective-scenario-interventions) owns persistence and interpretation.
+
+Run a local rehearsal against a privately retained checkpoint before staging:
+
+```powershell
+& $record -FilePath .\.venv\Scripts\python.exe -Arguments @(
+    '-m','giandoria.business_scenario','rehearse',
+    '--checkpoint','.local\scenario-checkpoint.json','--plan','.local\scenario-plan.json',
+    '--hours','5040','--output','.local\scenario-rehearsal.json')
+```
+
+Then Stop the exact saved lab session and verify shutdown. Initialize the normal demo context and stage:
+
+```powershell
+$outputs = Get-DemoDeploymentOutputs
+& $record -FilePath .\.venv\Scripts\python.exe -Arguments @(
+    '-m','giandoria.business_scenario','stage','--plan','.local\scenario-plan.json',
+    '--account',$outputs.stateAccountName.value)
+```
+
+Staging requires the saved session to be Stopped, acquires the runtime lease, validates both saved and proposed
+plans against the checkpoint, and verifies Storage readback. It changes only the scenario control blob.
+Start normally with a bounded shutdown deadline; verify tick progress and the applied intervention events.
+Append future interventions to iterate. Keep existing entries unchanged, including future entries already staged.
+
 ### Power BI semantic showcase
 
 With F4 already active and the guarded context initialized as above, publish/update the shared model
@@ -313,6 +345,10 @@ processes its embedded import partitions, reconciles DAX against extracted rows,
 `rp_giandoria_commercial` and `rp_giandoria_operations`. It does not start/stop the lab, resume capacity,
 change its SKU or create Azure infrastructure. Use analysis-only Start if capacity needs activation.
 Model processing/querying uses the existing F4 and is not cost-free; no new fixed-cost service is added.
+
+To focus a fresh extraction on one episode, add `--from-date YYYY-MM-DD` using its inclusive virtual date.
+The same start, exclusive cutoff and sequence bound apply to every fact. This leaves retained history unchanged
+and cannot be combined with `--reuse-snapshot`.
 
 To iterate on measures or visuals without moving the cutoff:
 

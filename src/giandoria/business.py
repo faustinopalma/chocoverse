@@ -1,7 +1,7 @@
 import hashlib
 import json
 import math
-from dataclasses import asdict, dataclass, field
+from dataclasses import asdict, dataclass, field, replace
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Protocol
@@ -170,6 +170,12 @@ class World(Module):
 
 
 class Market(World):
+    demand_percent: dict[str, int]
+
+    def __init__(self, name: str, config: BusinessConfig, seed: int) -> None:
+        super().__init__(name, config, seed)
+        self.demand_percent = {}
+
     def advance(self, sim_time: datetime, inbox: list[Message]) -> None:
         if self.tick % 24:
             return
@@ -180,7 +186,9 @@ class Market(World):
                 for territory in self.config.territories:
                     factor = seasonal if sku.startswith("seasonal") else 1.0
                     mean = self.config.baseline(sku) * share / 100 / len(self.config.territories)
-                    quantity = max(1, round(mean * factor * weekend * (0.8 + 0.4 * self.draw(f"{channel}:{sku}:{territory}"))))
+                    uplift = self.demand_percent.get(channel, 100) / 100
+                    quantity = max(1, round(mean * factor * weekend * uplift *
+                                            (0.8 + 0.4 * self.draw(f"{channel}:{sku}:{territory}"))))
                     self.send(
                         "market.purchase.intent", "retail" if channel == "own_retail" else "trade",
                         item=sku, quantity=quantity, channel=channel, values={"territory": territory},
@@ -591,6 +599,54 @@ class BusinessEngine:
         self.pending: list[Message] = []
         self.outbox: list[dict[str, Json]] = []
         self.event_counts: dict[str, int] = {}
+        self.scenario_changes: list[dict] = []
+
+    def set_scenario(self, changes: list[dict]) -> None:
+        if not isinstance(changes, list):
+            raise ValueError("Scenario changes must be a list.")
+        allowed = {"id", "tick", "reason", "demand_percent", "line_capacity_kg"}
+        seen: set[str] = set()
+        previous = -1
+        for change in changes:
+            if not isinstance(change, dict) or set(change) != allowed:
+                raise ValueError("Scenario changes require exactly id, tick, reason, demand_percent and line_capacity_kg.")
+            identity, tick = change["id"], change["tick"]
+            if (not isinstance(identity, str) or not identity or len(identity) > 64
+                    or any(c not in "abcdefghijklmnopqrstuvwxyz0123456789-" for c in identity) or identity in seen):
+                raise ValueError("Scenario IDs must be unique safe lowercase identifiers.")
+            if type(tick) is not int or tick < 0 or tick % 24 or tick <= previous:
+                raise ValueError("Scenario ticks must be strictly increasing simulation-day boundaries (multiples of 24).")
+            if not isinstance(change["reason"], str) or not change["reason"].strip() or len(change["reason"]) > 400:
+                raise ValueError("Scenario changes require a concise English reason.")
+            for field_name, known, maximum in (
+                ("demand_percent", self.business.channels, 1000),
+                ("line_capacity_kg", self.business.lines, 10000),
+            ):
+                values = change[field_name]
+                if (not isinstance(values, dict) or set(values) - set(known)
+                        or any(type(v) is not int or not 1 <= v <= maximum for v in values.values())):
+                    raise ValueError(f"Invalid scenario {field_name}.")
+            if not change["demand_percent"] and not change["line_capacity_kg"]:
+                raise ValueError("Scenario changes must change demand or capacity.")
+            seen.add(identity)
+            previous = tick
+        if changes[:len(self.scenario_changes)] != self.scenario_changes:
+            raise ValueError("Scenario history is append-only; existing changes cannot be edited or removed.")
+        if any(c["tick"] < self.tick for c in changes[len(self.scenario_changes):]):
+            raise ValueError("New scenario changes cannot rewrite past virtual time.")
+        self.scenario_changes = json.loads(json.dumps(changes))
+
+    def _apply_scenario(self, change: dict, *, emit: bool) -> None:
+        market = self.modules["market"]
+        if not isinstance(market, Market):
+            raise TypeError("Invalid market module.")
+        market.demand_percent.update(change["demand_percent"])
+        factory = self.modules["factory"]
+        effective = replace(factory.config, lines={**factory.config.lines, **change["line_capacity_kg"]})
+        for module in self.modules.values():
+            module.config = effective
+        if emit:
+            self.event("world", "world.scenario.changed", change)
 
     @property
     def fingerprint(self) -> str:
@@ -625,6 +681,9 @@ class BusinessEngine:
         })
 
     def step(self) -> None:
+        for change in self.scenario_changes:
+            if change["tick"] == self.tick:
+                self._apply_scenario(change, emit=True)
         inbox: dict[str, list[Message]] = {name: [] for name in self.modules}
         later = []
         for message in self.pending:
@@ -657,6 +716,8 @@ class BusinessEngine:
                 "sequence": self.sequence, "pending": [asdict(m) for m in self.pending],
                 "modules": {name: module.snapshot() for name, module in self.modules.items()},
                 "outbox": self.outbox, "event_counts": self.event_counts}
+        if self.scenario_changes:
+            state["scenario_changes"] = self.scenario_changes
         return json.loads(json.dumps(state, allow_nan=False))
 
     def restore(self, snapshot: dict) -> None:
@@ -669,6 +730,22 @@ class BusinessEngine:
         for name, module in self.modules.items():
             module.restore(snapshot["modules"][name])
         self.outbox, self.event_counts = snapshot["outbox"], snapshot["event_counts"]
+        self.scenario_changes = []
+        changes = snapshot.get("scenario_changes", [])
+        saved_tick = self.tick
+        self.tick = 0
+        try:
+            self.set_scenario(changes)
+        finally:
+            self.tick = saved_tick
+        market = self.modules["market"]
+        if isinstance(market, Market):
+            market.demand_percent = {}
+        for module in self.modules.values():
+            module.config = self.business
+        for change in self.scenario_changes:
+            if change["tick"] < self.tick:
+                self._apply_scenario(change, emit=False)
         self.assert_invariants()
 
     def assert_invariants(self) -> None:
@@ -698,7 +775,7 @@ class BusinessEngine:
             if factory.produced[sku] != logistics.received[sku] + in_transfer:
                 raise ValueError("Factory-to-warehouse transfer conservation violated.")
         for line, quantity in factory.line_use.items():
-            if not 0 <= quantity <= self.business.lines[line]:
+            if not 0 <= quantity <= factory.config.lines[line]:
                 raise ValueError("Finite line capacity violated.")
         for name in ("retail", "trade"):
             channels = self.modules[name]

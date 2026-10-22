@@ -239,7 +239,9 @@ class ManagerRuntimeTests(unittest.TestCase):
             http.return_value._audit_lock = threading.Lock()
             http.return_value.audit = []
             engine.return_value.summary.return_value = {"tick": 1}
-            store.return_value.get_json.return_value = session
+            store.return_value.get_json.side_effect = lambda container, name: (
+                session if name == "active-session.json" else None
+            )
             main()
         deadline = loop.call_args.args[5]
         self.assertGreater(deadline - 1000, 4 * 3600 - 35)

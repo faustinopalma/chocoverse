@@ -1,9 +1,9 @@
 # The Data Agent story minisite
 
-[Read the inventory review](https://faustinopalma.github.io/chocoverse/).
+[Read the recovery review](https://faustinopalma.github.io/chocoverse/).
 The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
 reaching an operational next step in four sections. Each question has a stated purpose: establish the current
-inventory position, check its persistence, then assess whether product-level priorities are supported.
+product sales, trace the factory flow, then assess how far company backlog has recovered.
 Other feature demonstrations remain in the [technical guide](../docs/29-data-agent-companion.md).
 There are no exercises or answers to unlock.
 It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.

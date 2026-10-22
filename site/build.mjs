@@ -37,7 +37,8 @@ function publicUrl(href) {
     assets.add(filename);
     return `assets/${filename}`;
   }
-  if (!relative.startsWith("docs/") && !["README.md", "infra/demo/README.md"].includes(relative)) {
+  if (!relative.startsWith("docs/") && !["README.md", "infra/demo/README.md",
+    "config/scenarios/channel-expansion-maintenance.json"].includes(relative)) {
     throw new Error(`Unexpected link: ${href}`);
   }
   return `${github}${relative}${fragment ? `#${fragment}` : ""}`;

@@ -9,7 +9,7 @@ from unittest.mock import Mock
 
 from giandoria.data_agent_companion import (
     DESCRIPTIONS, agent_definition, assert_definition, check_answer, correlation, daily_rows,
-    read_companion_definition, scenarios,
+    read_companion_definition, recovery_scenarios, scenarios,
 )
 
 
@@ -33,6 +33,40 @@ def json_part(parts: dict[str, dict | str], path: str) -> dict:
 
 
 class CompanionTests(unittest.TestCase):
+    def test_recovery_oracles_keep_calendar_and_observed_day_denominators_separate(self):
+        self.assertEqual(recovery_scenarios(snapshot()), {})
+        episode = {
+            "firstDate": "2047-08-27", "throughDate": "2048-02-29",
+            "tables": {
+                "Sales": [["2048-02-01", "export", "dark70", "north", 290]],
+                "Production": [["2048-02-01", "dark70", 580, 290, 145]],
+                "Balances": [
+                    ["2047-11-02", 0, 900, 300, 0, 0, 0],
+                    ["2047-11-30", 0, 1100, 300, 0, 0, 0],
+                    ["2048-02-01", 50, 80, 300, 0, 0, 0],
+                    ["2048-02-28", 100, 20, 300, 0, 0, 0],
+                ],
+            },
+        }
+        cases = recovery_scenarios(episode)
+        sales = cases["recovery-sales"]["expected"]
+        self.assertEqual(next(r for r in sales if r["month"] == "2048-02" and r["product"] == "dark70"),
+                         {"month": "2048-02", "product": "dark70", "sold_kg": 290,
+                          "days": 29, "sold_kg_per_day": 10})
+        flow = cases["recovery-flow"]["expected"][-1]
+        self.assertEqual(flow["released_kg_per_day"], 10)
+        self.assertEqual(flow["started_kg_per_day"], 20)
+        balances = cases["recovery-backlog"]["expected"]["months"]
+        self.assertEqual(balances[-1], {"month": "2048-02", "observed_dates": 2,
+                                       "average_backlog_kg": 50, "last_date": "2048-02-28", "last_backlog_kg": 20})
+        self.assertEqual(balances[0]["average_backlog_kg"], 1000)
+        for case in cases.values():
+            self.assertEqual(case["check"], "manual")
+            self.assertEqual(check_answer(case, "An unverified answer."), "NeedsUIVerification")
+        episode["tables"]["Balances"] = episode["tables"]["Balances"][:2]
+        with self.assertRaisesRegex(ValueError, "requires observed"):
+            recovery_scenarios(episode)
+
     def setUp(self):
         self.snapshot = snapshot()
         self.workspace, self.model = str(uuid4()), str(uuid4())
@@ -48,6 +82,13 @@ class CompanionTests(unittest.TestCase):
         self.assertEqual(rows[0]["date"], "2034-08-01")
         self.assertEqual(rows[-1]["date"], "2034-08-31")
         self.assertEqual(sum(row["sold_kg"] for row in rows), 496)
+
+    def test_companion_accepts_a_bounded_episode_with_observed_first_month(self):
+        changed = copy.deepcopy(self.snapshot)
+        changed["firstDate"] = "2034-08-01"
+        cases = scenarios(changed)
+        self.assertEqual(cases["dax"]["expected"]["observation_days"], 31)
+        self.assertEqual(cases["sql"]["expected"]["sold_kg"], 496)
 
     def test_missing_observations_never_become_zero(self):
         for table in ("Sales", "Production"):

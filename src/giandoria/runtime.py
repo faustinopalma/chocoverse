@@ -16,6 +16,7 @@ from azure.eventhub.exceptions import EventHubError
 from azure.identity import ManagedIdentityCredential
 
 from .business import BusinessConfig, BusinessEngine
+from .business_scenario import validate_control
 from .cloud_io import BlobStore, FoundryChat, RecordedHttp, RuntimeLease
 from .config import DemoConfig
 from .events import Json
@@ -194,6 +195,10 @@ def main() -> None:
                                     BusinessConfig.load(root / "config" / "business.json"), run_id, manager)
             runner = CheckpointRunner(engine, store, publisher)
             runner.restore()
+            scenario = store.get_json("lab-state", "business-scenario.json")
+            if scenario is not None:
+                engine.set_scenario(validate_control(scenario, run_id))
+                runner.flush()
             run_loop(runner, lease, store, stop, session_id, deadline, speed=speed, continuous=continuous,
                      hours=hours, target=target, generation=session.get("workerGeneration"))
             print(json.dumps({"operation": "business.completed", "summary": engine.summary()}), flush=True)

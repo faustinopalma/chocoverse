@@ -1,4 +1,5 @@
 import json
+import copy
 import unittest
 from pathlib import Path
 
@@ -18,6 +19,92 @@ class RecordedManager:
 
 
 class BusinessTests(unittest.TestCase):
+    def scenario(self):
+        return [
+            {"id": "trade-growth", "tick": 240, "reason": "Additional third-party demand.",
+             "demand_percent": {"modern_trade": 180, "export": 150}, "line_capacity_kg": {}},
+            {"id": "capacity-response", "tick": 480, "reason": "Commission additional moulding capacity.",
+             "demand_percent": {}, "line_capacity_kg": {"moulding": 850}},
+        ]
+
+    def test_scenario_preserves_baseline_fingerprint_and_replays_across_restart(self):
+        continuous = self.make_engine()
+        fingerprint = continuous.fingerprint
+        continuous.set_scenario(self.scenario())
+        self.advance(continuous, 600)
+        partial = self.make_engine()
+        partial.set_scenario(self.scenario())
+        self.advance(partial, 492)
+        restored = self.make_engine()
+        restored.restore(partial.snapshot())
+        restored.set_scenario(self.scenario())
+        self.advance(restored, 108)
+        self.assertEqual(fingerprint, restored.fingerprint)
+        self.assertEqual(self.normalized(continuous.outbox), self.normalized(restored.outbox))
+        self.assertEqual(continuous.summary(), restored.summary())
+        self.assertEqual(restored.modules["factory"].config.lines["moulding"], 850)
+        self.assertEqual(restored.modules["planning"].config.lines["moulding"], 850)
+        changes = [e for e in restored.outbox if e["type"] == "world.scenario.changed"]
+        self.assertEqual([e["tick"] for e in changes], [240, 480])
+        self.assertTrue(all(e["visibility"] == "enterprise" for e in changes))
+        restored.assert_invariants()
+
+    def test_scenario_is_append_only_and_rejects_retroactive_or_invalid_changes(self):
+        engine = self.make_engine()
+        engine.set_scenario(self.scenario()[:1])
+        engine.set_scenario(self.scenario())
+        for mutation in ("edit", "remove", "duplicate", "unknown", "negative", "bool", "midday"):
+            changed = copy.deepcopy(self.scenario())
+            if mutation == "edit":
+                changed[0]["demand_percent"]["export"] = 250
+            elif mutation == "remove":
+                changed.pop()
+            elif mutation == "duplicate":
+                changed[1]["id"] = changed[0]["id"]
+            elif mutation == "unknown":
+                changed[1]["line_capacity_kg"] = {"unknown": 800}
+            elif mutation == "negative":
+                changed[1]["line_capacity_kg"]["moulding"] = -1
+            elif mutation == "bool":
+                changed[1]["tick"] = True
+            else:
+                changed[1]["tick"] = 481
+            with self.subTest(mutation=mutation), self.assertRaises(ValueError):
+                engine.set_scenario(changed)
+        self.advance(engine, 600)
+        changed = copy.deepcopy(self.scenario())
+        changed.append({"id": "past", "tick": 576, "reason": "Invalid retroactive change.",
+                        "demand_percent": {"export": 100}, "line_capacity_kg": {}})
+        with self.assertRaisesRegex(ValueError, "past virtual time"):
+            engine.set_scenario(changed)
+
+    def test_old_checkpoint_and_capacity_reduction_keep_conservation(self):
+        engine = self.make_engine()
+        self.advance(engine, 239)
+        resumed = self.make_engine()
+        resumed.restore(engine.snapshot())
+        resumed.set_scenario([{"id": "bounded-reduction", "tick": 240, "reason": "Short capacity constraint.",
+                               "demand_percent": {}, "line_capacity_kg": {"moulding": 120}}])
+        self.advance(resumed, 72)
+        resumed.assert_invariants()
+        self.assertEqual(resumed.modules["factory"].config.lines["moulding"], 120)
+        self.assertEqual(resumed.modules["planning"].config.lines["moulding"], 120)
+
+    def test_channel_uplift_changes_only_the_requested_market_stream(self):
+        baseline, changed = self.make_engine(), self.make_engine()
+        changed.set_scenario([{"id": "growth", "tick": 0, "reason": "Modern trade expansion.",
+                               "demand_percent": {"modern_trade": 180}, "line_capacity_kg": {}}])
+        baseline.step()
+        changed.step()
+        def intentions(engine, channel):
+            return [event["data"]["quantity"] for event in engine.outbox
+                    if event["type"] == "market.purchase.intent" and event["data"]["channel"] == channel]
+        before, after = intentions(baseline, "modern_trade"), intentions(changed, "modern_trade")
+        self.assertGreater(sum(after) / sum(before), 1.7)
+        self.assertLess(sum(after) / sum(before), 1.9)
+        self.assertEqual(intentions(baseline, "export"), intentions(changed, "export"))
+        self.assertEqual(baseline.modules["factory"].snapshot(), changed.modules["factory"].snapshot())
+
     def test_two_calendar_years_with_monthly_restarts(self):
         engine = self.make_engine()
         for tick in range(17544):

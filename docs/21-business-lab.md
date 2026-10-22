@@ -106,6 +106,29 @@ Truth remains separate; these results do not imply the larger target assortment 
 Sequences 1-285,349 identify that immutable two-year prefix, including 239,296 enterprise events.
 Continuous operation appends to the same run. It does not replace the reference prefix or reset the company.
 
+### Prospective scenario interventions
+
+The [scenario controller](../src/giandoria/business_scenario.py) stages an append-only plan for the existing run.
+Each intervention has a stable ID, simulation-day boundary tick, reason, demand percentages and/or daily line
+capacities. Percentages are absolute relative to baseline demand; capacities are absolute kg/day. Unspecified
+settings retain their previous values. These are explicit scenario assumptions, not measured customer demand.
+Day boundaries are multiples of 24 hourly ticks from the epoch; local dates follow the configured Rome timezone.
+Capacity settings apply consistently to production planning and factory execution. Demand percentages change
+market intent; forecasts continue learning from observed sell-out and retain the existing replenishment rules.
+
+The baseline configuration and checkpoint fingerprint remain unchanged. The checkpoint retains the plan, and
+restart reconstructs its effective settings before continuing. Past interventions cannot be rewritten, removed
+or inserted retroactively. Each applied intervention emits an enterprise-visible `world.scenario.changed`
+event; latent purchase intent remains truth-only. Company balances, pending messages and ledger history persist.
+
+Offline rehearsal holds the S&OP policy at `balanced` *(assumption)* for comparable experiments; cloud managers
+continue using their recorded model-driven decisions. A rehearsal is a scenario-selection aid, not cloud evidence.
+Stage changes only after verified Stop and under the runtime lease. Start reads the staged plan and checkpoints
+it before advancing. Commands and the control-file schema belong to the
+[operating runbook](../infra/demo/README.md#prospective-scenario-interventions).
+The [channel-expansion and maintenance plan](../config/scenarios/channel-expansion-maintenance.json)
+records the retained run's prospective demand increase, temporary moulding restriction and capacity response.
+
 With the capacity active under a bounded lab session, inspect the business KQL database using:
 
 ```kusto
