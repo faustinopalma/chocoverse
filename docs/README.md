@@ -1,7 +1,7 @@
 # Giandoria — a simulated chocolate universe on Azure and Microsoft Fabric
 
 For a short visual introduction, start with the [Chocoverse illustrated tour](../README.md).
-For an analyst's perspective, follow the [interactive Data Agent story](https://faustinopalma.github.io/chocoverse/)
+For an analyst's perspective, follow the [Data Agent commercial review](https://faustinopalma.github.io/chocoverse/)
 or its [illustrated Markdown edition](./data-agent-story.md).
 This index is the navigation and implementation-status guide. The
 [mental-model chapter](./01-vision-and-mental-model.md) explains the target universe; the chapters below own its

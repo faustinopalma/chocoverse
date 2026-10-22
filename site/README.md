@@ -1,15 +1,20 @@
 # The Data Agent story minisite
 
-[Read the interactive story](https://faustinopalma.github.io/chocoverse/).
-The site turns the [authoritative Markdown](../docs/data-agent-story.md) into eight chapters with five
-browser-only exercises. It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
+[Read the commercial review](https://faustinopalma.github.io/chocoverse/).
+The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
+ending in a conditional recommendation. There are no exercises or answers to unlock.
+It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
 It has no analytics, cookies, sign-in or client-side storage.
+
+The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
+numbered exhibits and a closing decision table. It uses an editorial layout rather than dashboard cards.
+All reasoning is visible without JavaScript; scripts only provide theme selection and an evidence viewer.
 
 ## Edit and validate
 
-Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, and exercises in
-`learning.js` and `story.js`. The build reads daily values from the original Fabric chart rather than
-maintaining a second dataset. Changed chapter structure or evidence contracts fail the build or tests.
+Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, and viewing controls in `story.js`.
+The build validates daily coverage in the original Fabric chart without maintaining a browser dataset.
+Changed chapter structure or evidence contracts fail the build or tests.
 
 From the repository root, with Node.js 24 and npm installed:
 
@@ -25,8 +30,8 @@ The build replaces only generated `site/dist`. It copies explicitly referenced e
 Tests check the publication files, local links, numerical facts, date completeness and reasoning boundaries.
 
 Serve `site/dist` with a local static HTTP server for browser checks. Check narrow and wide screens,
-both themes, keyboard controls, image zoom and Escape, reduced motion, and the article with JavaScript disabled.
-Stop the preview server after use. The Markdown and answer table remain readable without JavaScript.
+both themes, keyboard navigation, image viewing and Escape, and the full recommendation with JavaScript disabled.
+There is no animated or scroll-triggered content. Stop the preview server after use.
 
 ## Publish
 
@@ -35,4 +40,4 @@ only `site/dist` through GitHub Pages. GitHub Pages must use **GitHub Actions** 
 The workflow can also be dispatched manually. Do not commit generated output or publish the repository root.
 
 The [companion runbook](../docs/29-data-agent-companion.md) owns actual Fabric execution and capability gates.
-Browser exercises do not turn an unverified or blocked platform feature into a passed demonstration.
+The report keeps unverified and blocked platform features separate from the demonstrated results.
