@@ -52,6 +52,9 @@ h2 { font-size: 26px; font-weight: 600; letter-spacing: -.025em; line-height: 1.
 .chapter-copy { min-width: 0; }
 .chapter-copy > p { margin: 0 0 24px; }
 .chapter-copy > p:last-child { margin-bottom: 0; }
+blockquote { margin: 0 0 28px; padding: 12px 0 12px 20px; border-left: 2px solid var(--cp-accent);
+  font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; }
+blockquote p { margin: 0; }
 strong { font-weight: 700; }
 code { font: .9em Consolas, "Courier New", Courier, monospace; }
 .evidence { margin: 32px 0; border-top: 1px solid var(--cp-border-strong); padding-top: 16px; }
@@ -70,6 +73,8 @@ th:first-child, td:first-child { padding-left: 0; width: 25%; }
 th:last-child, td:last-child { padding-right: 0; }
 .evidence-notes { margin: 48px 0 24px 288px; font-size: 14px; line-height: 1.7; color: var(--cp-text-soft); }
 .evidence-notes h2 { font-size: 22px; color: var(--cp-text); }
+.evidence-notes h2:not(:first-child) { margin-top: 40px; padding-top: 24px;
+  border-top: 1px solid var(--cp-border-strong); }
 .colophon { display: flex; justify-content: space-between; gap: 16px; border-top: 1px solid var(--cp-border-strong);
   padding-top: 24px; margin-top: 32px; font-size: 12px; }
 .privacy-note { font-size: 11px; margin-top: 24px; }

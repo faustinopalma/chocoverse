@@ -28,7 +28,6 @@ test("built publication contains only explicit static files and public evidence"
   assert.ok(!html.includes("The Road Ahead"));
   assert.ok(!html.includes("[commercial-answer]"));
   assert.ok(!html.includes("src=\"https://"));
-  assert.ok(!html.includes("fictional"));
   for (const [, url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
     assert.ok(!url.includes("\\"));
     if (url.startsWith("#")) assert.ok(html.includes(`id="${url.slice(1)}"`), url);
@@ -40,6 +39,29 @@ test("built publication contains only explicit static files and public evidence"
   }
   for (const fact of ["82 kg", "1,994 kg", "4.11%", "1,252.7", "-0.3069", "3,435,099.60", "unverified", "blocked"]) {
     assert.ok(html.includes(fact), fact);
+  }
+});
+
+test("captured outputs have readable inputs and named documentation sources", async () => {
+  const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
+  assert.equal((html.match(/<blockquote>/g) ?? []).length, 7);
+  const sections = [...html.matchAll(/<section class="chapter" id="chapter-(\d)"[\s\S]+?<\/section>/g)];
+  for (const [section, number] of sections) {
+    if (section.includes("<figure")) {
+      assert.ok(section.indexOf("<blockquote>") < section.indexOf("<figure"), `Chapter ${number} needs its input first`);
+    }
+  }
+  assert.ok(html.includes("same commercial input above"));
+  assert.ok(html.includes("does not establish that the separate Topics retrieval feature ran"));
+  assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
+  for (const path of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {
+    assert.ok(html.includes(`https://learn.microsoft.com/en-us/fabric/data-science/${path}`));
+  }
+  assert.ok(html.includes('href="https://github.com/faustinopalma/chocoverse"'));
+  const closing = html.slice(html.indexOf("Closing note"));
+  for (const phrase of ["virtual time", "Real-Time Dashboards", "Lakehouse", "Power BI", "Data Agent",
+    "Decision Room", "explicit extraction and publication", "reduced-detail", "incur charges"]) {
+    assert.ok(closing.includes(phrase), phrase);
   }
 });
 

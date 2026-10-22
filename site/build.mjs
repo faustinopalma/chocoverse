@@ -37,7 +37,9 @@ function publicUrl(href) {
     assets.add(filename);
     return `assets/${filename}`;
   }
-  if (!relative.startsWith("docs/") && relative !== "README.md") throw new Error(`Unexpected link: ${href}`);
+  if (!relative.startsWith("docs/") && !["README.md", "infra/demo/README.md"].includes(relative)) {
+    throw new Error(`Unexpected link: ${href}`);
+  }
   return `${github}${relative}${fragment ? `#${fragment}` : ""}`;
 }
 

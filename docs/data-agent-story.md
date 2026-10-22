@@ -14,7 +14,9 @@ Microsoft Fabric brings these records together. An analyst still has to find the
 the right question.
 
 A *Fabric Data Agent* translates business questions into queries over configured analytical sources.
-It can use SQL to query tables, DAX to calculate model-defined metrics, or KQL to explore event data [F36, F103].
+It can use SQL to query tables, DAX to calculate model-defined metrics, or KQL to explore event data.
+Microsoft documents these capabilities in the [Data Agent overview (F36)][agent-overview]
+and [runtime guide (F103)][agent-runtime].
 The analyst starts with the business problem and can inspect the generated query afterward.
 
 That connection to company data is what matters here. The agent uses source definitions and business context
@@ -30,6 +32,12 @@ Let's look at seventy-percent dark chocolate in the central territory during Aug
 Campaign sales alone tell us the volume. To judge their contribution, we also need the same category's
 sales across all channels.
 
+**Recorded input — commercial comparison:**
+
+> For August 2034, how much seventy-percent dark chocolate did fictional partner campaigns sell in the central
+> territory, and what share of that category's central-territory sell-out did campaigns represent? Apply our
+> Commercial sell-out topic and show the numerator, denominator and percentage.
+
 ![Campaign sell-out is 82 kg out of 1,994 kg across all channels, a 4.11% share.][commercial-answer]
 
 The agent returns **82 kg out of 1,994 kg: 4.11%**. Both totals use the same product, territory and month.
@@ -38,11 +46,16 @@ Only the channel filter changes. Keeping those conditions aligned makes the perc
 The execution also shows how business language reaches the data. An *ontology* describes business entities
 and their relationships. Here it resolves the product, channel and territory before SQL calculates the totals.
 
+The following execution trace belongs to the same commercial input above; it is not a second question.
+
 ![Entity searches resolve the business labels before the SQL query runs.][ontology-grounding]
 
 The stored labels are `dark70`, `campaigns` and `centre`. We checked the query's result against the underlying rows.
 This gives us the first sentence of the briefing: campaigns contributed 4.11% of this category's recorded
 sell-out, meaning purchases by customers.
+
+The input asks for the Commercial sell-out topic. The trace demonstrates ontology resolution and SQL execution,
+but does not establish that the separate Topics retrieval feature ran.
 
 Contribution leaves a further question open: what would have sold through other channels without the campaign?
 These totals cannot establish additional demand or profitability. Before discussing expansion, let's examine
@@ -52,6 +65,11 @@ the company's financial position.
 
 Finance needs the August closing cash figure. Adding every daily balance would count money repeatedly as it
 remained in the account. We need the last observed balance in the month.
+
+**Recorded input — cash close:**
+
+> For the company-wide August 2034 close, what was our closing cash in EUR? Show observation days and calendar days,
+> explain why cash balances must not be added across days, and use the semantic model measures.
 
 ![August closing cash is EUR 3,435,099.60, with 31 observation days and 31 calendar days.][cash-answer]
 
@@ -72,6 +90,12 @@ At the 3 September review, the analyst asks about two and four days of stock cov
 by the model to calculate a stock target. The recorded request selects both values simultaneously,
 so its answer depends on the model's multi-selection rule.
 
+**Recorded input — stock policy:**
+
+> At snapshot end 2034-09-03, suppose the Cover policy slicer has both 2 and 4 selected simultaneously, not two
+> separate scenarios. Which cover-days value and stock target in kg does the semantic model return? Use the
+> published one-decimal kg precision. Does this change production?
+
 ![Selecting two and four cover days together returns the three-day default and a 1,252.7 kg target.][policy-answer]
 
 The published rule requires one selected value. With two values selected together, it falls back to
@@ -91,14 +115,25 @@ The August daily records provide a first look at demand variation, not that futu
 We keep the company-wide scope and examine daily sales, so we can compare them with production.
 A daily chart needs the whole month: a 25-row preview would leave six August days out.
 
+**Recorded input — complete daily table:**
+
+> Show the complete daily company sell-out table for August 2034: every date from August 1 through August 31,
+> ordered by date, with Sold kg. Return all 31 rows, not just a preview of 25, and state the snapshot cutoff.
+
 The [daily result](./images/data-agent-story/daily-rows.png) contains all **31 dates**.
 We checked every date and value, including the final day, before asking for a native Fabric line chart.
+
+**Recorded input — native chart:**
+
+> For August 2034, show daily company Sold kg as an interactive native Fabric line chart, not a Python image.
+> Label virtual date and kg and state the snapshot cutoff.
 
 ![Native Fabric line chart showing all 31 daily company sell-out values for August.][native-chart]
 
 This is the chart exported from Fabric, shown here as a static image. In Fabric, hovering over a point exposes
 its date and value; the [31 August tooltip](./images/data-agent-story/native-chart-tooltip.png) shows **398 kg**.
-The 31-point result fits within the current 200-row native-visual limit [F107].
+The 31-point result fits within the 200-row limit documented in
+[Microsoft's visual-response guide (F107)][agent-visuals].
 
 This complete series lets us examine company-wide timing. It does not isolate campaign demand or forecast
 a larger campaign. The next calculation checks whether sales and production releases move together on the same day.
@@ -111,11 +146,19 @@ Joining individual sales records directly to individual production records could
 The agent uses *Code Interpreter*, which executes Python over retrieved data, to calculate Pearson correlation.
 This measures how closely two series vary together on a scale from -1 to +1.
 
+**Recorded input — Python calculation:**
+
+> Use Code Interpreter to calculate the Pearson correlation between daily company Sold kg and Released kg for
+> August 2034. Aggregate each flow by date before combining it, include all days, and report the paired-day count
+> and correlation to four decimals. Show the Python execution, distinguish association from causation, and
+> explicitly say if the tool is unavailable.
+
 ![The Code Interpreter execution completes successfully and exposes its input and output.][python-execution]
 
 The [answer](./images/data-agent-story/python-answer.png) reports **31 paired days** and a correlation of
 **-0.3069**, matching our independent calculation. The execution shows Python reading the daily dataset,
-checking August's date coverage and calculating the coefficient [F108].
+checking August's date coverage and calculating the coefficient. The tool is described in
+[Microsoft's Code Interpreter guide (F108)][agent-python].
 
 There is a modest negative same-day association. With one month of company-wide observations, this is a
 descriptive result, not a production policy or a campaign-impact estimate. It does not establish that reducing
@@ -126,8 +169,14 @@ campaigns that started this investigation?
 
 ## 7. Keep the answer at the right level
 
-Let's ask for sales, released production and closing cash for dark chocolate sold through campaigns
-in the central territory.
+We return to the original product, channel and territory. The question now requests three metrics at that
+same level, testing whether the company-wide findings can support a campaign-specific conclusion.
+
+**Recorded input — supported detail:**
+
+> For August 2034, report Sold kg, Released kg and closing cash in EUR for dark70 sold through campaigns in centre.
+> If the model cannot support a metric at that product/channel/territory grain, say unavailable rather than
+> allocating or inventing it.
 
 ![The agent returns 82 kg of sell-out and declines unsupported production and cash allocations.][boundaries-answer]
 
@@ -176,14 +225,47 @@ The answers and execution captures use data available through **3 September 2034
 complete month. Numerical results were checked independently. For reproducible prompts, source definitions,
 access prerequisites and live-run cost controls, use the [reproduction guide](./29-data-agent-companion.md).
 
+Inputs above reproduce the recorded requests verbatim; line wrapping is for readability.
+The word "fictional" in the commercial input is retained from that execution.
+SQL, DAX and Python captures linked within a section belong to its stated input.
+
 Two capabilities remain outside the demonstrated results:
 [Topics retrieval is unverified][topics-status];
 [M365 consumer feedback is blocked][feedback-status]
 by disabled feedback sharing and requires publication and consumer access. The guide retains the supporting
 screenshots and acceptance criteria.
 
-Product references: [F36 and F103-F110](./16-references.md). The ontology used here has a
+The source labels F36 and F103-F110 identify entries in the project's
+[reference register](./16-references.md); the descriptive links above open Microsoft's documentation directly.
+The ontology used here has a
 [migration requirement](./26-fabric-ontology.md) ahead of its announced retirement on **31 January 2027**.
+
+## Closing note — experiment with the Chocoverse
+
+This review is one investigation inside **Chocoverse**, the wider experimental universe around Giandoria.
+The [original repository, faustinopalma/chocoverse](https://github.com/faustinopalma/chocoverse),
+contains the code, scenarios, infrastructure and operating guides for exploring it.
+
+The company has a continuing story: it buys materials, produces chocolate, ships orders, sells through several
+channels and records financial movements. The implemented, reduced-detail runtime connects these events over
+virtual time. Pausing stops that clock; resuming continues the story. Scenarios, parameters and bounded manager
+choices can be changed in code to investigate how the company evolves.
+
+Fabric observes that story through complementary lenses. Eventhouse and Real-Time Dashboards follow changing
+operational events. Lakehouse tables preserve analytical snapshots; the semantic model and Power BI apply
+shared business measures. Ontology connects entities and relationships, while the Data Agent lets an analyst
+question configured sources. The Decision Room brings snapshot evidence into a governed investigation.
+
+These lenses have different refresh contracts. The live dashboard can advance with incoming events; the
+Data Agent and other snapshot-based experiences advance only after an explicit extraction and publication.
+This article preserves one such snapshot, so restarting the company does not silently change its evidence.
+
+The repository provides an end-to-end laboratory, not a claim that every part of the larger design is complete.
+Start with the [illustrated project tour](../README.md), check the
+[implemented scope](./README.md), then use the
+[laboratory runbook](../infra/demo/README.md) to reproduce or extend an experiment.
+Local work and cloud operations have different prerequisites; running the Azure/Fabric lab can incur charges
+and requires its start, shutdown and cost controls.
 
 [commercial-answer]: ./images/data-agent-story/commercial-answer.png
 [ontology-grounding]: ./images/data-agent-story/ontology-grounding.png
@@ -194,3 +276,7 @@ Product references: [F36 and F103-F110](./16-references.md). The ontology used h
 [boundaries-answer]: ./images/data-agent-story/boundaries-answer.png
 [topics-status]: ./29-data-agent-companion.md#c-schema-descriptions-and-topics-teach-context-at-the-correct-scope
 [feedback-status]: ./29-data-agent-companion.md#h-consumer-feedback-close-the-loop-without-claiming-automatic-learning
+[agent-overview]: https://learn.microsoft.com/en-us/fabric/data-science/concept-data-agent
+[agent-runtime]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-runtime
+[agent-visuals]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-visuals
+[agent-python]: https://learn.microsoft.com/en-us/fabric/data-science/data-agent-code-interpreter

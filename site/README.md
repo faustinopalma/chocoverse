@@ -15,6 +15,10 @@ All reasoning is visible without JavaScript; scripts only provide theme selectio
 Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, and viewing controls in `story.js`.
 The build validates daily coverage in the original Fabric chart without maintaining a browser dataset.
 Changed chapter structure or evidence contracts fail the build or tests.
+Keep each captured output with its recorded input. Quote the original request rather than reconstructing it
+from the answer; label execution traces that share an input. Use named documentation links, with reference IDs
+as secondary identifiers. The closing note links to the original repository and distinguishes live observations
+from snapshot-based analysis.
 
 From the repository root, with Node.js 24 and npm installed:
 
