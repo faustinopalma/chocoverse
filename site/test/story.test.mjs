@@ -64,6 +64,7 @@ test("each question follows a concrete decision purpose and precedes its capture
     assert.ok(section.indexOf("<blockquote>") < section.indexOf("<figure"));
   }
   assert.ok(html.includes("same input above"));
+  assert.ok(html.includes("backlog in blue and finished stock in magenta"));
   assert.ok(html.includes("real Fabric browser screenshots"));
   assert.ok(!/\[F\d+(?:,\s*F\d+)*\]/.test(html));
   for (const name of ["concept-data-agent", "data-agent-runtime", "data-agent-visuals", "data-agent-code-interpreter"]) {

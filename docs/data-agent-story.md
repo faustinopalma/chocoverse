@@ -61,7 +61,8 @@ Operations needs its daily path as well as the closing position to assess how fa
 
 The native chart belongs to the **same input above**, using all **121 observed dates** in each series.
 
-![Native Fabric chart: daily company backlog and finished stock from November through February.][recovery-history]
+![Native Fabric chart: backlog in blue and finished stock in magenta,
+with 121 observed dates per line.][recovery-history]
 
 Average observed backlog falls from **983.0 kg in November to 533.3 kg in February**.
 The final February observation is **0 kg**, compared with **1,119 kg** at November's close.
