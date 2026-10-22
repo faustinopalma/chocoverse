@@ -75,7 +75,7 @@ so its answer depends on the model's multi-selection rule.
 ![Selecting two and four cover days together returns the three-day default and a 1,252.7 kg target.][policy-answer]
 
 The published rule requires one selected value. With two values selected together, it falls back to
-**3 days**, giving a target of **1,252.7 kg**. Three comes from that default rule; the model does not
+**3 days**, giving a company-wide target of **1,252.7 kg**. Three comes from that default rule; the model does not
 average the selections.
 
 This execution therefore gives one default-policy target, not a comparison between two alternatives.
@@ -88,7 +88,7 @@ The August daily records provide a first look at demand variation, not that futu
 
 ## 5. Look beyond the monthly total
 
-We now widen the view to company-wide sales, so we can later compare them with production.
+We keep the company-wide scope and examine daily sales, so we can compare them with production.
 A daily chart needs the whole month: a 25-row preview would leave six August days out.
 
 The [daily result](./images/data-agent-story/daily-rows.png) contains all **31 dates**.
