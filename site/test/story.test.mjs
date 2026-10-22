@@ -80,13 +80,16 @@ test("each question follows a concrete decision purpose and precedes its capture
 test("the opening establishes the outstanding orders, decision and comparison periods before any query", async () => {
   const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
   const opening = source.slice(0, source.indexOf("## 1."));
-  for (const phrase of ["simulated scenario", "1,119 kg of orders remain to be shipped",
+  for (const phrase of ["In September, Giandoria expands its supermarket and export channels.",
+    "1,119 kg of orders remain to be shipped",
     "*backlog*", "take on more volume while fulfilling existing orders",
     "September provides the starting point", "November captures the restricted period",
     "February shows performance after the capacity increase"]) {
     assert.ok(opening.includes(phrase), phrase);
   }
   assert.ok(!opening.includes("create a supply-recovery review"));
+  const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
+  assert.ok(!/simulat/i.test(html), "Keep simulation labels out of the reader-facing story");
 });
 
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {

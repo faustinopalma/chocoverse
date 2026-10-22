@@ -1,7 +1,7 @@
 # How far has Giandoria's supply recovered?
 
 Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
-In this simulated scenario, it expands supermarket and export demand in September.
+In September, Giandoria expands its supermarket and export channels.
 A temporary restriction on its chocolate-moulding line follows in late October.
 At the end of November, **1,119 kg of orders remain to be shipped**. This outstanding volume is the company's
 *backlog*.
@@ -97,7 +97,7 @@ Operations retains the decision, using each answer to focus the next check.
 ## Evidence and further reading
 
 These executions use a fixed enterprise snapshot through **3 March 2048**; the review covers three complete
-months ending in February. Dates are simulated business dates. The [scenario plan][scenario] retains the demand
+months ending in February. The [scenario plan][scenario] retains the demand
 and capacity assumptions; enterprise records supply the outcomes.
 The retained run includes a January update aligning planning and execution capacity.
 The [input/output record][evidence] owns provenance, exact responses and independently calculated reference values.
