@@ -52,7 +52,7 @@ test("each question follows a concrete decision purpose and precedes its capture
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.equal((html.match(/<blockquote>/g) ?? []).length, 3);
   const purposes = [
-    "Operations first needs to see which products' customer purchases recovered after the restriction.",
+    "Operations first needs to see how customer purchases changed when maintenance reduced moulding capacity,",
     "Operations now needs to check whether the factory is supplying the products behind the sales change.",
     "Operations needs the daily backlog as well as the closing position",
   ];
@@ -81,6 +81,8 @@ test("the opening establishes the outstanding orders, decision and comparison pe
   const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
   const opening = source.slice(0, source.indexOf("## 1."));
   for (const phrase of ["In September, Giandoria expands its supermarket and export channels.",
+    "maintenance reduces the capacity of its chocolate-moulding line to **260 kg per day**",
+    "adds shifts and raises moulding capacity to **780 kg per day**",
     "1,119 kg of orders remain to be shipped",
     "*backlog*", "take on more volume while fulfilling existing orders",
     "September provides the starting point", "November captures the restricted period",
@@ -88,6 +90,10 @@ test("the opening establishes the outstanding orders, decision and comparison pe
     assert.ok(opening.includes(phrase), phrase);
   }
   assert.ok(!opening.includes("create a supply-recovery review"));
+  const firstQuestion = source.slice(source.indexOf("## 1."), source.indexOf("**Recorded input"));
+  assert.ok(firstQuestion.includes("when maintenance reduced moulding capacity"),
+    "Name the capacity change explicitly before asking about the sales recovery");
+  assert.ok(!source.includes("after the restriction"));
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/simulat/i.test(html), "Keep simulation labels out of the reader-facing story");
   assert.ok(!/virtual time|reduced-detail runtime|Pause it, resume it|fictional|not real/i.test(html),
@@ -107,7 +113,7 @@ test("the operational conclusion is bounded, visible and usable without scripts"
   }
   assert.ok(!/\shidden(?:\s|=|>)|<details|<button/.test(conclusion));
   assert.ok(!/increase production|lost sales were|missed deliveries were|ranked products/i.test(conclusion));
-  assert.ok(html.includes("isolating each intervention"));
+  assert.ok(html.includes("cannot separate the effects of capacity and demand"));
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
   assert.ok(!/chapter-copy|fetch\(|localStorage|sessionStorage/.test(script));
 });

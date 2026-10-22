@@ -2,11 +2,13 @@
 
 Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
 In September, Giandoria expands its supermarket and export channels.
-A temporary restriction on its chocolate-moulding line follows in late October.
+In late October, maintenance reduces the capacity of its chocolate-moulding line to **260 kg per day**.
+This line shapes the chocolate.
 At the end of November, **1,119 kg of orders remain to be shipped**. This outstanding volume is the company's
 *backlog*.
 
-Giandoria increases moulding capacity in late December. By the end of February, Operations needs to assess
+In late December, Giandoria adds shifts and raises moulding capacity to **780 kg per day**.
+By the end of February, Operations needs to assess
 whether the business can take on more volume while fulfilling existing orders.
 **Has the extra capacity translated into recovered sales and a sustained reduction in outstanding orders?**
 
@@ -16,10 +18,11 @@ and February shows performance after the capacity increase.
 
 ## 1. Measure the commercial change
 
-Operations first needs to see which products' customer purchases recovered after the restriction.
+Operations first needs to see how customer purchases changed when maintenance reduced moulding capacity,
+and how far they recovered after the additional shifts.
 We compare *sell-out*, the chocolate customers actually bought, across the three months.
 This identifies the products to follow through the factory next.
-The semantic model defines the sales measure; calendar-day averages make the month lengths comparable.
+Calendar-day averages make the month lengths comparable.
 
 **Recorded input — product sales:**
 
@@ -36,8 +39,7 @@ The next investigation therefore follows dark and milk chocolate, which share th
 ## 2. Follow the pattern through the factory
 
 Operations now needs to check whether the factory is supplying the products behind the sales change.
-*Throughput* is the volume moving through production over time. Comparing production starts, releases
-and shipments shows whether the recovery extends along that flow.
+*Throughput* is the volume moving through production over time. We compare starts, releases and shipments.
 The Lakehouse contains these product-level production records.
 
 **Recorded input — production flow:**
@@ -49,8 +51,8 @@ The Lakehouse contains these product-level production records.
 ![Fabric response: combined dark and milk production starts, releases and shipments per calendar day.][recovery-flow]
 
 Combined shipments move from **397.2 to 253.1 to 404.9 kg/day**. Starts and releases show the same
-November dip and February recovery. This is consistent with the episode's moulding restriction and capacity
-response. The comparison describes the observed run; isolating each intervention's effect calls for controlled runs.
+November dip and February recovery. This pattern is consistent with the lower moulding capacity during maintenance
+and the subsequent increase. The monthly comparison alone cannot separate the effects of capacity and demand.
 
 Throughput has recovered to September's pace. The next question is how that recovery reaches outstanding orders.
 
@@ -68,14 +70,14 @@ Operations needs the daily backlog as well as the closing position to judge whet
 
 ![Fabric response: November and February company backlog, with observed-date counts.][recovery-backlog]
 
-The native chart belongs to the **same input above**, using all **121 observed dates** in each series.
+The chart belongs to the **same input above**, using all **121 observed dates** per series.
 
 ![Native Fabric chart: backlog in blue and finished stock in magenta,
 with 121 observed dates per line.][recovery-history]
 
 Average observed backlog falls from **983.0 kg in November to 533.3 kg in February**.
 The final February observation is **0 kg**, compared with **1,119 kg** at November's close.
-Together, the average and closing balance show a substantial recovery and the workload carried during February.
+The average also reveals the workload carried during February.
 The comparison uses 30 November observations and 29 February observations.
 
 ## 4. Set the next operational checkpoint
