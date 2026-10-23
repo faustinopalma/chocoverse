@@ -94,7 +94,7 @@ const template = await readFile(path.join(here, "shell.html"), "utf8");
 const assetVersion = async (filename) => createHash("sha256")
   .update((await readFile(path.join(here, filename), "utf8")).replace(/\r\n/g, "\n"))
   .digest("hex").slice(0, 12);
-const html = template.replace("{{TITLE}}", escape(title))
+const html = template.replaceAll("{{TITLE}}", escape(title))
   .replace("{{STYLE_VERSION}}", await assetVersion("style.css"))
   .replace("{{SCRIPT_VERSION}}", await assetVersion("story.js"))
   .replace("{{CONTEXT}}", render(source.slice(contextStart, reviewStart)))

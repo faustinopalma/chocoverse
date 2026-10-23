@@ -3,6 +3,8 @@
 [Read the recovery review](https://faustinopalma.github.io/chocoverse/).
 The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
 opening with Giandoria's connected value chain and reaching a synthesis in four sections.
+The opening sets the company context, capacity changes and questions without revealing the results.
+Quantities and insights appear after their recorded Data Agent answers; the final section connects those findings.
 Each question has a stated purpose: establish the current
 product sales, trace the factory flow, then assess how far company backlog has recovered.
 Other feature demonstrations remain in the [technical guide](../docs/29-data-agent-companion.md).

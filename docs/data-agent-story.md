@@ -1,10 +1,9 @@
-# How far has Giandoria's supply recovered?
+# Investigating Giandoria's supply recovery with a Fabric Data Agent
 
 ## Giandoria in the Chocoverse
 
-Giandoria is an established Italian chocolate maker. **Chocoverse** follows the business around it:
-suppliers, factory teams, logistics partners, shops and customers. Demand changes with seasons and marketing
-campaigns, so planners turn forecasts and customer orders into purchasing and production plans.
+Giandoria is an established Italian chocolate maker, supplying its own shops, supermarkets and export channels.
+**Chocoverse** is its connected business world: suppliers, planners, factory teams, logistics partners and customers.
 
 1. **Demand**
    Orders, seasons and campaigns.
@@ -19,25 +18,19 @@ campaigns, so planners turn forecasts and customer orders into purchasing and pr
 6. **Customers**
    Own shops, supermarkets and export channels.
 
-Finance follows costs, receipts and cash across this chain. Each activity leaves records in Microsoft Fabric.
-The Data Agent lets an analyst investigate business questions across its configured sources in everyday language.
+Customer orders, shared forecasts and sales information feed back into demand planning.
+Finance follows costs and cash across the chain; Microsoft Fabric brings its business records together.
 
 ## This recovery review
 
-In September, Giandoria expands its supermarket and export channels.
-In late October, maintenance reduces the capacity of its chocolate-moulding line to **260 kg per day**.
-This line shapes the chocolate.
-At the end of November, **1,119 kg of orders remain to be shipped**. This outstanding volume is the company's
-*backlog*.
+In September 2047, Giandoria expands its supermarket and export channels. Maintenance then reduces capacity
+on the moulding line, which shapes the chocolate, in late October. Giandoria adds shifts in late December.
 
-In late December, Giandoria adds shifts and raises moulding capacity to **780 kg per day**.
-By the end of February, Operations needs to assess
-whether the business can take on more volume while fulfilling existing orders.
-**Has the extra capacity translated into recovered sales and a sustained reduction in outstanding orders?**
+By the end of February, Operations wants to understand what changed. How have customer purchases evolved?
+Does the factory show the same pattern? What has happened to orders waiting to be shipped?
 
-We use a Fabric Data Agent to compare product sales, follow the change through production and shipments,
-then check the daily backlog. September provides the starting point, November captures the restricted period,
-and February shows performance after the capacity increase.
+Let's ask a Fabric Data Agent, starting with sales. We compare September, before maintenance,
+November, during the reduced-capacity period, and February, after the additional shifts.
 
 ## 1. Measure the commercial change
 
@@ -81,8 +74,9 @@ Throughput has recovered to September's pace. The next question is how that reco
 
 ## 3. Check the backlog behind the recovery
 
-The factory's recovered pace now needs to translate into clearing outstanding orders.
-Operations needs the daily backlog as well as the closing position to judge whether that clearance is sustained.
+The factory's recovered pace raises another question: what has happened to orders still waiting to be shipped?
+This outstanding volume is the company's *backlog*. Operations needs its daily trend and month-end position
+to see whether the recovery is reaching those orders.
 
 **Recorded input — backlog recovery:**
 

@@ -54,7 +54,7 @@ test("each question follows a concrete decision purpose and precedes its capture
   const purposes = [
     "Operations first needs to see how customer purchases changed when maintenance reduced moulding capacity,",
     "Operations now needs to check whether the factory is supplying the products behind the sales change.",
-    "Operations needs the daily backlog as well as the closing position",
+    "what has happened to orders still waiting to be shipped?",
   ];
   for (let number = 1; number <= 3; number++) {
     const section = html.match(new RegExp(`<section class="chapter" id="chapter-${number}"[\\s\\S]+?</section>`))?.[0];
@@ -84,19 +84,20 @@ test("each question follows a concrete decision purpose and precedes its capture
   }
 });
 
-test("the opening establishes the outstanding orders, decision and comparison periods before any query", async () => {
+test("the opening sets the event and questions without revealing the analytical answers", async () => {
   const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
   const opening = source.slice(0, source.indexOf("## 1."));
-  for (const phrase of ["In September, Giandoria expands its supermarket and export channels.",
-    "maintenance reduces the capacity of its chocolate-moulding line to **260 kg per day**",
-    "adds shifts and raises moulding capacity to **780 kg per day**",
-    "1,119 kg of orders remain to be shipped",
-    "*backlog*", "take on more volume while fulfilling existing orders",
-    "September provides the starting point", "November captures the restricted period",
-    "February shows performance after the capacity increase"]) {
+  for (const phrase of ["In September 2047, Giandoria expands its supermarket and export channels.",
+    "Maintenance then reduces capacity", "Giandoria adds shifts in late December.",
+    "How have customer purchases evolved?", "Does the factory show the same pattern?",
+    "What has happened to orders waiting to be shipped?", "Let's ask a Fabric Data Agent",
+    "September, before maintenance", "November, during the reduced-capacity period",
+    "February, after the additional shifts"]) {
     assert.ok(opening.includes(phrase), phrase);
   }
   assert.ok(!opening.includes("create a supply-recovery review"));
+  assert.ok(!/\bkg\b|1,119|983\.0|533\.3|404\.9|227\.2|260|780|closes at|has recovered/i.test(opening),
+    "Introduce the setting and questions, leaving quantities and conclusions to the answers");
   const firstQuestion = source.slice(source.indexOf("## 1."), source.indexOf("**Recorded input"));
   assert.ok(firstQuestion.includes("when maintenance reduced moulding capacity"),
     "Name the capacity change explicitly before asking about the sales recovery");
@@ -112,12 +113,16 @@ test("the standalone opening introduces Giandoria and the connected business bef
   const context = html.match(/<section class="company-context"[\s\S]+?<\/section>/)?.[0];
   assert.ok(context);
   for (const phrase of ["established Italian chocolate maker", "Chocoverse", "Demand", "Planning",
-    "Procurement", "Production", "Distribution", "Customers", "Finance", "marketing", "Microsoft Fabric"]) {
+    "Procurement", "Production", "Distribution", "Customers", "Finance", "campaigns", "Microsoft Fabric",
+    "Customer orders, shared forecasts and sales information feed back into demand planning"]) {
     assert.ok(context.includes(phrase), phrase);
   }
   assert.equal((context.match(/<li>/g) ?? []).length, 6);
   assert.ok(html.indexOf(context) < html.indexOf("This recovery review"));
   assert.ok(!/<(?:img|script|iframe)\b/.test(context), "The value chain must remain readable without image or script loading");
+  const title = "Investigating Giandoria's supply recovery with a Fabric Data Agent";
+  assert.ok(html.includes(`<title>${title}</title>`));
+  assert.ok(html.includes(`<h1>${title}</h1>`));
 });
 
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {
