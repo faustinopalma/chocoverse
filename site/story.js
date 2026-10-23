@@ -1,14 +1,29 @@
 function initialize() {
   const root = document.documentElement;
+  const italian = root.lang === "it";
+  const languageLinks = document.querySelectorAll(".language-switch a");
+  function updateLanguageLinks() {
+    languageLinks.forEach(link => {
+      const target = new URL(link.href);
+      target.searchParams.set("scoutTheme", root.dataset.theme);
+      target.hash = location.hash;
+      link.href = target.href;
+    });
+  }
+  updateLanguageLinks();
+  addEventListener("hashchange", updateLanguageLinks);
   const themeButton = document.querySelector("#theme-toggle");
   function labelTheme() {
-    themeButton.textContent = root.dataset.theme === "dark" ? "Light edition" : "Dark edition";
+    themeButton.textContent = root.dataset.theme === "dark"
+      ? (italian ? "Tema chiaro" : "Light edition")
+      : (italian ? "Tema scuro" : "Dark edition");
   }
   labelTheme();
   themeButton.hidden = false;
   themeButton.addEventListener("click", () => {
     root.dataset.theme = root.dataset.theme === "dark" ? "light" : "dark";
     labelTheme();
+    updateLanguageLinks();
   });
 
   const dialog = document.querySelector("#evidence-dialog");

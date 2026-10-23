@@ -19,7 +19,7 @@ const pointLabels = svg => [...svg.matchAll(/<[^>]+aria-roledescription="point"[
 
 test("publication contains only explicit static files and the recovery evidence", async () => {
   const dir = path.join(site, "dist");
-  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css"]);
+  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "it.html", "story.js", "style.css"]);
   const assets = (await readdir(path.join(dir, "assets"))).sort();
   assert.deepEqual(assets, ["giandoria-editorial.webp", "recovery-backlog.png", "recovery-flow.png",
     "recovery-history.svg", "recovery-sales.png"]);
@@ -47,6 +47,46 @@ test("publication contains only explicit static files and the recovery evidence"
     assert.ok(html.includes(fact), fact);
   }
   assert.ok(!/inventory review|7 of 30|24–26 August|rendered exports/i.test(html));
+});
+
+test("Italian edition translates the full story and controls while preserving original English evidence", async () => {
+  const dir = path.join(site, "dist");
+  const english = await readFile(path.join(dir, "index.html"), "utf8");
+  const italian = await readFile(path.join(dir, "it.html"), "utf8");
+  assert.match(italian, /<html lang="it">/);
+  assert.match(english, /<html lang="en">/);
+  for (const [html, language] of [[english, "en"], [italian, "it"]]) {
+    assert.match(html, new RegExp(`hreflang="${language}" aria-current="page"`));
+    assert.equal((html.match(/class="chapter"/g) ?? []).length, 4);
+    assert.equal((html.match(/data-zoom/g) ?? []).length, 4);
+    for (const [, url] of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
+      if (!url.startsWith("#") && !url.startsWith("https://")) {
+        await readFile(path.join(dir, url.split("?")[0]));
+      }
+    }
+  }
+  for (const phrase of ["Le domande originali, gli screenshot delle risposte e il grafico di Fabric restano in inglese.",
+    "Giandoria è tornata a rifornire i clienti?", "Misurare il cambiamento nelle vendite",
+    "Seguire il fenomeno in fabbrica", "Verificare gli ordini arretrati", "Che cosa ci dice l'analisi",
+    "Ordini arretrati", "Scorte di prodotto finito", "Apri l'immagine originale", "Chiudi il documento",
+    "Tema scuro", "404,9 kg/giorno", "533,3 kg a febbraio", "983,0 kg", "1.119 kg", "3 marzo 2048"]) {
+    assert.ok(italian.includes(phrase), phrase);
+  }
+  const record = JSON.parse(await readFile(recordPath, "utf8"));
+  const source = await readFile(path.join(root, "docs", "data-agent-story.it.md"), "utf8");
+  const inputs = [...source.matchAll(/(?:^>[^\r\n]*(?:\r?\n|$))+/gm)]
+    .map(([text]) => text.replace(/^>\s?/gm, "").replace(/\s+/g, " ").trim());
+  assert.deepEqual(inputs, record.exchanges.map(exchange => exchange.input));
+  const englishSource = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
+  const narrativeNumbers = (text, italian) => [...text.split(/\r?\n---/)[0]
+    .replace(/(?:^>[^\r\n]*(?:\r?\n|$))+/gm, "").matchAll(/\d+(?:[.,]\d+)*/g)]
+    .map(([number]) => Number(italian ? number.replaceAll(".", "").replace(",", ".") : number.replaceAll(",", "")));
+  assert.deepEqual(narrativeNumbers(source, true), narrativeNumbers(englishSource, false),
+    "The translated narrative must preserve every numerical fact and date in order");
+  assert.equal((italian.match(/<blockquote lang="en">/g) ?? []).length, 3);
+  const imageSources = html => [...html.matchAll(/<img src="([^"]+)"/g)].map(([, src]) => src);
+  assert.deepEqual(imageSources(italian), imageSources(english));
+  assert.ok(!/\{\{/.test(italian));
 });
 
 test("the company illustration is separate from authentic Data Agent evidence", async () => {
@@ -272,9 +312,11 @@ test("the archived native sales chart retains all 31 captured values", async () 
 test("rebuilding removes stale artifacts and preserves the generated story", async () => {
   const dir = path.join(site, "dist");
   const before = await readFile(path.join(dir, "index.html"), "utf8");
+  const italianBefore = await readFile(path.join(dir, "it.html"), "utf8");
   const stale = path.join(dir, "assets", "stale-evidence.png");
   await writeFile(stale, "This file must never survive a new build.");
   execFileSync(process.execPath, [path.join(site, "build.mjs")]);
   await assert.rejects(readFile(stale), { code: "ENOENT" });
   assert.equal(await readFile(path.join(dir, "index.html"), "utf8"), before);
+  assert.equal(await readFile(path.join(dir, "it.html"), "utf8"), italianBefore);
 });

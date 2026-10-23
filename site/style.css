@@ -17,6 +17,9 @@ button:hover { border-color: var(--cp-accent); }
   font-size: 12px; letter-spacing: .04em; }
 .publication-bar a { color: var(--cp-text); text-decoration: none; }
 .publication-bar button { font-size: 12px; background: var(--cp-bg); border: 0; text-decoration: underline; }
+.publication-controls, .language-switch { display: flex; align-items: center; gap: 16px; }
+.language-switch a { display: inline-flex; align-items: center; min-height: 44px; }
+.language-switch [aria-current="page"] { font-weight: 700; text-decoration: underline; }
 main { max-width: 1160px; margin: auto; padding: 0 32px; }
 .report-cover { padding-top: 40px; }
 .wordmark { text-align: center; font-size: clamp(36px, 9.6vw, 116px); font-weight: 800; line-height: 1.1;
@@ -111,6 +114,8 @@ dialog p, dialog a { font-size: 14px; }
   body { font-size: 17px; }
   main { padding: 0 20px; }
   .publication-bar { padding-inline: 20px; }
+  .publication-bar { flex-wrap: wrap; gap: 4px 16px; }
+  .publication-controls { flex-wrap: wrap; gap: 4px 16px; }
   .publication-bar a { max-width: 170px; }
   .report-cover { padding-top: 24px; }
   .wordmark { padding-bottom: 20px; }

@@ -12,6 +12,13 @@ There are no exercises or answers to unlock.
 It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
 It has no analytics, cookies, sign-in or client-side storage.
 
+The language selector links two static editions: English (`index.html`, the default) and Italian (`it.html`).
+The [Italian translation](../docs/data-agent-story.it.md) follows the English source's structure and results.
+Both editions share the same untouched screenshots and native chart; original recorded questions remain English.
+Story text, captions, navigation, legend and viewing controls are translated.
+Language switching works without JavaScript; with scripts it also retains the chapter and selected theme.
+There is no automatic language detection or stored language preference.
+
 The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
 numbered exhibits and a closing synthesis. A short prose introduction establishes Giandoria and Chocoverse
 before the review, without a value-chain card grid. It uses an editorial layout rather than a dashboard.
@@ -42,7 +49,8 @@ The editable Blender file and inspection render stay in ignored `.local/chocover
 
 ## Edit and validate
 
-Edit the narrative in Markdown, presentation in `shell.html` and `style.css`, and viewing controls in `story.js`.
+Edit both narrative editions in Markdown, presentation in `shell.html` and `style.css`,
+UI translations in `build.mjs`, and viewing controls in `story.js`.
 Tests retain coverage checks for the archived Fabric chart without publishing it in the new investigation.
 Changed chapter structure or evidence contracts fail the build or tests.
 Keep each captured output with its recorded input. Quote the original request rather than reconstructing it
