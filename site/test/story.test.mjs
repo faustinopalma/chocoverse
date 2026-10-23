@@ -52,7 +52,7 @@ test("each question follows a concrete decision purpose and precedes its capture
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.equal((html.match(/<blockquote>/g) ?? []).length, 3);
   const purposes = [
-    "Operations first needs to see how customer purchases changed when maintenance reduced moulding capacity,",
+    "Operations first needs to identify which product sales fell during the supply disruption",
     "Operations now needs to check whether the factory is supplying the products behind the sales change.",
     "what has happened to orders still waiting to be shipped?",
   ];
@@ -90,8 +90,8 @@ test("the opening sets the event and questions without revealing the analytical 
   for (const phrase of ["In September 2047, Giandoria expands its supermarket and export channels.",
     "an unexpected equipment", "malfunction requires unplanned maintenance on the moulding line",
     "Giandoria adds shifts in late December.",
-    "How have customer purchases evolved?", "Does the factory show the same pattern?",
-    "What has happened to orders waiting to be shipped?", "Let's ask a Fabric Data Agent",
+    "is Giandoria supplying its customers again?", "How did sales fare during the disruption?",
+    "Have shipments recovered?", "Are orders still waiting to be shipped?", "Let's ask a Fabric Data Agent",
     "September, before maintenance", "November, during the reduced-capacity period",
     "February, after the additional shifts"]) {
     assert.ok(opening.includes(phrase), phrase);
@@ -100,8 +100,11 @@ test("the opening sets the event and questions without revealing the analytical 
   assert.ok(!/\bkg\b|1,119|983\.0|533\.3|404\.9|227\.2|260|780|closes at|has recovered/i.test(opening),
     "Introduce the setting and questions, leaving quantities and conclusions to the answers");
   const firstQuestion = source.slice(source.indexOf("## 1."), source.indexOf("**Recorded input"));
-  assert.ok(firstQuestion.includes("when maintenance reduced moulding capacity"),
-    "Name the capacity change explicitly before asking about the sales recovery");
+  assert.ok(firstQuestion.includes("during the supply disruption"),
+    "Frame sales as commercial symptoms of the supply disruption, not a demand investigation");
+  assert.ok(firstQuestion.includes("not a measure of underlying demand"));
+  assert.ok(firstQuestion.includes("availability can limit what customers can buy"));
+  assert.ok(!source.includes("How have customer purchases evolved?"));
   assert.ok(!source.includes("after the restriction"));
   const scenario = JSON.parse(await readFile(path.join(root, "config", "scenarios",
     "channel-expansion-maintenance.json"), "utf8"));

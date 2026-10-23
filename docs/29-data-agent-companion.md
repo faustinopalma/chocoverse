@@ -20,6 +20,8 @@ then follow the actual questions and screenshots. The full value chain provides 
 The [business lab](./21-business-lab.md) owns the available data scope.
 The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Markdown as a supply-recovery review.
 Its questions connect the product sales pattern to production flows, then assess the outstanding company backlog.
+The business question is supply and order fulfilment, not a change in underlying demand.
+Sell-out provides the commercial symptom; production flows and backlog test the operational recovery.
 The [scenario plan](../config/scenarios/channel-expansion-maintenance.json) supplies explicit demand and capacity
 assumptions. Enterprise events supply the measured outcomes; scenario assumptions stay distinct from observations.
 The story treats the restriction as unplanned maintenance following an unexpected equipment malfunction.

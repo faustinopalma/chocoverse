@@ -27,18 +27,18 @@ In September 2047, Giandoria expands its supermarket and export channels. In lat
 malfunction requires unplanned maintenance on the moulding line, which shapes the chocolate, reducing its capacity.
 Giandoria adds shifts in late December.
 
-By the end of February, Operations wants to understand what changed. How have customer purchases evolved?
-Does the factory show the same pattern? What has happened to orders waiting to be shipped?
+By the end of February, Operations asks: **is Giandoria supplying its customers again?**
+How did sales fare during the disruption? Have shipments recovered? Are orders still waiting to be shipped?
 
 Let's ask a Fabric Data Agent, starting with sales. We compare September, before maintenance,
 November, during the reduced-capacity period, and February, after the additional shifts.
 
 ## 1. Measure the commercial change
 
-Operations first needs to see how customer purchases changed when maintenance reduced moulding capacity,
-and how far they recovered after the additional shifts.
-We compare *sell-out*, the chocolate customers actually bought, across the three months.
-This identifies the products to follow through the factory next.
+Operations first needs to identify which product sales fell during the supply disruption and how far they recovered.
+We compare *sell-out*, the chocolate actually sold to customers, across the three months.
+These are realized sales, not a measure of underlying demand: availability can limit what customers can buy.
+The comparison identifies the products to follow through the factory next.
 Calendar-day averages make the month lengths comparable.
 
 **Recorded input — product sales:**
@@ -108,7 +108,7 @@ That recovered flow also reaches outstanding orders: average backlog falls from 
 to 533.3 kg in February**, and February closes at **zero**. The closing balance marks the clearance of the
 backlog; the monthly average shows that Giandoria was still working through it during February.
 
-The investigation moves from customer purchases to factory shipments, then to orders awaiting delivery.
+The investigation starts with the commercial symptoms, checks factory shipments, then follows orders awaiting delivery.
 Using natural-language questions, the analyst follows that thread across semantic-model measures, Lakehouse SQL
 and a daily chart. Together, the answers show a recovery in supply and order fulfilment, with an uneven recovery
 in product sales.
