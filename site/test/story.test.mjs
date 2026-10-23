@@ -122,12 +122,12 @@ test("the standalone opening introduces Giandoria and the connected business bef
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   const context = html.match(/<section class="company-context"[\s\S]+?<\/section>/)?.[0];
   assert.ok(context);
-  for (const phrase of ["established Italian chocolate maker", "Chocoverse", "Demand", "Planning",
-    "Procurement", "Production", "Distribution", "Customers", "Finance", "campaigns", "Microsoft Fabric",
+  for (const phrase of ["established Italian chocolate maker", "Chocoverse", "suppliers", "planners",
+    "factory teams", "logistics partners", "customers", "Finance", "Microsoft Fabric",
     "Customer orders, shared forecasts and sales information feed back into demand planning"]) {
     assert.ok(context.includes(phrase), phrase);
   }
-  assert.equal((context.match(/<li>/g) ?? []).length, 6);
+  assert.ok(!/<(?:ol|ul|li)\b/.test(context), "Keep the introduction compact, without value-chain cards");
   assert.ok(html.indexOf(context) < html.indexOf("This recovery review"));
   assert.ok(!/<(?:img|script|iframe)\b/.test(context), "The value chain must remain readable without image or script loading");
   const title = "Investigating Giandoria's supply recovery with a Fabric Data Agent";

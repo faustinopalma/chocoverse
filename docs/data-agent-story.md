@@ -5,19 +5,6 @@
 Giandoria is an established Italian chocolate maker, supplying its own shops, supermarkets and export channels.
 **Chocoverse** is its connected business world: suppliers, planners, factory teams, logistics partners and customers.
 
-1. **Demand**
-   Orders, seasons and campaigns.
-2. **Planning**
-   Forecasts, materials and production schedules.
-3. **Procurement**
-   Ingredients, packaging and inbound deliveries.
-4. **Production**
-   Chocolate making, moulding and packing.
-5. **Distribution**
-   Stock, warehouses and outbound deliveries.
-6. **Customers**
-   Own shops, supermarkets and export channels.
-
 Customer orders, shared forecasts and sales information feed back into demand planning.
 Finance follows costs and cash across the chain; Microsoft Fabric brings its business records together.
 

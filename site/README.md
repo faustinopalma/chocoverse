@@ -13,8 +13,8 @@ It uses captured evidence, makes no live Fabric calls and needs no Azure capacit
 It has no analytics, cookies, sign-in or client-side storage.
 
 The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
-numbered exhibits and a closing synthesis. A six-stage business map introduces demand, planning, procurement,
-production, distribution and customers before the review. It uses an editorial layout rather than a dashboard.
+numbered exhibits and a closing synthesis. A short prose introduction establishes Giandoria and Chocoverse
+before the review, without a value-chain card grid. It uses an editorial layout rather than a dashboard.
 All reasoning is visible without JavaScript; scripts only provide theme selection and an evidence viewer.
 
 ## Edit and validate

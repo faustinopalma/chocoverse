@@ -40,13 +40,6 @@ h1 { font-size: clamp(36px, 4.7vw, 60px); font-weight: 450; letter-spacing: -.04
 .company-context { border-block: 1px solid var(--cp-border-strong); padding: 28px 0; margin: 0 0 32px; }
 .company-context h2 { font-size: 24px; }
 .company-context p { max-width: 86ch; font-size: 17px; line-height: 1.65; margin: 16px 0 0; }
-.company-context ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px;
-  list-style: none; counter-reset: business-step; padding: 0; margin: 24px 0; }
-.company-context li { counter-increment: business-step; border: 1px solid var(--cp-border);
-  background: var(--cp-bg-elevated); padding: 16px; font-size: 14px; line-height: 1.6; }
-.company-context li::before { content: "0" counter(business-step); display: block; font-size: 12px;
-  color: var(--cp-accent); font-family: Consolas, "Courier New", Courier, monospace; margin-bottom: 8px; }
-.company-context li strong { display: block; font-size: 17px; color: var(--cp-text); }
 .contents { border-block: 1px solid var(--cp-text); padding: 24px 0; margin-bottom: 32px; }
 .contents h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 16px; font-weight: 600; }
 .contents ol { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -110,7 +103,6 @@ dialog p, dialog a { font-size: 14px; }
   h2 { font-size: 23px; }
 }
 @media (max-width: 640px) {
-  .company-context ol { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
   body { font-size: 17px; }
   main { padding: 0 20px; }
   .publication-bar { padding-inline: 20px; }
