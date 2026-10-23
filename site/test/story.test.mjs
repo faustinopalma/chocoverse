@@ -19,9 +19,10 @@ const pointLabels = svg => [...svg.matchAll(/<[^>]+aria-roledescription="point"[
 
 test("publication contains only explicit static files and the recovery evidence", async () => {
   const dir = path.join(site, "dist");
-  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css"]);
+  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css", "vendor"]);
   const assets = (await readdir(path.join(dir, "assets"))).sort();
-  assert.deepEqual(assets, ["recovery-backlog.png", "recovery-flow.png", "recovery-history.svg", "recovery-sales.png"]);
+  assert.deepEqual(assets, ["chocoverse.glb", "recovery-backlog.png", "recovery-flow.png",
+    "recovery-history.svg", "recovery-sales.png"]);
   const html = await readFile(path.join(dir, "index.html"), "utf8");
   const referenced = [...new Set([...html.matchAll(/(?:href|src)="assets\/([^"]+)"/g)].map(([, name]) => name))].sort();
   assert.deepEqual(assets, referenced);
@@ -46,6 +47,35 @@ test("publication contains only explicit static files and the recovery evidence"
     assert.ok(html.includes(fact), fact);
   }
   assert.ok(!/inventory review|7 of 30|24–26 August|rendered exports/i.test(html));
+});
+
+test("the promotional world remains self-contained interactive 3D, separate from analytical evidence", async () => {
+  const dir = path.join(site, "dist");
+  const html = await readFile(path.join(dir, "index.html"), "utf8");
+  const world = html.match(/<section class="world-3d"[\s\S]+?<\/section>/)?.[0];
+  assert.ok(world);
+  assert.ok(world.includes("<model-viewer") && world.includes("camera-controls"));
+  assert.ok(world.includes('touch-action="pan-y"'));
+  assert.ok(world.includes("<noscript>") && world.includes("Download 3D model"));
+  assert.ok(!/<img|data-zoom|auto-rotate|poster="/.test(world));
+  assert.ok(html.indexOf(world) < html.indexOf("This recovery review"));
+  const bytes = await readFile(path.join(dir, "assets", "chocoverse.glb"));
+  assert.ok(bytes.length < 3 * 1024 * 1024, "Keep the model below 3 MiB");
+  assert.equal(bytes.toString("ascii", 0, 4), "glTF");
+  assert.equal(bytes.readUInt32LE(4), 2);
+  assert.equal(bytes.readUInt32LE(8), bytes.length);
+  const json = JSON.parse(bytes.toString("utf8", 20, 20 + bytes.readUInt32LE(12)));
+  assert.ok(json.meshes.length > 30, "Publish geometry, not a textured poster plane");
+  assert.ok(json.nodes.some(node => node.name === "GIANDORIA"));
+  assert.ok(json.nodes.some(node => node.name === "CHOCOVERSE"));
+  for (const item of [...(json.buffers ?? []), ...(json.images ?? [])]) assert.ok(!item.uri);
+  assert.ok(!json.extensionsRequired?.includes("KHR_draco_mesh_compression"));
+  assert.deepEqual((await readdir(path.join(dir, "vendor"))).sort(),
+    ["model-viewer-LICENSE.txt", "model-viewer.min.js"]);
+  assert.ok((await readFile(path.join(dir, "vendor", "model-viewer-LICENSE.txt"), "utf8")).includes("Apache"));
+  const script = await readFile(path.join(dir, "story.js"), "utf8");
+  assert.ok(script.includes('import("./vendor/model-viewer.min.js")'));
+  assert.ok(script.includes("IntersectionObserver") && script.includes("console.error"));
 });
 
 test("each question follows a concrete decision purpose and precedes its captured answer", async () => {

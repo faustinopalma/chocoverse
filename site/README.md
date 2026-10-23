@@ -15,7 +15,32 @@ It has no analytics, cookies, sign-in or client-side storage.
 The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
 numbered exhibits and a closing synthesis. A short prose introduction establishes Giandoria and Chocoverse
 before the review, without a value-chain card grid. It uses an editorial layout rather than a dashboard.
-All reasoning is visible without JavaScript; scripts only provide theme selection and an evidence viewer.
+All reasoning is visible without JavaScript; scripts provide theme selection, evidence viewing and optional 3D.
+The opening also contains a real, orbitable 3D illustration, not a rendered image.
+It introduces the factory, distribution, shops, agents and data connections without adding another business inventory.
+It is promotional artwork, not a measured factory layout or an analytical exhibit.
+
+## The 3D world
+
+The original [scene builder](./art/build-chocoverse.py) uses the existing BlenderMCP archive's
+`scripts/gallery_common.py` geometry helpers. It runs in a separate factory-startup Blender process;
+it does not change an open Blender session or any archived scene.
+The checked-in [GLB](./art/chocoverse.glb) contains actual meshes and materials, with no remote assets or decoders.
+`@google/model-viewer` 4.3.1 is pinned in npm; the build publishes its local bundle and Apache-2.0 license.
+The viewer loads near the viewport, supports orbit/zoom and reset, and has no automatic rotation.
+On touch screens, vertical scrolling remains available. Without WebGL or JavaScript, readers can download the model
+and continue reading the complete investigation. Loading failures are shown explicitly.
+
+To regenerate with Blender 5.2 and the local archive (adjust the paths if needed):
+
+```powershell
+. .\ops\CommandJournal.ps1
+Invoke-RecordedNative -FilePath 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' `
+  -Arguments @('--background', '--factory-startup', '--disable-autoexec', '--python-exit-code', '1',
+    '--python', 'site\art\build-chocoverse.py', '--', 'C:\code\BlenderMCP') -TimeoutSeconds 240
+```
+
+Only the GLB is published. The editable Blender file and inspection render stay in ignored `.local/chocoverse-art`.
 
 ## Edit and validate
 

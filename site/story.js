@@ -37,8 +37,52 @@ function initialize() {
   });
 }
 
+async function initializeWorld() {
+  const viewer = document.querySelector("#chocoverse-model");
+  const status = document.querySelector("#world-status");
+  const reset = document.querySelector("#world-reset");
+  const fail = (error) => {
+    status.textContent = "3D could not load. Check WebGL support, or use Download 3D model.";
+    viewer.querySelector(".world-loading").textContent = "The 3D view is unavailable.";
+    reset.hidden = true;
+    console.error("Chocoverse 3D failed:", error);
+  };
+  viewer.addEventListener("error", fail);
+  viewer.addEventListener("load", () => {
+    status.textContent = "Interactive 3D · Drag to orbit. Scroll or pinch to zoom.";
+    reset.hidden = false;
+  });
+  reset.addEventListener("click", () => {
+    viewer.cameraOrbit = "32deg 58deg auto";
+    viewer.cameraTarget = "auto auto auto";
+    viewer.fieldOfView = "32deg";
+    viewer.resetTurntableRotation();
+  });
+  const start = async () => {
+    status.textContent = "Loading Chocoverse in 3D…";
+    try {
+      await import("./vendor/model-viewer.min.js");
+      viewer.src = "assets/chocoverse.glb";
+    } catch (error) {
+      fail(error);
+    }
+  };
+  if ("IntersectionObserver" in window) {
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        void start();
+      }
+    }, { rootMargin: "200px" });
+    observer.observe(viewer);
+  } else {
+    await start();
+  }
+}
+
 try {
   initialize();
+  void initializeWorld();
 } catch (error) {
   document.querySelector("#enhancement-error").hidden = false;
   console.error("Report viewing controls failed:", error);

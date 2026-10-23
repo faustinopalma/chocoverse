@@ -105,6 +105,7 @@ const html = template.replaceAll("{{TITLE}}", escape(title))
 if (/\{\{[A-Z]+\}\}/.test(html)) throw new Error("Unfilled template field.");
 await rm(output, { recursive: true, force: true });
 await mkdir(path.join(output, "assets"), { recursive: true });
+await mkdir(path.join(output, "vendor"), { recursive: true });
 await writeFile(path.join(output, "index.html"), html);
 await writeFile(path.join(output, ".nojekyll"), "");
 for (const file of ["style.css", "story.js"]) {
@@ -113,4 +114,8 @@ for (const file of ["style.css", "story.js"]) {
 for (const asset of assets) {
   await copyFile(path.join(root, "docs", "images", "data-agent-story", asset), path.join(output, "assets", asset));
 }
+await copyFile(path.join(here, "art", "chocoverse.glb"), path.join(output, "assets", "chocoverse.glb"));
+const viewer = path.join(here, "node_modules", "@google", "model-viewer");
+await copyFile(path.join(viewer, "dist", "model-viewer.min.js"), path.join(output, "vendor", "model-viewer.min.js"));
+await copyFile(path.join(viewer, "LICENSE"), path.join(output, "vendor", "model-viewer-LICENSE.txt"));
 console.log(`Built ${chapters.length} chapters, ${assets.size} public evidence assets.`);
