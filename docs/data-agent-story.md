@@ -1,6 +1,29 @@
 # How far has Giandoria's supply recovered?
 
-Giandoria buys ingredients, makes chocolate and sells through its own shops and other channels.
+## Giandoria in the Chocoverse
+
+Giandoria is an established Italian chocolate maker. **Chocoverse** follows the business around it:
+suppliers, factory teams, logistics partners, shops and customers. Demand changes with seasons and marketing
+campaigns, so planners turn forecasts and customer orders into purchasing and production plans.
+
+1. **Demand**
+   Orders, seasons and campaigns.
+2. **Planning**
+   Forecasts, materials and production schedules.
+3. **Procurement**
+   Ingredients, packaging and inbound deliveries.
+4. **Production**
+   Chocolate making, moulding and packing.
+5. **Distribution**
+   Stock, warehouses and outbound deliveries.
+6. **Customers**
+   Own shops, supermarkets and export channels.
+
+Finance follows costs, receipts and cash across this chain. Each activity leaves records in Microsoft Fabric.
+The Data Agent lets an analyst investigate business questions across its configured sources in everyday language.
+
+## This recovery review
+
 In September, Giandoria expands its supermarket and export channels.
 In late October, maintenance reduces the capacity of its chocolate-moulding line to **260 kg per day**.
 This line shapes the chocolate.
@@ -106,7 +129,6 @@ The [technical guide][companion] explains how to reproduce the analysis and reco
 ## Closing note — follow Giandoria through the Chocoverse
 
 This investigation is one episode inside **Chocoverse**, Giandoria's evolving business universe.
-Purchases lead to production, production supplies deliveries, and customer purchases generate financial movements.
 The next review can follow how Giandoria turns this recovery into reliable supply across its channels.
 
 Fabric provides complementary lenses: Eventhouse and Real-Time Dashboards follow operational events;

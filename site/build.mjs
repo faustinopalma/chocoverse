@@ -18,8 +18,10 @@ const references = source.match(/^\[[^\]]+\]:[^\r\n]+/gm)?.join("\n") ?? "";
 const title = source.match(/^# (.+)\r?$/m)?.[1].trim();
 const chapters = [...source.matchAll(/^## ([1-4])\. (.+)\r?$/gm)];
 const footerStart = source.indexOf("## Sources");
-if (!title || chapters.length !== 4 || footerStart < 0) {
-  throw new Error("The story must have a title, four numbered chapters, and an evidence section.");
+const contextStart = source.indexOf("## Giandoria in the Chocoverse");
+const reviewStart = source.indexOf("## This recovery review");
+if (!title || chapters.length !== 4 || footerStart < 0 || contextStart < 0 || reviewStart < contextStart) {
+  throw new Error("The story must have a title, company context, recovery introduction, four chapters and sources.");
 }
 for (const [index, chapter] of chapters.entries()) {
   if (Number(chapter[1]) !== index + 1) throw new Error("Chapter order changed.");
@@ -95,7 +97,8 @@ const assetVersion = async (filename) => createHash("sha256")
 const html = template.replace("{{TITLE}}", escape(title))
   .replace("{{STYLE_VERSION}}", await assetVersion("style.css"))
   .replace("{{SCRIPT_VERSION}}", await assetVersion("story.js"))
-  .replace("{{INTRO}}", render(source.slice(source.indexOf("\n") + 1, chapters[0].index)))
+  .replace("{{CONTEXT}}", render(source.slice(contextStart, reviewStart)))
+  .replace("{{INTRO}}", render(source.slice(reviewStart, chapters[0].index)))
   .replace("{{NAV}}", nav)
   .replace("{{CHAPTERS}}", sectionHtml)
   .replace("{{EVIDENCE}}", render(source.slice(footerStart)));

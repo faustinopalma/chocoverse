@@ -2,7 +2,8 @@
 
 [Read the recovery review](https://faustinopalma.github.io/chocoverse/).
 The site turns the [authoritative Markdown](../docs/data-agent-story.md) into a continuous investigation,
-reaching an operational next step in four sections. Each question has a stated purpose: establish the current
+opening with Giandoria's connected value chain and reaching a synthesis in four sections.
+Each question has a stated purpose: establish the current
 product sales, trace the factory flow, then assess how far company backlog has recovered.
 Other feature demonstrations remain in the [technical guide](../docs/29-data-agent-companion.md).
 There are no exercises or answers to unlock.
@@ -10,7 +11,8 @@ It uses captured evidence, makes no live Fabric calls and needs no Azure capacit
 It has no analytics, cookies, sign-in or client-side storage.
 
 The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
-numbered exhibits and a closing decision table. It uses an editorial layout rather than dashboard cards.
+numbered exhibits and a closing synthesis. A six-stage business map introduces demand, planning, procurement,
+production, distribution and customers before the review. It uses an editorial layout rather than a dashboard.
 All reasoning is visible without JavaScript; scripts only provide theme selection and an evidence viewer.
 
 ## Edit and validate
@@ -20,8 +22,7 @@ Tests retain coverage checks for the archived Fabric chart without publishing it
 Changed chapter structure or evidence contracts fail the build or tests.
 Keep each captured output with its recorded input. Quote the original request rather than reconstructing it
 from the answer; label execution traces that share an input. Use named documentation links.
-The closing note links to the original repository and distinguishes live observations
-from snapshot-based analysis.
+The closing note links to the wider project; the sources note links to reproducibility and verification limits.
 
 From the repository root, with Node.js 24 and npm installed:
 

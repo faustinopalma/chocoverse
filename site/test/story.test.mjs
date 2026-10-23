@@ -107,6 +107,19 @@ test("the opening establishes the outstanding orders, decision and comparison pe
     "Preserve the business world's narrative immersion through the closing note");
 });
 
+test("the standalone opening introduces Giandoria and the connected business before the recovery review", async () => {
+  const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
+  const context = html.match(/<section class="company-context"[\s\S]+?<\/section>/)?.[0];
+  assert.ok(context);
+  for (const phrase of ["established Italian chocolate maker", "Chocoverse", "Demand", "Planning",
+    "Procurement", "Production", "Distribution", "Customers", "Finance", "marketing", "Microsoft Fabric"]) {
+    assert.ok(context.includes(phrase), phrase);
+  }
+  assert.equal((context.match(/<li>/g) ?? []).length, 6);
+  assert.ok(html.indexOf(context) < html.indexOf("This recovery review"));
+  assert.ok(!/<(?:img|script|iframe)\b/.test(context), "The value chain must remain readable without image or script loading");
+});
+
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/<(?:input|select|form|progress)\b/.test(html));
@@ -150,7 +163,8 @@ test("verbatim inputs, source-row oracles and real captures retain their provena
     assert.equal(image.subarray(1, 4).toString(), "PNG");
   }
   assert.ok(source.trim().split(/\s+/).length <= 1200, "Keep the full reading path within 1,200 words");
-  assert.ok(source.slice(0, source.indexOf("## Sources")).trim().split(/\s+/).length <= 850);
+  const review = source.slice(source.indexOf("## This recovery review"), source.indexOf("## Sources"));
+  assert.ok(review.trim().split(/\s+/).length <= 850, "Keep the investigation concise alongside the standalone context");
   const guide = await readFile(path.join(root, "docs", "29-data-agent-companion.md"), "utf8");
   assert.ok(guide.includes("/blob/1e7022f/docs/data-agent-story.md"));
   assert.ok(guide.includes("/blob/3e0642d/docs/data-agent-story.md"));
