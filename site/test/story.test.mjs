@@ -88,7 +88,8 @@ test("the opening sets the event and questions without revealing the analytical 
   const source = await readFile(path.join(root, "docs", "data-agent-story.md"), "utf8");
   const opening = source.slice(0, source.indexOf("## 1."));
   for (const phrase of ["In September 2047, Giandoria expands its supermarket and export channels.",
-    "Maintenance then reduces capacity", "Giandoria adds shifts in late December.",
+    "an unexpected equipment", "malfunction requires unplanned maintenance on the moulding line",
+    "Giandoria adds shifts in late December.",
     "How have customer purchases evolved?", "Does the factory show the same pattern?",
     "What has happened to orders waiting to be shipped?", "Let's ask a Fabric Data Agent",
     "September, before maintenance", "November, during the reduced-capacity period",
@@ -102,6 +103,12 @@ test("the opening sets the event and questions without revealing the analytical 
   assert.ok(firstQuestion.includes("when maintenance reduced moulding capacity"),
     "Name the capacity change explicitly before asking about the sales recovery");
   assert.ok(!source.includes("after the restriction"));
+  const scenario = JSON.parse(await readFile(path.join(root, "config", "scenarios",
+    "channel-expansion-maintenance.json"), "utf8"));
+  const maintenance = scenario.changes.find(change => change.id === "moulding-maintenance");
+  assert.match(maintenance.reason, /Unexpected equipment malfunction requires unplanned maintenance/);
+  assert.equal(maintenance.tick, 152544);
+  assert.deepEqual(maintenance.line_capacity_kg, { moulding: 260 });
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
   assert.ok(!/simulat/i.test(html), "Keep simulation labels out of the reader-facing story");
   assert.ok(!/virtual time|reduced-detail runtime|Pause it, resume it|fictional|not real/i.test(html),

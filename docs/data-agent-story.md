@@ -23,8 +23,9 @@ Finance follows costs and cash across the chain; Microsoft Fabric brings its bus
 
 ## This recovery review
 
-In September 2047, Giandoria expands its supermarket and export channels. Maintenance then reduces capacity
-on the moulding line, which shapes the chocolate, in late October. Giandoria adds shifts in late December.
+In September 2047, Giandoria expands its supermarket and export channels. In late October, an unexpected equipment
+malfunction requires unplanned maintenance on the moulding line, which shapes the chocolate, reducing its capacity.
+Giandoria adds shifts in late December.
 
 By the end of February, Operations wants to understand what changed. How have customer purchases evolved?
 Does the factory show the same pattern? What has happened to orders waiting to be shipped?

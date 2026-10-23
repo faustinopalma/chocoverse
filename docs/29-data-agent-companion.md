@@ -22,6 +22,9 @@ The [minisite](https://faustinopalma.github.io/chocoverse/) presents the same Ma
 Its questions connect the product sales pattern to production flows, then assess the outstanding company backlog.
 The [scenario plan](../config/scenarios/channel-expansion-maintenance.json) supplies explicit demand and capacity
 assumptions. Enterprise events supply the measured outcomes; scenario assumptions stay distinct from observations.
+The story treats the restriction as unplanned maintenance following an unexpected equipment malfunction.
+This cause is a scenario assumption, not an incident diagnosis established by the Data Agent or a measured result.
+The clarification changes neither the capacity schedule nor the retained analytical snapshot.
 
 The CLI cases are `recovery-sales`, `recovery-flow` and `recovery-backlog`, all using the story companion.
 They require a fixed snapshot covering September 2047, November 2047 and February 2048.

@@ -12,7 +12,7 @@
     {
       "id": "moulding-maintenance",
       "tick": 152544,
-      "reason": "Temporary moulding capacity restriction during maintenance (scenario assumption).",
+      "reason": "Unexpected equipment malfunction requires unplanned maintenance, temporarily restricting moulding capacity (scenario assumption).",
       "demand_percent": {},
       "line_capacity_kg": {"moulding": 260}
     },
