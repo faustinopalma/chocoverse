@@ -15,6 +15,8 @@ It has no analytics, cookies, sign-in or client-side storage.
 The visual template is an original manufacturing-company review: a typographic masthead, ruled contents,
 numbered exhibits and a closing synthesis. A short prose introduction establishes Giandoria and Chocoverse
 before the review, without a value-chain card grid. It uses an editorial layout rather than a dashboard.
+An AI-generated conceptual illustration accompanies that introduction; it is labelled separately from
+the authentic, numbered Data Agent exhibits. The static WebP lives in `art/giandoria-editorial.webp`.
 All reasoning is visible without JavaScript; scripts provide theme selection and evidence viewing.
 
 ## Retained 3D artwork
@@ -57,7 +59,8 @@ Invoke-RecordedNative -FilePath 'npm.cmd' -Arguments @('--prefix', 'site', 'test
 ```
 
 The build replaces only generated `site/dist`. It copies explicitly referenced evidence images from
-`docs/images/data-agent-story`; private presentations, lab records and repository contents are never site inputs.
+`docs/images/data-agent-story` and the company illustration from `art/giandoria-editorial.webp`.
+Private presentations and lab records are never site inputs.
 Tests check the publication files, local links, numerical facts, date completeness and reasoning boundaries.
 
 Serve `site/dist` with a local static HTTP server for browser checks. Check narrow and wide screens,

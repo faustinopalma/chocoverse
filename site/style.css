@@ -37,7 +37,12 @@ h1 { font-size: clamp(36px, 4.7vw, 60px); font-weight: 450; letter-spacing: -.04
 .standfirst { font-size: 20px; line-height: 1.6; }
 .standfirst p { margin: 0 0 20px; }
 .standfirst h2 { margin-bottom: 20px; }
-.company-context { border-block: 1px solid var(--cp-border-strong); padding: 28px 0; margin: 0 0 32px; }
+.company-opening { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;
+  border-block: 1px solid var(--cp-border-strong); padding: 28px 0; margin: 0 0 32px; }
+.company-context { min-width: 0; }
+.company-art { margin: 0; min-width: 0; }
+.company-art img { display: block; width: 100%; height: auto; border-radius: 10px; }
+.company-art figcaption { font-size: 11px; }
 .company-context h2 { font-size: 24px; }
 .company-context p { max-width: 86ch; font-size: 17px; line-height: 1.65; margin: 16px 0 0; }
 .contents { border-block: 1px solid var(--cp-text); padding: 24px 0; margin-bottom: 32px; }
@@ -112,6 +117,7 @@ dialog p, dialog a { font-size: 14px; }
   .edition-line { font-size: 9px; gap: 16px; }
   .edition-line span:last-child { text-align: right; }
   .cover-title, .cover-introduction, .chapter { display: block; }
+  .company-opening { grid-template-columns: 1fr; gap: 24px; }
   .cover-title { padding-top: 24px; }
   .report-label { margin-bottom: 24px; font-size: 10px; }
   h1 { font-size: 38px; }

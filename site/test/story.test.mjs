@@ -21,15 +21,15 @@ test("publication contains only explicit static files and the recovery evidence"
   const dir = path.join(site, "dist");
   assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "story.js", "style.css"]);
   const assets = (await readdir(path.join(dir, "assets"))).sort();
-  assert.deepEqual(assets, ["recovery-backlog.png", "recovery-flow.png",
+  assert.deepEqual(assets, ["giandoria-editorial.webp", "recovery-backlog.png", "recovery-flow.png",
     "recovery-history.svg", "recovery-sales.png"]);
   const html = await readFile(path.join(dir, "index.html"), "utf8");
   const referenced = [...new Set([...html.matchAll(/(?:href|src)="assets\/([^"]+)"/g)].map(([, name]) => name))].sort();
   assert.deepEqual(assets, referenced);
   assert.ok(!/<p>\s*<figure/.test(html));
-  assert.equal((html.match(/<img src="[^"]+"[^>]* width="\d+" height="\d+"/g) ?? []).length, 4);
+  assert.equal((html.match(/<img src="[^"]+"[^>]* width="\d+" height="\d+"/g) ?? []).length, 5);
   assert.equal((html.match(/class="chapter"/g) ?? []).length, 4);
-  assert.equal((html.match(/<figcaption>/g) ?? []).length, 4);
+  assert.equal((html.match(/<figcaption>/g) ?? []).length, 5);
   assert.equal((html.match(/data-zoom/g) ?? []).length, 4);
   for (let index = 1; index <= 4; index++) assert.ok(html.includes(`Exhibit 0${index}`));
   for (const privateText of ["{{", ".local/", "The Road Ahead", "Deck Pomeriggio", 'src="https://']) {
@@ -47,6 +47,18 @@ test("publication contains only explicit static files and the recovery evidence"
     assert.ok(html.includes(fact), fact);
   }
   assert.ok(!/inventory review|7 of 30|24–26 August|rendered exports/i.test(html));
+});
+
+test("the company illustration is separate from authentic Data Agent evidence", async () => {
+  const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
+  const figure = html.match(/<figure class="company-art">[\s\S]+?<\/figure>/)?.[0];
+  assert.ok(figure);
+  assert.match(figure, /AI-generated conceptual illustration/);
+  assert.ok(!/data-zoom|Exhibit/.test(figure));
+  assert.ok(html.indexOf(figure) < html.indexOf("This recovery review"));
+  const image = await readFile(path.join(site, "dist", "assets", "giandoria-editorial.webp"));
+  assert.equal(image.toString("ascii", 8, 12), "WEBP");
+  assert.ok(image.length < 300 * 1024, "Keep the illustration below 300 KiB");
 });
 
 test("the archived 3D artwork is retained but excluded from the minisite", async () => {

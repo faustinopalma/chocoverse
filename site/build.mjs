@@ -113,4 +113,6 @@ for (const file of ["style.css", "story.js"]) {
 for (const asset of assets) {
   await copyFile(path.join(root, "docs", "images", "data-agent-story", asset), path.join(output, "assets", asset));
 }
+await copyFile(path.join(here, "art", "giandoria-editorial.webp"),
+  path.join(output, "assets", "giandoria-editorial.webp"));
 console.log(`Built ${chapters.length} chapters, ${assets.size} public evidence assets.`);
