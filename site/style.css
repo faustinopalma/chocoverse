@@ -40,18 +40,6 @@ h1 { font-size: clamp(36px, 4.7vw, 60px); font-weight: 450; letter-spacing: -.04
 .company-context { border-block: 1px solid var(--cp-border-strong); padding: 28px 0; margin: 0 0 32px; }
 .company-context h2 { font-size: 24px; }
 .company-context p { max-width: 86ch; font-size: 17px; line-height: 1.65; margin: 16px 0 0; }
-.world-3d { margin: 0 0 40px; border-bottom: 1px solid var(--cp-border-strong); padding-bottom: 24px; }
-.world-heading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-.world-heading h2 { font-size: 24px; }
-.world-heading span, .world-caption { font-size: 13px; color: var(--cp-text-soft); }
-model-viewer { display: block; width: 100%; height: clamp(300px, 40vw, 460px);
-  background: var(--cp-bg-elevated); margin-top: 20px; --progress-bar-color: var(--cp-accent); }
-.world-loading { display: grid; place-items: center; width: 100%; height: 100%;
-  color: var(--cp-text-muted); font-size: 15px; background: var(--cp-bg-elevated); }
-.world-controls { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 20px; font-size: 12px; }
-.world-controls p { flex: 1 1 280px; }
-.world-controls button { font-size: 12px; padding: 4px 12px; }
-.world-caption { margin: 4px 0 0; }
 .contents { border-block: 1px solid var(--cp-text); padding: 24px 0; margin-bottom: 32px; }
 .contents h2 { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; margin: 0 0 16px; font-weight: 600; }
 .contents ol { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -115,7 +103,6 @@ dialog p, dialog a { font-size: 14px; }
   h2 { font-size: 23px; }
 }
 @media (max-width: 640px) {
-  .world-heading { display: block; }
   body { font-size: 17px; }
   main { padding: 0 20px; }
   .publication-bar { padding-inline: 20px; }
