@@ -9,6 +9,7 @@ const COLORS = [
 const TAP_TARGETS = "a[href],button,summary,label,[role=button]";
 const MIN_STEP = 1.2;
 const TAP_MS = 350;
+const DESKTOP_POINTER = "(min-width: 768px) and (hover: hover) and (pointer: fine)";
 
 export function initializeWhiteboard() {
   const root = document.documentElement;
@@ -26,6 +27,7 @@ export function initializeWhiteboard() {
       undoTitle: "Undo last stroke (Ctrl+Z)", clearTitle: "Clear annotations on this page",
       colorNames: COLORS.map(item => item.name) };
   const storeKey = `giandoria-whiteboard-data-agent-story-${language}-v1`;
+  const desktopPointer = window.matchMedia(DESKTOP_POINTER);
   const pages = {};
   let color = COLORS[0].color;
   let width = 3;
@@ -188,7 +190,10 @@ export function initializeWhiteboard() {
 
   function route(event) {
     if (current) return;
-    if (isPen(event)) arm(true, true);
+    if (isPen(event) && desktopPointer.matches) {
+      root.classList.add("whiteboard-ready");
+      arm(true, true);
+    }
     else if (event.pointerType === "mouse") arm(mouseDraw, false);
     else arm(false, false);
   }
@@ -384,7 +389,11 @@ export function initializeWhiteboard() {
   });
   observer.observe(app);
   observer.observe(bar);
-  root.classList.add("whiteboard-ready");
+  desktopPointer.addEventListener("change", event => {
+    if (event.matches) return;
+    root.classList.remove("whiteboard-ready");
+    arm(false, false);
+  });
   syncToolbar();
   load();
   render();

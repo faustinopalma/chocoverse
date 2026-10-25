@@ -11,9 +11,11 @@ button:hover { border-color: var(--cp-accent); }
 :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
 [hidden] { display: none !important; }
 .whiteboard-bar { display: none; }
+@media (min-width: 768px) and (hover: hover) and (pointer: fine) {
 html.whiteboard-ready .whiteboard-bar { position: fixed; inset: 0 0 auto; z-index: 100;
   display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 12px;
   background: var(--cp-surface); border-bottom: 1px solid var(--cp-border); }
+}
 .wb-group { display: inline-flex; align-items: center; gap: 4px; }
 .wb-button { min-height: 34px; padding: 4px 10px; border: 1px solid var(--cp-border);
   border-radius: .625rem; background: var(--cp-surface); font-size: 13px; line-height: 1.2; }
