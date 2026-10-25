@@ -9,6 +9,15 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 const root = path.dirname(here);
 const output = path.join(here, "dist");
 const assets = new Set();
+const versionOf = value => createHash("sha256")
+  .update(value.replace(/\r\n/g, "\n"))
+  .digest("hex").slice(0, 12);
+const assetVersion = async filename => versionOf(await readFile(path.join(here, filename), "utf8"));
+const whiteboardVersion = await assetVersion("whiteboard.js");
+const story = (await readFile(path.join(here, "story.js"), "utf8"))
+  .replace("{{WHITEBOARD_VERSION}}", whiteboardVersion);
+if (story.includes("{{")) throw new Error("Unfilled story script version.");
+const scriptVersion = versionOf(story);
 
 async function buildEdition(language) {
   const italian = language === "it";
@@ -136,14 +145,11 @@ async function buildEdition(language) {
       template = template.replaceAll(english, translated);
     }
   }
-  const assetVersion = async (filename) => createHash("sha256")
-    .update((await readFile(path.join(here, filename), "utf8")).replace(/\r\n/g, "\n"))
-    .digest("hex").slice(0, 12);
   const html = template.replaceAll("{{TITLE}}", escape(title))
     .replace("{{EN_CURRENT}}", italian ? "" : 'aria-current="page"')
     .replace("{{IT_CURRENT}}", italian ? 'aria-current="page"' : "")
     .replace("{{STYLE_VERSION}}", await assetVersion("style.css"))
-    .replace("{{SCRIPT_VERSION}}", await assetVersion("story.js"))
+    .replace("{{SCRIPT_VERSION}}", scriptVersion)
     .replace("{{CONTEXT}}", render(source.slice(contextStart, reviewStart)))
     .replace("{{INTRO}}", render(source.slice(reviewStart, chapters[0].index)))
     .replace("{{NAV}}", nav)
@@ -158,9 +164,10 @@ await mkdir(path.join(output, "assets"), { recursive: true });
 await buildEdition("en");
 await buildEdition("it");
 await writeFile(path.join(output, ".nojekyll"), "");
-for (const file of ["style.css", "story.js", "whiteboard.js"]) {
+for (const file of ["style.css", "whiteboard.js"]) {
   await copyFile(path.join(here, file), path.join(output, file));
 }
+await writeFile(path.join(output, "story.js"), story);
 for (const asset of assets) {
   await copyFile(path.join(root, "docs", "images", "data-agent-story", asset), path.join(output, "assets", asset));
 }

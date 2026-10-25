@@ -1,4 +1,4 @@
-import { initializeWhiteboard } from "./whiteboard.js";
+import { initializeWhiteboard } from "./whiteboard.js?v={{WHITEBOARD_VERSION}}";
 
 function initialize() {
   const root = document.documentElement;

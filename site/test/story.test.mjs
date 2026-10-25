@@ -25,6 +25,14 @@ test("publication contains only explicit static files and the recovery evidence"
   assert.deepEqual(assets, ["giandoria-editorial.webp", "recovery-backlog.png", "recovery-flow.png",
     "recovery-history.svg", "recovery-sales.png"]);
   const html = await readFile(path.join(dir, "index.html"), "utf8");
+  const italian = await readFile(path.join(dir, "it.html"), "utf8");
+  const story = await readFile(path.join(dir, "story.js"), "utf8");
+  const whiteboard = await readFile(path.join(dir, "whiteboard.js"), "utf8");
+  const storyVersion = sha256(story.replace(/\r\n/g, "\n")).slice(0, 12);
+  const whiteboardVersion = sha256(whiteboard.replace(/\r\n/g, "\n")).slice(0, 12);
+  assert.ok(html.includes(`story.js?v=${storyVersion}`));
+  assert.ok(italian.includes(`story.js?v=${storyVersion}`));
+  assert.match(story, new RegExp(`from "\\./whiteboard\\.js\\?v=${whiteboardVersion}"`));
   const referenced = [...new Set([...html.matchAll(/(?:href|src)="assets\/([^"]+)"/g)].map(([, name]) => name))].sort();
   assert.deepEqual(assets, referenced);
   assert.ok(!/<p>\s*<figure/.test(html));
