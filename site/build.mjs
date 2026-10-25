@@ -125,8 +125,7 @@ async function buildEdition(language) {
       ["Recovery review", "Analisi della ripresa"],
       ["Markdown edition", "Versione Markdown"],
       ["Back to the cover ↑", "Torna all'inizio ↑"],
-      ["A static report. No sign-in, analytics, cookies or live Fabric calls.",
-        "Un'analisi statica. Nessun accesso, tracciamento, cookie o chiamata a Fabric in tempo reale."],
+      ["Whiteboard annotations stay in this browser.", "Le annotazioni restano in questo browser."],
       ["Execution evidence", "Documenti delle esecuzioni"],
       ["Close evidence", "Chiudi il documento"],
       ["Close ×", "Chiudi ×"],
@@ -159,7 +158,7 @@ await mkdir(path.join(output, "assets"), { recursive: true });
 await buildEdition("en");
 await buildEdition("it");
 await writeFile(path.join(output, ".nojekyll"), "");
-for (const file of ["style.css", "story.js"]) {
+for (const file of ["style.css", "story.js", "whiteboard.js"]) {
   await copyFile(path.join(here, file), path.join(output, file));
 }
 for (const asset of assets) {

@@ -1,3 +1,5 @@
+import { initializeWhiteboard } from "./whiteboard.js";
+
 function initialize() {
   const root = document.documentElement;
   const italian = root.lang === "it";
@@ -50,6 +52,8 @@ function initialize() {
       dialog.close();
     }
   });
+
+  initializeWhiteboard();
 }
 
 try {

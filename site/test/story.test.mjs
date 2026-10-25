@@ -19,7 +19,8 @@ const pointLabels = svg => [...svg.matchAll(/<[^>]+aria-roledescription="point"[
 
 test("publication contains only explicit static files and the recovery evidence", async () => {
   const dir = path.join(site, "dist");
-  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "it.html", "story.js", "style.css"]);
+  assert.deepEqual((await readdir(dir)).sort(), [".nojekyll", "assets", "index.html", "it.html",
+    "story.js", "style.css", "whiteboard.js"]);
   const assets = (await readdir(path.join(dir, "assets"))).sort();
   assert.deepEqual(assets, ["giandoria-editorial.webp", "recovery-backlog.png", "recovery-flow.png",
     "recovery-history.svg", "recovery-sales.png"]);
@@ -69,7 +70,8 @@ test("Italian edition translates the full story and controls while preserving or
     "Giandoria è tornata a rifornire i clienti?", "Misurare il cambiamento nelle vendite",
     "Seguire il fenomeno in fabbrica", "Verificare gli ordini arretrati", "Che cosa ci dice l'analisi",
     "Ordini arretrati", "Scorte di prodotto finito", "Apri l'immagine originale", "Chiudi il documento",
-    "Tema scuro", "404,9 kg/giorno", "533,3 kg a febbraio", "983,0 kg", "1.119 kg", "3 marzo 2048"]) {
+    "Tema scuro", "Le annotazioni restano in questo browser.", "404,9 kg/giorno", "533,3 kg a febbraio",
+    "983,0 kg", "1.119 kg", "3 marzo 2048"]) {
     assert.ok(italian.includes(phrase), phrase);
   }
   const record = JSON.parse(await readFile(recordPath, "utf8"));
@@ -209,7 +211,8 @@ test("the standalone opening introduces Giandoria and the connected business bef
 
 test("the operational conclusion is bounded, visible and usable without scripts", async () => {
   const html = await readFile(path.join(site, "dist", "index.html"), "utf8");
-  assert.ok(!/<(?:input|select|form|progress)\b/.test(html));
+  assert.deepEqual([...html.matchAll(/<(input|select|form|progress)\b/g)].map(([, tag]) => tag), ["input"]);
+  assert.match(html, /<label class="wb-group wb-width">[\s\S]*?<input type="range"/);
   assert.match(html, /style\.css\?v=[a-f0-9]{12}/);
   assert.match(html, /story\.js\?v=[a-f0-9]{12}/);
   const conclusion = html.match(/<section class="chapter" id="chapter-4"[\s\S]+?<\/section>/)?.[0];
@@ -225,6 +228,33 @@ test("the operational conclusion is bounded, visible and usable without scripts"
   assert.ok(html.includes("cannot separate the effects of capacity and demand"));
   const script = await readFile(path.join(site, "dist", "story.js"), "utf8");
   assert.ok(!/chapter-copy|fetch\(|localStorage|sessionStorage/.test(script));
+});
+
+test("both editions publish the localized, accessible whiteboard and isolated annotation engine", async () => {
+  const dir = path.join(site, "dist");
+  const [english, italian, engine, css] = await Promise.all([
+    readFile(path.join(dir, "index.html"), "utf8"),
+    readFile(path.join(dir, "it.html"), "utf8"),
+    readFile(path.join(dir, "whiteboard.js"), "utf8"),
+    readFile(path.join(dir, "style.css"), "utf8"),
+  ]);
+  for (const html of [english, italian]) {
+    assert.match(html, /id="wbbar" class="whiteboard-bar" role="toolbar"/);
+    assert.match(html, /id="ink"[^>]*aria-hidden="true"><\/svg>\s*<\/main>/);
+    assert.match(html, /id="mousedraw"[^>]*aria-pressed="false"/);
+    assert.match(html, /id="width" min="1" max="14"/);
+  }
+  assert.match(engine, /giandoria-whiteboard-data-agent-story-\$\{language\}-v1/);
+  assert.match(engine, /localStorage\.setItem/);
+  assert.match(engine, /addEventListener\("storage"/);
+  assert.match(engine, /getCoalescedEvents/);
+  assert.match(engine, /pointercancel/);
+  assert.match(engine, /elementFromPoint/);
+  assert.match(engine, /clearConfirm: "Cancellare tutte le annotazioni\?"/);
+  assert.match(english, /Whiteboard annotations stay in this browser/);
+  assert.match(italian, /Le annotazioni restano in questo browser/);
+  assert.match(css, /#ink path \{ fill: none; stroke-linecap: round; stroke-linejoin: round; \}/);
+  assert.match(css, /--cp-accent/);
 });
 
 test("verbatim inputs, source-row oracles and real captures retain their provenance", async () => {
