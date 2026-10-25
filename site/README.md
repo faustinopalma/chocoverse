@@ -17,6 +17,8 @@ The whiteboard tools are available on desktop only. A persistent tab intentional
 closes the animated toolbar. Pen input draws without opening the toolbar; mouse clicks
 elsewhere leave it unchanged. Mouse drawing remains an explicit toolbar option. The
 transparent drawing surface spans the viewport, including space beyond the centered report.
+Saved strokes use document-relative drawing coordinates, so zooming or resizing scales the
+annotations with the page.
 Browsers expose a generic pen pointer type, not the pen's manufacturer, so Wacom-specific
 detection is not available.
 
