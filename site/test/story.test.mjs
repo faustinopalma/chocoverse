@@ -239,9 +239,10 @@ test("both editions publish the localized, accessible whiteboard and isolated an
     readFile(path.join(dir, "style.css"), "utf8"),
   ]);
   for (const html of [english, italian]) {
-    assert.match(html, /id="wbbar" class="whiteboard-bar" role="toolbar"/);
-    assert.match(html, /id="ink"[^>]*aria-hidden="true"><\/svg>\s*<\/main>/);
+    assert.match(html, /id="wb-tab"[^>]*aria-controls="wbbar"[^>]*aria-expanded="false"/);
+    assert.match(html, /id="wbbar" class="whiteboard-bar" role="toolbar"[^>]*aria-hidden="true" inert/);
     assert.match(html, /id="mousedraw"[^>]*aria-pressed="false"/);
+    assert.match(html, /id="ink"[^>]*aria-hidden="true"><\/svg>\s*<\/main>/);
     assert.match(html, /id="width" min="1" max="14"/);
   }
   assert.match(engine, /giandoria-whiteboard-data-agent-story-\$\{language\}-v1/);
@@ -251,8 +252,13 @@ test("both editions publish the localized, accessible whiteboard and isolated an
   assert.match(engine, /pointercancel/);
   assert.match(engine, /elementFromPoint/);
   assert.match(engine, /const DESKTOP_POINTER = "\(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\)"/);
-  assert.match(engine, /isPen\(event\) && desktopPointer\.matches/);
-  assert.match(css, /@media \(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\) \{\s*html\.whiteboard-ready \.whiteboard-bar/);
+  assert.match(engine, /tab\.addEventListener\("click"/);
+  assert.equal([...engine.matchAll(/\.addEventListener\("click",\s*\(\)\s*=>\s*\{\s*mouseDraw = !mouseDraw/g)].length, 1);
+  assert.match(engine, /if \(tab\.contains\(event\.target\) \|\| bar\.contains\(event\.target\)\) return/);
+  assert.match(engine, /if \(!isPen\(event\) \|\| !desktopPointer\.matches\) return/);
+  assert.match(css, /@media \(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?\.whiteboard-tab/);
+  assert.match(css, /#ink \{[^}]*left: calc\(50% - 50vw\); width: 100vw/s);
+  assert.match(css, /transition: opacity 180ms ease, transform 180ms ease/);
   assert.match(engine, /clearConfirm: "Cancellare tutte le annotazioni\?"/);
   assert.match(english, /Whiteboard annotations stay in this browser/);
   assert.match(italian, /Le annotazioni restano in questo browser/);

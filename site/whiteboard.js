@@ -16,13 +16,16 @@ export function initializeWhiteboard() {
   const app = document.getElementById("top");
   const ink = document.getElementById("ink");
   const bar = document.getElementById("wbbar");
+  const tab = document.getElementById("wb-tab");
   const language = root.lang === "it" ? "it" : "en";
   const labels = language === "it"
-    ? { toolbar: "Strumenti di annotazione", mouse: "Disegno con il mouse", colors: "Colore dell'inchiostro",
+    ? { toolbar: "Strumenti di annotazione", tabShow: "Mostra gli strumenti di annotazione",
+      tabHide: "Nascondi gli strumenti di annotazione", mouse: "Disegno con il mouse", colors: "Colore dell'inchiostro",
       width: "Spessore", undo: "Annulla", clear: "Cancella", clearConfirm: "Cancellare tutte le annotazioni?",
       undoTitle: "Annulla l'ultimo tratto (Ctrl+Z)", clearTitle: "Cancella le annotazioni di questa pagina",
       colorNames: ["Accento", "Blu", "Verde", "Ambra", "Testo"] }
-    : { toolbar: "Whiteboard tools", mouse: "Mouse draws", colors: "Ink colour",
+    : { toolbar: "Whiteboard tools", tabShow: "Show whiteboard tools",
+      tabHide: "Hide whiteboard tools", mouse: "Mouse draws", colors: "Ink colour",
       width: "Stroke width", undo: "Undo", clear: "Clear", clearConfirm: "Clear all annotations?",
       undoTitle: "Undo last stroke (Ctrl+Z)", clearTitle: "Clear annotations on this page",
       colorNames: COLORS.map(item => item.name) };
@@ -34,9 +37,13 @@ export function initializeWhiteboard() {
   let mouseDraw = false;
   let current = null;
   let pendingSync = false;
+  let toolbarInertTimer;
 
   bar.setAttribute("aria-label", labels.toolbar);
   document.getElementById("mousedraw").textContent = labels.mouse;
+  tab.textContent = language === "it" ? "Annotazioni" : "Whiteboard";
+  tab.title = labels.tabShow;
+  tab.setAttribute("aria-label", labels.tabShow);
   document.getElementById("colors").setAttribute("aria-label", labels.colors);
   document.getElementById("width-label").textContent = labels.width;
   document.getElementById("undo").textContent = labels.undo;
@@ -131,11 +138,45 @@ export function initializeWhiteboard() {
   }
 
   function syncToolbar() {
+    if (!root.classList.contains("whiteboard-ready")) {
+      document.body.style.paddingTop = "";
+      root.style.scrollPaddingTop = "";
+      return;
+    }
     const height = `${Math.ceil(bar.getBoundingClientRect().height)}px`;
     if (document.body.style.paddingTop !== height) {
       document.body.style.paddingTop = height;
       root.style.scrollPaddingTop = height;
     }
+  }
+
+  function showToolbar() {
+    if (!desktopPointer.matches) return false;
+    clearTimeout(toolbarInertTimer);
+    root.classList.add("whiteboard-ready");
+    bar.inert = false;
+    bar.setAttribute("aria-hidden", "false");
+    tab.setAttribute("aria-expanded", "true");
+    tab.setAttribute("aria-label", labels.tabHide);
+    tab.title = labels.tabHide;
+    syncToolbar();
+    resizeInk();
+    return true;
+  }
+
+  function hideToolbar() {
+    root.classList.remove("whiteboard-ready");
+    bar.setAttribute("aria-hidden", "true");
+    tab.setAttribute("aria-expanded", "false");
+    tab.setAttribute("aria-label", labels.tabShow);
+    tab.title = labels.tabShow;
+    arm(false, false);
+    syncToolbar();
+    resizeInk();
+    clearTimeout(toolbarInertTimer);
+    toolbarInertTimer = window.setTimeout(() => {
+      bar.inert = true;
+    }, 200);
   }
 
   function pointFrom(event) {
@@ -190,12 +231,8 @@ export function initializeWhiteboard() {
 
   function route(event) {
     if (current) return;
-    if (isPen(event) && desktopPointer.matches) {
-      root.classList.add("whiteboard-ready");
-      arm(true, true);
-    }
-    else if (event.pointerType === "mouse") arm(mouseDraw, false);
-    else arm(false, false);
+    arm(isPen(event) && desktopPointer.matches || event.pointerType === "mouse" && mouseDraw,
+      isPen(event) && desktopPointer.matches);
   }
 
   function release(pointerId) {
@@ -217,6 +254,7 @@ export function initializeWhiteboard() {
       load();
       render();
     }
+    arm(false, false);
   }
 
   function interactiveTarget(x, y) {
@@ -227,7 +265,7 @@ export function initializeWhiteboard() {
     return hit?.closest(TAP_TARGETS);
   }
 
-  function onPointerDown(event) {
+  function onPointerDown(event, tapTarget = null) {
     if (event.pointerType === "touch") return;
     if (event.pointerType === "mouse" && (!mouseDraw || event.button !== 0)) return;
     finish();
@@ -258,6 +296,7 @@ export function initializeWhiteboard() {
       startedAt: event.timeStamp,
       moved: false,
       pen: event.pointerType === "pen",
+      tapTarget,
     };
   }
 
@@ -287,7 +326,7 @@ export function initializeWhiteboard() {
     const drawing = current;
     if (drawing.mode === "pen" && drawing.pen && event.type === "pointerup"
       && !drawing.moved && event.timeStamp - drawing.startedAt < TAP_MS) {
-      const target = interactiveTarget(event.clientX, event.clientY);
+      const target = drawing.tapTarget || interactiveTarget(event.clientX, event.clientY);
       if (target) {
         strokes().splice(strokes().indexOf(drawing.stroke), 1);
         drawing.stroke.element.remove();
@@ -357,7 +396,6 @@ export function initializeWhiteboard() {
       arm(false, false);
     }
   });
-  ink.addEventListener("pointerdown", onPointerDown);
   ink.addEventListener("pointermove", onPointerMove);
   ink.addEventListener("pointerup", onPointerUp);
   ink.addEventListener("pointercancel", onPointerUp);
@@ -365,6 +403,37 @@ export function initializeWhiteboard() {
     if (current && event.pointerId === current.pointerId) finish();
   });
   ink.addEventListener("contextmenu", event => event.preventDefault());
+  tab.addEventListener("click", () => {
+    if (root.classList.contains("whiteboard-ready")) {
+      finish();
+      hideToolbar();
+    } else {
+      showToolbar();
+    }
+  });
+  window.addEventListener("pointerdown", event => {
+    if (event.pointerType === "mouse") {
+      if (tab.contains(event.target) || bar.contains(event.target)) return;
+      if (root.classList.contains("whiteboard-ready")) {
+        if (current) finish();
+        hideToolbar();
+      }
+      if (mouseDraw && event.button === 0) {
+        event.preventDefault();
+        event.stopPropagation();
+        onPointerDown(event);
+      }
+      return;
+    }
+    if (!isPen(event) || !desktopPointer.matches) return;
+    if (tab.contains(event.target)) return;
+    const tapTarget = interactiveTarget(event.clientX, event.clientY);
+    showToolbar();
+    if (bar.contains(event.target)) return;
+    event.preventDefault();
+    event.stopPropagation();
+    onPointerDown(event, tapTarget);
+  }, { capture: true });
   window.addEventListener("pointerup", onPointerUp);
   window.addEventListener("storage", event => {
     if (event.key !== storeKey && event.key !== null) return;
@@ -391,8 +460,8 @@ export function initializeWhiteboard() {
   observer.observe(bar);
   desktopPointer.addEventListener("change", event => {
     if (event.matches) return;
-    root.classList.remove("whiteboard-ready");
-    arm(false, false);
+    finish();
+    hideToolbar();
   });
   syncToolbar();
   load();

@@ -13,10 +13,11 @@ It uses captured evidence, makes no live Fabric calls and needs no Azure capacit
 It has no analytics, cookies or sign-in. Whiteboard annotations are stored in browser
 local storage, separately for each language; they stay on that browser profile and are not
 included in print or shared with report recipients.
-The whiteboard toolbar is hidden on touch-first and narrow-screen devices. On desktop it
-appears only after the browser detects a hovering pen; mouse drawing remains an explicit
-toolbar option. Browsers expose a generic pen pointer type, not the pen's manufacturer,
-so Wacom-specific detection is not available.
+The whiteboard tools are available on desktop only. A persistent tab toggles the animated
+toolbar; pen contact opens it and a mouse click outside it closes it. Mouse drawing remains
+an explicit toolbar option. The transparent drawing surface spans the viewport, including
+space beyond the centered report. Browsers expose a generic pen pointer type, not the pen's
+manufacturer, so Wacom-specific detection is not available.
 
 The language selector links two static editions: English (`index.html`, the default) and Italian (`it.html`).
 The [Italian translation](../docs/data-agent-story.it.md) follows the English source's structure and results.
