@@ -409,7 +409,6 @@ export function initializeWhiteboard() {
     if (!isPen(event) || !desktopPointer.matches) return;
     if (tab.contains(event.target)) return;
     const tapTarget = interactiveTarget(event.clientX, event.clientY);
-    showToolbar();
     if (bar.contains(event.target)) return;
     event.preventDefault();
     event.stopPropagation();
