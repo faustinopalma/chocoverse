@@ -414,10 +414,6 @@ export function initializeWhiteboard() {
   window.addEventListener("pointerdown", event => {
     if (event.pointerType === "mouse") {
       if (tab.contains(event.target) || bar.contains(event.target)) return;
-      if (root.classList.contains("whiteboard-ready")) {
-        if (current) finish();
-        hideToolbar();
-      }
       if (mouseDraw && event.button === 0) {
         event.preventDefault();
         event.stopPropagation();

@@ -255,6 +255,12 @@ test("both editions publish the localized, accessible whiteboard and isolated an
   assert.match(engine, /tab\.addEventListener\("click"/);
   assert.equal([...engine.matchAll(/\.addEventListener\("click",\s*\(\)\s*=>\s*\{\s*mouseDraw = !mouseDraw/g)].length, 1);
   assert.match(engine, /if \(tab\.contains\(event\.target\) \|\| bar\.contains\(event\.target\)\) return/);
+  const mouseStart = engine.indexOf('window.addEventListener("pointerdown", event => {');
+  const penStart = engine.indexOf("    if (!isPen(event)", mouseStart);
+  assert.ok(mouseStart >= 0 && penStart > mouseStart);
+  const mouseRouting = engine.slice(mouseStart, penStart);
+  assert.doesNotMatch(mouseRouting, /hideToolbar/);
+  assert.match(mouseRouting, /if \(mouseDraw && event\.button === 0\)/);
   assert.match(engine, /if \(!isPen\(event\) \|\| !desktopPointer\.matches\) return/);
   assert.match(css, /@media \(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\) \{[\s\S]*?\.whiteboard-tab/);
   assert.match(css, /#ink \{[^}]*left: calc\(50% - 50vw\); width: 100vw/s);
