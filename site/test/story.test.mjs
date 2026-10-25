@@ -250,6 +250,9 @@ test("both editions publish the localized, accessible whiteboard and isolated an
   assert.match(engine, /getCoalescedEvents/);
   assert.match(engine, /pointercancel/);
   assert.match(engine, /elementFromPoint/);
+  assert.match(engine, /const DESKTOP_POINTER = "\(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\)"/);
+  assert.match(engine, /isPen\(event\) && desktopPointer\.matches/);
+  assert.match(css, /@media \(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\) \{\s*html\.whiteboard-ready \.whiteboard-bar/);
   assert.match(engine, /clearConfirm: "Cancellare tutte le annotazioni\?"/);
   assert.match(english, /Whiteboard annotations stay in this browser/);
   assert.match(italian, /Le annotazioni restano in questo browser/);
