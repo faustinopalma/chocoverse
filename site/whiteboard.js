@@ -38,6 +38,8 @@ export function initializeWhiteboard() {
   let current = null;
   let pendingSync = false;
   let toolbarInertTimer;
+  let canvasWidth = Math.max(1, window.innerWidth);
+  let canvasHeight = Math.max(1, app.offsetHeight);
 
   bar.setAttribute("aria-label", labels.toolbar);
   document.getElementById("mousedraw").textContent = labels.mouse;
@@ -70,6 +72,7 @@ export function initializeWhiteboard() {
     const data = readStore();
     if (!data) return;
     if (strokes().length) {
+      data.canvas = { width: canvasWidth, height: canvasHeight };
       data.page = strokes().map(stroke => ({
         c: stroke.color,
         w: stroke.width,
@@ -77,6 +80,7 @@ export function initializeWhiteboard() {
       }));
     } else {
       delete data.page;
+      delete data.canvas;
     }
     try {
       localStorage.setItem(storeKey, JSON.stringify(data));
@@ -88,6 +92,13 @@ export function initializeWhiteboard() {
   function load() {
     const data = readStore();
     if (!data) return;
+    if (Number.isFinite(data.canvas?.width) && data.canvas.width > 0
+      && Number.isFinite(data.canvas?.height) && data.canvas.height > 0) {
+      canvasWidth = data.canvas.width;
+      canvasHeight = data.canvas.height;
+    }
+    ink.setAttribute("viewBox", `0 0 ${canvasWidth} ${canvasHeight}`);
+    ink.setAttribute("preserveAspectRatio", "none");
     pages.page = Array.isArray(data.page)
       ? data.page.flatMap(stroke => {
         if (!stroke || !Array.isArray(stroke.p) || !stroke.p.length) return [];
@@ -165,10 +176,15 @@ export function initializeWhiteboard() {
   }
 
   function pointFrom(event) {
-    const rect = ink.getBoundingClientRect();
+    const point = ink.createSVGPoint();
+    point.x = event.clientX;
+    point.y = event.clientY;
+    const matrix = ink.getScreenCTM();
+    if (!matrix) throw new Error("Whiteboard drawing surface has no screen transform.");
+    const position = point.matrixTransform(matrix.inverse());
     return {
-      x: Math.round((event.clientX - rect.left) * 10) / 10,
-      y: Math.round((event.clientY - rect.top) * 10) / 10,
+      x: Math.round(position.x * 10) / 10,
+      y: Math.round(position.y * 10) / 10,
     };
   }
 

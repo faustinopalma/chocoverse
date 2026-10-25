@@ -255,10 +255,15 @@ test("both editions publish the localized, accessible whiteboard and isolated an
   }
   assert.match(engine, /giandoria-whiteboard-data-agent-story-\$\{language\}-v1/);
   assert.match(engine, /localStorage\.setItem/);
+  assert.match(engine, /data\.canvas = \{ width: canvasWidth, height: canvasHeight \}/);
   assert.match(engine, /addEventListener\("storage"/);
   assert.match(engine, /getCoalescedEvents/);
   assert.match(engine, /pointercancel/);
   assert.match(engine, /elementFromPoint/);
+  assert.match(engine, /ink\.setAttribute\("viewBox", `0 0 \$\{canvasWidth\} \$\{canvasHeight\}`\)/);
+  assert.match(engine, /ink\.setAttribute\("preserveAspectRatio", "none"\)/);
+  assert.match(engine, /point\.matrixTransform\(matrix\.inverse\(\)\)/);
+  assert.match(engine, /function pointFrom\(event\) \{[\s\S]*?getScreenCTM\(\)/);
   assert.match(engine, /const DESKTOP_POINTER = "\(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\)"/);
   assert.match(engine, /tab\.addEventListener\("click"/);
   assert.equal([...engine.matchAll(/\bshowToolbar\(\);/g)].length, 1);
