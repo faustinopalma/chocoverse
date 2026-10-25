@@ -74,6 +74,18 @@
 </head>
 <body>
   <a class="skip-link" href="#chapter-1">Skip to the report</a>
+  <div id="wbbar" class="whiteboard-bar" role="toolbar" aria-label="Whiteboard tools">
+    <button class="wb-button" id="mousedraw" type="button" aria-pressed="false">Mouse draws</button>
+    <div class="wb-group" id="colors" role="group" aria-label="Ink colour"></div>
+    <label class="wb-group wb-width">
+      <span id="width-label">Stroke width</span>
+      <input type="range" id="width" min="1" max="14" value="3" aria-label="Stroke width">
+    </label>
+    <div class="wb-group">
+      <button class="wb-button" id="undo" type="button">Undo</button>
+      <button class="wb-button" id="clear" type="button">Clear</button>
+    </div>
+  </div>
   <header class="publication-bar">
     <a href="#top">Giandoria / Data Agent investigation</a>
     <div class="publication-controls">
@@ -114,7 +126,9 @@
       <div class="colophon"><a href="https://github.com/faustinopalma/chocoverse/blob/main/docs/data-agent-story.md">Markdown edition</a>
         <a href="#top">Back to the cover ↑</a></div>
       <p class="privacy-note">A static report. No sign-in, analytics, cookies or live Fabric calls.</p>
+      <p class="privacy-note">Whiteboard annotations stay in this browser.</p>
     </footer>
+    <svg id="ink" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
   </main>
   <dialog id="evidence-dialog" aria-labelledby="evidence-title">
     <div class="dialog-header"><h2 id="evidence-title">Execution evidence</h2>

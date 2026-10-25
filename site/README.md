@@ -10,7 +10,9 @@ product sales, trace the factory flow, then assess how far company backlog has r
 Other feature demonstrations remain in the [technical guide](../docs/29-data-agent-companion.md).
 There are no exercises or answers to unlock.
 It uses captured evidence, makes no live Fabric calls and needs no Azure capacity.
-It has no analytics, cookies, sign-in or client-side storage.
+It has no analytics, cookies or sign-in. Whiteboard annotations are stored in browser
+local storage, separately for each language; they stay on that browser profile and are not
+included in print or shared with report recipients.
 
 The language selector links two static editions: English (`index.html`, the default) and Italian (`it.html`).
 The [Italian translation](../docs/data-agent-story.it.md) follows the English source's structure and results.
@@ -24,7 +26,8 @@ numbered exhibits and a closing synthesis. A short prose introduction establishe
 before the review, without a value-chain card grid. It uses an editorial layout rather than a dashboard.
 An AI-generated conceptual illustration accompanies that introduction; it is labelled separately from
 the authentic, numbered Data Agent exhibits. The static WebP lives in `art/giandoria-editorial.webp`.
-All reasoning is visible without JavaScript; scripts provide theme selection and evidence viewing.
+All reasoning remains readable without JavaScript; scripts provide theme selection, evidence viewing and
+local whiteboard annotations.
 
 ## Retained 3D artwork
 
