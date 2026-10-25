@@ -74,7 +74,9 @@
 </head>
 <body>
   <a class="skip-link" href="#chapter-1">Skip to the report</a>
-  <div id="wbbar" class="whiteboard-bar" role="toolbar" aria-label="Whiteboard tools">
+  <button class="whiteboard-tab" id="wb-tab" type="button" aria-controls="wbbar"
+    aria-expanded="false">Whiteboard</button>
+  <div id="wbbar" class="whiteboard-bar" role="toolbar" aria-label="Whiteboard tools" aria-hidden="true" inert>
     <button class="wb-button" id="mousedraw" type="button" aria-pressed="false">Mouse draws</button>
     <div class="wb-group" id="colors" role="group" aria-label="Ink colour"></div>
     <label class="wb-group wb-width">

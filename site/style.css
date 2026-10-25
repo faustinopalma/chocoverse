@@ -11,10 +11,19 @@ button:hover { border-color: var(--cp-accent); }
 :focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
 [hidden] { display: none !important; }
 .whiteboard-bar { display: none; }
+.whiteboard-tab { display: none; }
 @media (min-width: 768px) and (hover: hover) and (pointer: fine) {
-html.whiteboard-ready .whiteboard-bar { position: fixed; inset: 0 0 auto; z-index: 100;
-  display: flex; align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 12px;
-  background: var(--cp-surface); border-bottom: 1px solid var(--cp-border); }
+  .whiteboard-bar { position: fixed; inset: 0 0 auto; z-index: 100; display: flex;
+    align-items: center; flex-wrap: wrap; gap: 6px; padding: 6px 128px 6px 12px;
+    background: var(--cp-surface); border-bottom: 1px solid var(--cp-border);
+    opacity: 0; transform: translateY(-100%); visibility: hidden; pointer-events: none;
+    transition: opacity 180ms ease, transform 180ms ease, visibility 0s linear 180ms; }
+  html.whiteboard-ready .whiteboard-bar { opacity: 1; transform: translateY(0); visibility: visible;
+    pointer-events: auto; transition-delay: 0s; }
+  .whiteboard-tab { position: fixed; top: 0; right: 12px; z-index: 101; display: block;
+    min-height: 34px; padding: 4px 12px; border: 1px solid var(--cp-border);
+    border-top: 0; border-radius: 0 0 .625rem .625rem; background: var(--cp-surface);
+    font-size: 13px; line-height: 1.2; }
 }
 .wb-group { display: inline-flex; align-items: center; gap: 4px; }
 .wb-button { min-height: 34px; padding: 4px 10px; border: 1px solid var(--cp-border);
@@ -26,7 +35,7 @@ html.whiteboard-ready .whiteboard-bar { position: fixed; inset: 0 0 auto; z-inde
   border: 2px solid var(--cp-border-strong); border-radius: 50%; cursor: pointer; }
 #colors .wb-swatch[aria-pressed="true"] { outline: 2px solid var(--cp-accent); outline-offset: 2px; }
 #top { position: relative; }
-#ink { position: absolute; z-index: 30; top: 0; left: 0; width: 100%; height: 0;
+#ink { position: absolute; z-index: 30; top: 0; left: calc(50% - 50vw); width: 100vw; height: 0;
   overflow: hidden; pointer-events: none; touch-action: none; }
 #ink.mouse { cursor: crosshair; }
 #ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
@@ -162,7 +171,7 @@ dialog p, dialog a { font-size: 14px; }
   dialog { padding: 16px; }
 }
 @media print {
-  .whiteboard-bar, .publication-bar, .skip-link, .contents, dialog, #enhancement-error, #ink { display: none !important; }
+  .whiteboard-bar, .whiteboard-tab, .publication-bar, .skip-link, .contents, dialog, #enhancement-error, #ink { display: none !important; }
   body { padding-top: 0 !important; }
   main { max-width: none; padding: 0; }
   .report-cover { padding-top: 0; }
