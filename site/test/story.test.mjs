@@ -261,6 +261,7 @@ test("both editions publish the localized, accessible whiteboard and isolated an
   assert.match(engine, /elementFromPoint/);
   assert.match(engine, /const DESKTOP_POINTER = "\(min-width: 768px\) and \(hover: hover\) and \(pointer: fine\)"/);
   assert.match(engine, /tab\.addEventListener\("click"/);
+  assert.doesNotMatch(engine, /document\.body\.style\.paddingTop|root\.style\.scrollPaddingTop/);
   assert.equal([...engine.matchAll(/\.addEventListener\("click",\s*\(\)\s*=>\s*\{\s*mouseDraw = !mouseDraw/g)].length, 1);
   assert.match(engine, /if \(tab\.contains\(event\.target\) \|\| bar\.contains\(event\.target\)\) return/);
   const mouseStart = engine.indexOf('window.addEventListener("pointerdown", event => {');

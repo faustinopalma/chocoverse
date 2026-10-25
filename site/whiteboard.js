@@ -137,19 +137,6 @@ export function initializeWhiteboard() {
     resizeInk();
   }
 
-  function syncToolbar() {
-    if (!root.classList.contains("whiteboard-ready")) {
-      document.body.style.paddingTop = "";
-      root.style.scrollPaddingTop = "";
-      return;
-    }
-    const height = `${Math.ceil(bar.getBoundingClientRect().height)}px`;
-    if (document.body.style.paddingTop !== height) {
-      document.body.style.paddingTop = height;
-      root.style.scrollPaddingTop = height;
-    }
-  }
-
   function showToolbar() {
     if (!desktopPointer.matches) return false;
     clearTimeout(toolbarInertTimer);
@@ -159,7 +146,6 @@ export function initializeWhiteboard() {
     tab.setAttribute("aria-expanded", "true");
     tab.setAttribute("aria-label", labels.tabHide);
     tab.title = labels.tabHide;
-    syncToolbar();
     resizeInk();
     return true;
   }
@@ -171,7 +157,6 @@ export function initializeWhiteboard() {
     tab.setAttribute("aria-label", labels.tabShow);
     tab.title = labels.tabShow;
     arm(false, false);
-    syncToolbar();
     resizeInk();
     clearTimeout(toolbarInertTimer);
     toolbarInertTimer = window.setTimeout(() => {
@@ -449,17 +434,14 @@ export function initializeWhiteboard() {
   });
 
   const observer = new ResizeObserver(() => {
-    syncToolbar();
     resizeInk();
   });
   observer.observe(app);
-  observer.observe(bar);
   desktopPointer.addEventListener("change", event => {
     if (event.matches) return;
     finish();
     hideToolbar();
   });
-  syncToolbar();
   load();
   render();
 }
